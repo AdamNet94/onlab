@@ -1,0 +1,22 @@
+
+<div class="main-container">
+  <div class="question-and-timer-container">
+    <div class="question" id="question">
+      <p> {{currentQuestion?.text}}</p>
+    </div>
+  </div>
+  <div class="answer-container">
+    <button class="answer" id="answerA" (click)="answerSelected($event)">{{ currentQuestion?.answers[0].name }}</button>
+    <button class="answer" id="answerB" (click)="answerSelected($event)">{{ currentQuestion?.answers[1].name }}</button>
+  </div>
+  <div class="answer-container">
+    <button class="answer" id="answerC" (click)="answerSelected($event)">{{ currentQuestion?.answers[2].name }}</button>
+    <button class="answer" id="answerD" (click)="answerSelected($event)">{{ currentQuestion?.answers[3].name }}</button>
+  </div>
+
+  <button (click)="nextQuestion()">Next Question</button>
+</div>
+
+<div id="answersdiv">
+
+</div>

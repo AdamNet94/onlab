@@ -1,0 +1,16 @@
+<div class="main-container">
+    <div class="question-and-timer-container">
+        <div class="question" id="question">
+            Ez egy kérdés?
+        </div>
+        <div id="timer-wrapper"><span id="time">{{ timer }}</span></div>
+    </div>
+    <div class="answer-container">
+        <button class="answer" id="answerA" (click)="answerSelected($event)" >A válasz</button>
+        <button class="answer" id="answerB" (click)="answerSelected($event)">B válasz</button>
+    </div>
+    <div class="answer-container">
+        <button class="answer" id="answerC" (click)="answerSelected($event)">C válasz</button>
+        <button class="answer" id="answerD" (click)="answerSelected($event)">D válasz</button>
+    </div>
+</div>

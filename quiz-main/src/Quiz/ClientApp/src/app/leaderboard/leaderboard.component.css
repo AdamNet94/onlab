@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid rgb(224, 219, 219);
+    counter-reset: rowNumber;
+}
+
+table tr:not(:first-child) {
+    counter-increment: rowNumber;
+}
+
+table tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+    margin-left: 0.5rem;
+    font-weight: bold;
+}
+  
+th, td {
+    text-align: left;
+    padding: 16px;
+}
+
+th {
+    background-color: rgb(224, 219, 219);
+}
+  
+tr:nth-child(even) {
+    background-color: rgba(224, 219, 219, 0.363)
+}
+
+.leaderboard {
+    margin: 2rem;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.score {
+    float: left;
+    margin: 1rem 0rem 1rem 1rem;
+    font-size: 2rem;
+}
+
+.rank {
+    float: right;
+    margin: 1rem 1rem 1rem 0rem;
+    font-size: 2rem;
+}

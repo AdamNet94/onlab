@@ -1,0 +1,20 @@
+<div class="leaderboard">
+    <div class="score">
+        Your score is: 800
+    </div> 
+    <div class="rank">
+        Your rank is: 100
+    </div>
+    <table id="players-table">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Points</th>
+        </tr>
+        <tr *ngFor="let player of players">
+            <td></td>
+            <td>{{ player.name }}</td>
+            <td>{{ player.points }}</td>
+        </tr>
+      </table>
+</div>

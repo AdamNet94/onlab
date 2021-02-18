@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    max-width: 140rem;
+    margin: 8rem auto;
+    background-color: rgb(252, 252, 252);
+    box-shadow: 0 2rem 6rem rgba(0, 0, 0, .3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.answer-container {
+    display: flex;
+}
+
+.question {
+    color: #5e6364;
+    font-size: 2rem;
+    font-weight: 300;
+    margin: 1rem;
+    text-align: center;
+    width: 75%;
+    overflow-wrap: break-word;
+}
+
+.answer {
+    border: none;
+    color: #5e6364;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
+    min-height: 10rem;
+    width: 100%;
+    margin: 2rem;
+    background-color:rgb(224, 219, 219);
+    border-radius: 5px;
+    font-size: 2rem;
+    transition: all .3s;
+    overflow-wrap: break-word;
+    /* box-shadow: 0rem 0rem 0.3rem 0rem rgba(74,74,74,0.84); */
+}
+
+.answer:hover {
+    border-radius: 20px;
+}
+
+.answer:focus {
+    outline: none;
+}
+
+.answer:active {
+    box-shadow: inset 0rem 0rem 0.9rem 0rem rgba(74,74,74,0.84);
+}
+
+
+.answer-disabled {
+    border: none;
+    color: #5e6364;
+    font-family: 'Open Sans', sans-serif;
+    min-height: 10rem;
+    width: 100%;
+    margin: 2rem;
+    background-color:rgb(192, 192, 192);
+    border-radius: 5px;
+    font-size: 2rem;
+    transition: all .3s;
+    overflow-wrap: break-word;
+}
+
+.answer-selected {
+    border: 2px solid rgb(173, 166, 168);
+    color: #5e6364;
+    font-family: 'Open Sans', sans-serif;
+    min-height: 10rem;
+    width: 100%;
+    margin: 2rem;
+    background-color:rgb(241, 237, 238);
+    border-radius: 5px;
+    font-size: 2rem;
+    transition: all .3s;
+    overflow-wrap: break-word;
+}
+
+.answer-selected:focus {
+    outline: none;
+}
+
+.question-and-timer-container {
+    display: flex;
+    padding: 2rem;
+}
+
+#timer-wrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 0.5rem;
+}
+
+#time {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #5e6364;
+    text-align: center;
+}
+
+@media only screen and (max-width: 960px) {
+    .answer-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .question-and-timer-container {
+        display: block;
+    }
+
+    .question {
+        width: 100%;
+    }
+
+    .main-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    #answerD {
+        margin-bottom: 0rem;
+    }
+}
