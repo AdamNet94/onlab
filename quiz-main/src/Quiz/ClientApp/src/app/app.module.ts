@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
@@ -24,6 +23,7 @@ import { UsersComponent}  from './users/users.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { QuizUserComponent } from './quiz-user/quiz-user.component';
 import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
+import { MyStudiorumComponent } from './my-studiorum/my-studiorum.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,6 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent,
     QuestionComponent,
     ChartComponent,
     StageComponent,
@@ -43,7 +42,8 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
     StageComponent,
     LobbyComponent,
     QuizUserComponent,
-    LoobyOutlookComponent
+    LoobyOutlookComponent,
+    MyStudiorumComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -55,7 +55,6 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
       { path: 'counter', component: CounterComponent },
       { path: 'question', component: QuestionComponent},
       { path: 'chart', component: ChartComponent},
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'stage', component: StageComponent },
       { path: 'question-create', component: QuestionCreateComponent },
       { path: 'question-edit', component: QuestionEditComponent },
@@ -64,7 +63,8 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
       { path: 'users', component: UsersComponent },
       { path: 'lobby', component: LobbyComponent },
       { path: 'lobby-outlook', component: LoobyOutlookComponent },
-      { path: 'quiz-user', component: QuizUserComponent }
+      { path: 'quiz-user', component: QuizUserComponent },
+      { path: 'my-studiorum', component: MyStudiorumComponent }
     ])
   ],
   providers: [
