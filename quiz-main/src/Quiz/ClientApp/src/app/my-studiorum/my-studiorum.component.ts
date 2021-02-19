@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Question } from '../shared/question';
+import { Studiorum} from '../shared/studiorum'
 
 @Component({
   selector: 'app-my-studiorum',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyStudiorumComponent implements OnInit {
 
-  constructor() { }
+  private studiorums : Array<Studiorum> = [];
+  constructor() {
+    var s1 = new Studiorum("soem title");
+    var q1 = new Question(); q1.name ="First question";
+    var q2 = new Question(); q1.name ="Second question";
+    var q :Question[] = [q1, q2];
+    s1.questions = q;
+    this.studiorums.push(s1);
+    this.studiorums.length
+  }
 
   ngOnInit() {
+
   }
 
 }

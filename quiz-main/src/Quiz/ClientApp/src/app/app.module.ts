@@ -24,6 +24,8 @@ import { LobbyComponent } from './lobby/lobby.component';
 import { QuizUserComponent } from './quiz-user/quiz-user.component';
 import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
 import { MyStudiorumComponent } from './my-studiorum/my-studiorum.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -65,7 +67,8 @@ import { MyStudiorumComponent } from './my-studiorum/my-studiorum.component';
       { path: 'lobby-outlook', component: LoobyOutlookComponent },
       { path: 'quiz-user', component: QuizUserComponent },
       { path: 'my-studiorum', component: MyStudiorumComponent }
-    ])
+    ]),
+    NgbModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

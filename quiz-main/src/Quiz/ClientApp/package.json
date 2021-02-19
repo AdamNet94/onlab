@@ -22,17 +22,18 @@
     "@angular/platform-server": "8.2.12",
     "@angular/router": "8.2.12",
     "@aspnet/signalr": "^1.1.4",
+    "@ng-bootstrap/ng-bootstrap": "^5.3.0",
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
     "animate.css": "^4.1.1",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": "^4.3.1",
+    "chart.js": "2.9.4",
     "core-js": "^3.3.3",
     "jquery": "^3.5.1",
     "oidc-client": "^1.9.1",
     "popper.js": "^1.16.0",
     "rxjs": "^6.5.3",
-    "zone.js": "0.9.1",
-    "chart.js": "2.9.4"
+    "zone.js": "0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.803.24",
