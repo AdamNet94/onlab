@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
@@ -19,12 +18,12 @@ import { QuestionCreateComponent } from './question-create/question-create.compo
 import { QuestionListComponent } from './question-list/question-list.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
-import { UsersComponent}  from './users/users.component';
 import { LobbyComponent } from './lobby/lobby.component';
-import { QuizUserComponent } from './quiz-user/quiz-user.component';
 import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
 import { MyStudiorumComponent } from './my-studiorum/my-studiorum.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PlayComponent } from './play/play.component';
+import { CounterComponent } from './counter/counter.component';
 
 
 @NgModule({
@@ -32,7 +31,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     QuestionComponent,
     ChartComponent,
     StageComponent,
@@ -40,12 +38,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     QuestionListComponent,
     QuestionEditComponent,
     LeaderboardComponent,
-    UsersComponent,
     StageComponent,
     LobbyComponent,
-    QuizUserComponent,
     LoobyOutlookComponent,
-    MyStudiorumComponent
+    MyStudiorumComponent,
+    PlayComponent,
+    CounterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -54,7 +52,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
       { path: 'question', component: QuestionComponent},
       { path: 'chart', component: ChartComponent},
       { path: 'stage', component: StageComponent },
@@ -62,11 +59,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       { path: 'question-edit', component: QuestionEditComponent },
       { path: 'question-list', component: QuestionListComponent },
       { path: 'leaderboard', component: LeaderboardComponent },
-      { path: 'users', component: UsersComponent },
       { path: 'lobby', component: LobbyComponent },
       { path: 'lobby-outlook', component: LoobyOutlookComponent },
-      { path: 'quiz-user', component: QuizUserComponent },
-      { path: 'my-studiorum', component: MyStudiorumComponent }
+      { path: 'my-studiorum', component: MyStudiorumComponent },
+      { path: 'play', component: PlayComponent }
     ]),
     NgbModule
   ],

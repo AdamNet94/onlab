@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Question } from '../shared/question';
 import { Studiorum} from '../shared/studiorum'
 
@@ -10,7 +11,7 @@ import { Studiorum} from '../shared/studiorum'
 export class MyStudiorumComponent implements OnInit {
 
   private studiorums : Array<Studiorum> = [];
-  constructor() {
+  constructor(private route: ActivatedRoute) {
     var s1 = new Studiorum("soem title");
     var q1 = new Question(); q1.name ="First question";
     var q2 = new Question(); q1.name ="Second question";
@@ -22,6 +23,10 @@ export class MyStudiorumComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  EditStudiorum(){
+    this.route
   }
 
 }

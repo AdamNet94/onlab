@@ -1,16 +1,8 @@
-<div class="main-container">
-    <div class="question-and-timer-container">
-        <div class="question" id="question">
-            Ez egy kérdés?
-        </div>
-        <div id="timer-wrapper"><span id="time">{{ timer }}</span></div>
+    <div class="container">
+        <h3 class="text-center">Ki nem volt republikánus elnöke az USA-nak?</h3>
+        <span id="timer"> {{timeleft}} </span>
     </div>
     <div class="answer-container">
-        <button class="answer" id="answerA" (click)="answerSelected($event)" >A válasz</button>
-        <button class="answer" id="answerB" (click)="answerSelected($event)">B válasz</button>
+        <button *ngFor="let answer of dummyanswers"
+        type="button" class="btn btn-light btn-primary btn-lg">{{answer}}</button>
     </div>
-    <div class="answer-container">
-        <button class="answer" id="answerC" (click)="answerSelected($event)">C válasz</button>
-        <button class="answer" id="answerD" (click)="answerSelected($event)">D válasz</button>
-    </div>
-</div>
