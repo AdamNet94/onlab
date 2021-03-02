@@ -1,62 +1,21 @@
-<div class="container-contact100">
-  <div class="wrap-contact100">
 
-    <span class="contact100-form-title">
-      Questions
-    </span>
-    
-    
-      <div class="contact100-form-subtitle" *ngIf="!questions"><em>Loading...</em></div>
-   
+  <h2>Studiorum Name</h2>
 
-    <div *ngFor="let question of questions"
-         (click)="onSelect(question)"
-         class="wrap-input100 bg1 rs1-wrap-input100"
-         style="cursor: pointer">
-      <span class="label-input100">{{question.name}}</span>
-      <span class="question-text">{{question.text}} </span>
-
-      <button class="correct-btn form-check-inline" (click)="deleteSelectedQuestion(question)">
-        <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-x-square" fill="#e60000" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-          <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-        </svg>
-      </button>
-
-      <div *ngIf="selectedQuestion==question">
-        <div *ngFor="let answer of question.answers" class="bg-2 answer">
-          <span class="input100" type="text" name="answer">{{answer.name}}</span>
-
-          <div *ngIf="answer.isCorrect" class="correct-btn form-check-inline">
-            <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-check2" fill="green" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-            </svg>
-          </div>
-          <span *ngIf="answer.isCorrect == false" class="correct-btn form-check-inline">
-            <svg width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-x" fill="red" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-            </svg>
-          </span>
+  <div>
+    <div class="row">
+      <div class="col-8">
+        <app-question-editor [formData] ="selectedQuestion"></app-question-editor>
+      </div>
+      <div class="col-4">
+        <div *ngFor="let question of dummyQuestions; index as i;">
+          <button type="button" (click)="changeCurrentQuestion(i)" class="list-group-item list-group-item-action">
+            {{question.text}}
+          </button>
         </div>
-        
-          <div class="wrap-edit-question">
-            <button class="contact100-form-btn" (click)="editQuestion()">
-              <span>
-                Edit question
-              </span>
-            </button>
-          </div>
-       
-      </div>
-       
-      </div>
-
-      <div class="container-contact100-form-btn">
-        <button class="contact100-form-btn" (click)="addQuestion()">
-          <span>
-            Add new question
-          </span>
-        </button>
+        <button type ="button" class="btn btn-secondary">Add new Question</button>
       </div>
     </div>
   </div>
+  
+
+  

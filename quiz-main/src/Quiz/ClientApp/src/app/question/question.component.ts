@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CounterService } from '../services/counter.service';
-import {CounterComponent}from '../counter/counter.component';
 import { time } from 'console';
 
 @Component({

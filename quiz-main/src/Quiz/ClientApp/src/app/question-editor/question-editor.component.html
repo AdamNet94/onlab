@@ -1,0 +1,45 @@
+<div class="container-contact100">
+  <div class="wrap-contact100">
+    <form #questionCreateForm="ngForm" name="form" class="contact100-form" (submit)="onSubmit(questionCreateForm)">
+      <span class="contact100-form-title">
+        Question {{formData.id}}
+      </span>
+
+      <div class="wrap-input100 bg1">
+
+        <span class="label-input100">QUESTION TEXT *</span>
+
+        <input name="question.text"
+               #question.text="ngModel"
+               [(ngModel)]="formData.text"
+               class="input100" type="text"
+               placeholder="Enter question" required
+              >
+      </div>
+
+      <div *ngFor="let text of markupText; index as i;" class="wrap-input100 bg1 rs1-wrap-input100">
+
+        <span class="label-input100">{{text}}</span>
+
+        <input type="hidden" name="a1id" [value]="formData.answers[0].id">
+        <input type="hidden" name="a1questionID" [value]="formData.answers[0].questionID">
+        
+        <input [(ngModel)]="formData.answers[i].text"
+               name="a1.namee"
+               class="input100" type="text"
+               placeholder="Enter answer and check if correct" required
+               >
+
+        <input [(ngModel)]="formData.answers[i].isCorrect"
+               name="a1.isCorrect"
+               class="checkbox" type="checkbox">
+      </div>
+
+      <div class="container-contact100-form-btn">
+        <button class="contact100-form-btn" type="submit" [disabled]="questionCreateForm.form.invalid">
+         Edit Question
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
