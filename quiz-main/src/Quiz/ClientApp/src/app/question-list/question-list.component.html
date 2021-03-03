@@ -4,7 +4,7 @@
   <div>
     <div class="row">
       <div class="col-8">
-        <app-question-editor [formData] ="selectedQuestion"></app-question-editor>
+        <app-question-editor [formData] ="selectedQuestion" (questionChangedEvent)="receiveChangedQuestion($event)"></app-question-editor>
       </div>
       <div class="col-4">
         <div *ngFor="let question of dummyQuestions; index as i;">

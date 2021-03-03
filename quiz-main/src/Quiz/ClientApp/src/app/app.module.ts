@@ -21,6 +21,7 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
 import { MyStudiorumComponent } from './my-studiorum/my-studiorum.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PlayComponent } from './play/play.component';
+import { StudiorumCrudService } from './services/studiorum-crud.service';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import { PlayComponent } from './play/play.component';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
-    QuestionCrudService 
+    QuestionCrudService,
+    StudiorumCrudService
   ],
   bootstrap: [AppComponent]
 })

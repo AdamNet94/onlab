@@ -13,6 +13,7 @@ namespace Quiz.Models
         public int AnswerId { get; set; }
         public int Score { get; set; }
         public bool isCorrect { get; set; }
-        public string User { get; set; }
+        public string Player { get; set; }
+        public QuizInstance Quiz { get; set; }
     }
 }

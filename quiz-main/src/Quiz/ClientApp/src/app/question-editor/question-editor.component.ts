@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { Question } from '../shared/question';
 import { Answer } from '../shared/answer';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ export class QuestionEditorComponent implements OnInit {
  markupText :string[] = ['Answer 02 *',"Answer 02 *","Answer 03 *","Answer 04 *"]
 
   @Input() public formData: Question;
+  @Output() questionChangedEvent = new EventEmitter<Question>();
 
   constructor(private httpservice: QuestionCrudService, private router: Router) {
     //this.formData = new Question();
@@ -24,16 +25,19 @@ export class QuestionEditorComponent implements OnInit {
    this.resetForm();
   }
 
-  onSubmit(questionCreateForm: NgForm) {
+  onEdit(questionForm: NgForm) {
     console.log(this.formData);
     this.httpservice.postQuestion(this.formData).subscribe(
       question => {
         this.httpservice.parseCreatedQuestion(question);
-        this.resetForm(questionCreateForm);
+        //this.resetForm(questionForm);
        // this.router.navigate(['/question-list']);
       },
-      err => { console.log(err); }
+      err => { console.log(err); },
+      () => { }
+      
     )
+    this.questionChangedEvent.emit(this.formData);
   }
 
   resetForm(questionCreateForm?: NgForm) {

@@ -20,9 +20,13 @@ namespace Quiz.Data
                 if (context.Questions.Any())
                     return;
 
-                var q1 = new Question { Name = "Mitológia", Text = "Kinek a gyermeke volt Pégaszosz(Pegazus) a szárnyas ló a görög mitológiában?" };
-                var q2 = new Question { Name = "Sport", Text = "Ki nem tagja a '92-es Dream Teamnek?" };
-                var q3 = new Question { Name = "Politika", Text = "Ki nevezett kit a legynagyobb magyarnak?" };
+                var studiorum1 = new Studiorum { Title = "Az első Studiorum" };
+                context.Studiorums.Add(studiorum1);
+                context.SaveChanges();
+
+                var q1 = new Question { Text = "Kinek a gyermeke volt Pégaszosz(Pegazus) a szárnyas ló a görög mitológiában?",StudiorumId =studiorum1.Id };
+                var q2 = new Question { Text = "Ki nem tagja a '92-es Dream Teamnek?", StudiorumId = studiorum1.Id };
+                var q3 = new Question { Text = "Ki nevezett kit a legynagyobb magyarnak?", StudiorumId = studiorum1.Id };
                 
                 context.Questions.AddRange
                     (

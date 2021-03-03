@@ -22,11 +22,14 @@ export class QuestionListComponent implements OnInit {
 
 
   constructor(private service: QuestionCrudService, private router: Router) {
-    for(let j=0; j<4;j++){ 
-      var q=new Question(0,`probakérdés?+ ${j}`,`probakérdés?+ ${j}`)
+    for(let j=0; j<4;j++){
+      var q=new Question(j,`probakérdés?+ ${j}`,`probakérdés?+ ${j}`)
         for(let i=0; i<4;i++){ q.answers[i].text=`probaválasz${i}`};
         this.dummyQuestions.push(q);
     };
+    for(let i=0; i<this.dummyQuestions.length;i++)
+      console.log(this.dummyQuestions[i]);
+
     this.selectedQuestion=this.dummyQuestions[0]; 
     console.log(this.dummyQuestions[1].text);
     console.log(this.dummyQuestions[1].answers[2]);
@@ -40,6 +43,14 @@ export class QuestionListComponent implements OnInit {
         this.fetchQuestionList();
       });
     }
+  }
+
+  receiveChangedQuestion($event){
+    let q:Question = $event as Question;
+    let index = this.dummyQuestions.findIndex(element => element.id==q.id);
+    if(index > 0)
+      this.dummyQuestions[index]=q;
+    else console.log("could not find question with this ID");
   }
 
   changeCurrentQuestion(questionIndex: number) {

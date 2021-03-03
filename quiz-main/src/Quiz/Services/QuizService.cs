@@ -89,8 +89,8 @@ namespace Quiz.Services
                     {
                         
                         var ansIn = _context.AnswerInstances.ToList();
-                        var grouped = ansIn.GroupBy(a => a.User, a => a.Score, (key, value) => new { User = key, Score = value });
-                        List<UserScore> scores = _context.AnswerInstances.GroupBy(a => a.User).Select(ai => new UserScore
+                        var grouped = ansIn.GroupBy(a => a.Player, a => a.Score, (key, value) => new { User = key, Score = value });
+                        List<UserScore> scores = _context.AnswerInstances.GroupBy(a => a.Player).Select(ai => new UserScore
                         { user = ai.Key, sumScore = ai.Sum(a => a.Score) }).OrderByDescending(a => a.sumScore).ToList();
 
                         quizInstance.State = QuizState.Questionresult;
@@ -139,7 +139,7 @@ namespace Quiz.Services
             var user = new User();
             user.Name = userName;
             var ai = new AnswerInstance
-            { QuestionId = questionId, AnswerId = answerId, Score = isGoodANswer ? 1: 0, isCorrect = isGoodANswer, User = userName};
+            { QuestionId = questionId, AnswerId = answerId, Score = isGoodANswer ? 1: 0, isCorrect = isGoodANswer, Player = userName};
             _context.AnswerInstances.Add(ai);
             QuizInstance quizInstance = _context.QuizInstances.Find(quizInstanceId);
             //quizInstance.SubmittedAnswers.Add(ai);

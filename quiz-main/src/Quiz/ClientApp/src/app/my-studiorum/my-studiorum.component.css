@@ -2,6 +2,10 @@ h2.mb-0{
     display: flex;
     justify-content: flex-end;
 }
-button.btn-secondary{
+h2 > button.btn{
     margin: 5px;
+    font-weight: bold;
+}
+button.modal-window{
+    margin: 20px 20px;
 }

@@ -1,6 +1,6 @@
 <div class="container-contact100">
   <div class="wrap-contact100">
-    <form #questionCreateForm="ngForm" name="form" class="contact100-form" (submit)="onSubmit(questionCreateForm)">
+    <form #questionForm="ngForm" name="form" class="contact100-form" (submit)="onEdit(questionForm)">
       <span class="contact100-form-title">
         Question {{formData.id}}
       </span>
@@ -20,9 +20,6 @@
       <div *ngFor="let text of markupText; index as i;" class="wrap-input100 bg1 rs1-wrap-input100">
 
         <span class="label-input100">{{text}}</span>
-
-        <input type="hidden" name="a1id" [value]="formData.answers[0].id">
-        <input type="hidden" name="a1questionID" [value]="formData.answers[0].questionID">
         
         <input [(ngModel)]="formData.answers[i].text"
                name="a1.namee"
@@ -36,7 +33,7 @@
       </div>
 
       <div class="container-contact100-form-btn">
-        <button class="contact100-form-btn" type="submit" [disabled]="questionCreateForm.form.invalid">
+        <button class="contact100-form-btn" type="submit" [disabled]="questionForm.form.invalid">
          Edit Question
         </button>
       </div>
