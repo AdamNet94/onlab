@@ -7,7 +7,7 @@
         <app-question-editor [formData] ="selectedQuestion" (questionChangedEvent)="receiveChangedQuestion($event)"></app-question-editor>
       </div>
       <div class="col-4">
-        <div *ngFor="let question of dummyQuestions; index as i;">
+        <div *ngFor="let question of studiorum.questions; index as i;">
           <button type="button" (click)="changeCurrentQuestion(i)" class="list-group-item list-group-item-action">
             {{question.text}}
           </button>
@@ -18,4 +18,3 @@
   </div>
   
 
-  

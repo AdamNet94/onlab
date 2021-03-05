@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Quiz.Data;
 
-namespace Quiz.Data.Migrations
+namespace Quiz.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210303161714_Studiorum1")]
-    partial class Studiorum1
+    [Migration("20210303181729_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

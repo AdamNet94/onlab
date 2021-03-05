@@ -51,7 +51,7 @@ import { StudiorumCrudService } from './services/studiorum-crud.service';
       { path: 'chart', component: ChartComponent},
       { path: 'stage', component: StageComponent },
       { path: 'question-editor', component: QuestionEditorComponent },
-      { path: 'question-list', component: QuestionListComponent },
+      { path: 'my-studiorum/:studiorumId', component: QuestionListComponent },
       { path: 'leaderboard', component: LeaderboardComponent },
       { path: 'lobby', component: LobbyComponent },
       { path: 'lobby-outlook', component: LoobyOutlookComponent },

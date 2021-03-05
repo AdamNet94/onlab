@@ -19,12 +19,12 @@ namespace Quiz.Data
             {
                 if (context.Questions.Any())
                     return;
-
+                
                 var studiorum1 = new Studiorum { Title = "Az első Studiorum" };
                 context.Studiorums.Add(studiorum1);
                 context.SaveChanges();
 
-                var q1 = new Question { Text = "Kinek a gyermeke volt Pégaszosz(Pegazus) a szárnyas ló a görög mitológiában?",StudiorumId =studiorum1.Id };
+                var q1 = new Question { Text = "Kinek a gyermeke volt Pégaszosz(Pegazus) a szárnyas ló a görög mitológiában?",StudiorumId = studiorum1.Id};
                 var q2 = new Question { Text = "Ki nem tagja a '92-es Dream Teamnek?", StudiorumId = studiorum1.Id };
                 var q3 = new Question { Text = "Ki nevezett kit a legynagyobb magyarnak?", StudiorumId = studiorum1.Id };
                 

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Question } from '../shared/question';
 import { Studiorum} from '../shared/studiorum';
 import { StudiorumCrudService} from '../services/studiorum-crud.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-my-studiorum',
@@ -13,21 +13,25 @@ export class MyStudiorumComponent implements OnInit {
 
   private studiorums : Array<Studiorum> = [];
 
-  constructor(private route: ActivatedRoute, private httpservice: StudiorumCrudService) {
-    var s1 = new Studiorum(1,"some title");
-    var q1 = new Question(); q1.name ="First question";
-    var q2 = new Question(); q1.name ="Second question";
-    var q :Question[] = [q1, q2];
-    s1.questions = q;
-    this.studiorums.push(s1);
+  constructor(private router: Router, private httpservice: StudiorumCrudService) {
+    this.httpservice.getStudiorums().subscribe(result => {
+      this.studiorums = result;
+    }, error => console.error(error));
   }
 
   ngOnInit() {
-
+   
   }
 
-  addStudiorum(title: string){
-      console.log(title);
+  navigateToQuestions(id:number) {
+    this.router.navigate(['my-studiorum/studiorumId', { studiorumId: id + 1 }]);
+  }
+
+  addStudiorum(title: string) {
+    var newStudiorum = new Studiorum(0,title);
+    this.httpservice.postStudiorum(newStudiorum).subscribe(result => {
+      this.studiorums.push(result);
+    }, error => console.error(error));
   }
 
   deleteStudiorum(index:number){

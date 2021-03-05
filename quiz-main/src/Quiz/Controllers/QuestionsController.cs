@@ -113,6 +113,7 @@ namespace Quiz.Controllers
             {
                 return NotFound();
             }
+
             // A kitorlendo kerdeshez tartozo valaszokat is 
             var answersToDetele = _context.Answers.Where(a => a.QuestionID == question.Id);
             if (!answersToDetele.IsNullOrEmpty())
