@@ -12,9 +12,10 @@ namespace Quiz.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
-        public int QuestionID { get; set; }
+        public string Text { get; set; }
+        public int QuestionId { get; set; }
         public bool IsCorrect { get; set; }
+
     }
 
 }

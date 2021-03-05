@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionCrudService } from '../shared/question-crud.service';
 import { Question } from '../shared/question';
 import { Answer } from '../shared/answer';
 import { StudiorumCrudService } from '../services/studiorum-crud.service';
 import { Studiorum } from '../shared/studiorum';
+import { QuestionEditorComponent } from '../question-editor/question-editor.component';
 
 @Component({
   selector: 'app-question-list',
@@ -14,9 +15,11 @@ import { Studiorum } from '../shared/studiorum';
 
 export class QuestionListComponent implements OnInit {
 
+  @ViewChild(QuestionEditorComponent, { static: false }) child;
+
   studiorumId: number;
   studiorum: Studiorum = new Studiorum();
-  selectedQuestion: Question = null;
+  selectedQuestion: Question;
   @Output() currentQuestionChanged = new EventEmitter<Question>();
 
 
@@ -33,26 +36,46 @@ export class QuestionListComponent implements OnInit {
     this.selectedQuestion = this.studiorum.questions[0];
   }
 
+  ngOnInit() {
+
+  }
+
   receiveChangedQuestion($event){
     let q:Question = $event as Question;
-    let index = this.studiorum.questions.findIndex(element => element.id==q.id);
-    if(index > 0)
-      this.studiorum.questions[index]=q;
-    else console.log("could not find question with this ID");
+    let index = this.studiorum.questions.findIndex(element => element.id == q.id);
+    if (index > 0)
+      this.studiorum.questions[index] = q;
+      /*
+       if we cannot find in the list, then it's a new question and it was added already in
+       createQuestion() method
+       */
+    else this.studiorum.questions[this.studiorum.questions.length-1] = q;
+  }
+
+  receiveDeletedQuestion($event) {
+    let q: Question = $event as Question;
+    let index = this.studiorum.questions.findIndex(element => element.id == q.id);
+    if (index > 0)
+      this.studiorum.questions.splice(index, 1);
+    this.selectedQuestion = this.studiorum.questions[0];
+    console.log("meghivva");
   }
 
   changeCurrentQuestion(questionIndex: number) {
     this.selectedQuestion = this.studiorum.questions[questionIndex];
   }
 
-  ngOnInit() {
-   
+  createQuestion() {
+    var lastQuestion = this.studiorum.questions[this.studiorum.questions.length - 1];
+    if (lastQuestion.id != 0) {
+      this.selectedQuestion = new Question();
+      this.selectedQuestion.studiorumId = this.studiorumId;
+      this.studiorum.questions.push(this.selectedQuestion);
+    }
+    else this.selectedQuestion = lastQuestion;
   }
 
-  editQuestion(): void {
-    
-    this.router.navigate(['/question-edit']);
-  }
+
 
 }
 

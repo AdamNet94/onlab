@@ -226,7 +226,7 @@ namespace Quiz.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     State = table.Column<int>(nullable: false),
-                    QuestionId = table.Column<int>(nullable: false),
+                    CurrentQuestionId = table.Column<int>(nullable: false),
                     StudiorumId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -246,16 +246,16 @@ namespace Quiz.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
-                    QuestionID = table.Column<int>(nullable: false),
+                    Text = table.Column<string>(nullable: false),
+                    QuestionId = table.Column<int>(nullable: false),
                     IsCorrect = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Answers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Answers_Questions_QuestionID",
-                        column: x => x.QuestionID,
+                        name: "FK_Answers_Questions_QuestionId",
+                        column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -272,7 +272,7 @@ namespace Quiz.Migrations
                     Score = table.Column<int>(nullable: false),
                     isCorrect = table.Column<bool>(nullable: false),
                     Player = table.Column<string>(nullable: true),
-                    QuizId = table.Column<int>(nullable: true)
+                    QuizId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -282,7 +282,7 @@ namespace Quiz.Migrations
                         column: x => x.QuizId,
                         principalTable: "QuizInstances",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -291,9 +291,9 @@ namespace Quiz.Migrations
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Answers_QuestionID",
+                name: "IX_Answers_QuestionId",
                 table: "Answers",
-                column: "QuestionID");
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

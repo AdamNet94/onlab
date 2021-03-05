@@ -30,7 +30,7 @@ namespace Quiz.Services
         {
             Console.WriteLine("Start called");
             currentQuestionId = 1;
-            QuizInstance quiz = new QuizInstance { State = QuizState.Start, QuestionId = _context.Questions.Find(currentQuestionId).Id };
+            QuizInstance quiz = new QuizInstance { State = QuizState.Start, CurrentQuestionId = _context.Questions.Find(currentQuestionId).Id };
             _context.Add(quiz);
             _context.SaveChanges();
             int quizInstanceId = quiz.Id;
@@ -75,7 +75,7 @@ namespace Quiz.Services
                     else
                     {
                         quizInstance.State = QuizState.Showquestion;
-                        quizInstance.QuestionId = currentQuestion.Id+1;
+                        quizInstance.CurrentQuestionId = currentQuestion.Id+1;
                     }
                     _context.SaveChanges();
                     break;
@@ -85,7 +85,7 @@ namespace Quiz.Services
                     break;
                 case QuizState.Quizresult:
                     currentQuestion = this.getCurrentQuestion(quizInstance);
-                    if (quizInstance.QuestionId == this.QuestionCount() || quizInstance.QuestionId > this.QuestionCount())
+                    if (quizInstance.CurrentQuestionId == this.QuestionCount() || quizInstance.CurrentQuestionId > this.QuestionCount())
                     {
                         
                         var ansIn = _context.AnswerInstances.ToList();
@@ -110,7 +110,7 @@ namespace Quiz.Services
 
         private Question getCurrentQuestion(QuizInstance quizInstance)
         {
-            currentQuestion = _context.Questions.Where(q => q.Id == quizInstance.QuestionId || q.Id > quizInstance.QuestionId).Include(q => q.Answers).FirstOrDefault();
+            currentQuestion = _context.Questions.Where(q => q.Id == quizInstance.CurrentQuestionId || q.Id > quizInstance.CurrentQuestionId).Include(q => q.Answers).FirstOrDefault();
             return currentQuestion;
         }
 

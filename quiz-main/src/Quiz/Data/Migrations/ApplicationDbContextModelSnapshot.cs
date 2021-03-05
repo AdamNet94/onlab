@@ -246,16 +246,16 @@ namespace Quiz.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("QuestionID")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionID");
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
                 });
@@ -276,7 +276,7 @@ namespace Quiz.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("QuizId")
+                    b.Property<int>("QuizId")
                         .HasColumnType("int");
 
                     b.Property<int>("Score")
@@ -385,7 +385,7 @@ namespace Quiz.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("QuestionId")
+                    b.Property<int>("CurrentQuestionId")
                         .HasColumnType("int");
 
                     b.Property<int>("State")
@@ -469,9 +469,9 @@ namespace Quiz.Migrations
 
             modelBuilder.Entity("Quiz.Models.Answer", b =>
                 {
-                    b.HasOne("Quiz.Models.Question", null)
+                    b.HasOne("Quiz.Models.Question", "Question")
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionID")
+                        .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -480,12 +480,14 @@ namespace Quiz.Migrations
                 {
                     b.HasOne("Quiz.Models.QuizInstance", "Quiz")
                         .WithMany("SubmittedAnswers")
-                        .HasForeignKey("QuizId");
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Quiz.Models.Question", b =>
                 {
-                    b.HasOne("Quiz.Models.Studiorum", null)
+                    b.HasOne("Quiz.Models.Studiorum", "Studiorum")
                         .WithMany("Questions")
                         .HasForeignKey("StudiorumId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -494,7 +496,7 @@ namespace Quiz.Migrations
 
             modelBuilder.Entity("Quiz.Models.QuizInstance", b =>
                 {
-                    b.HasOne("Quiz.Models.Studiorum", null)
+                    b.HasOne("Quiz.Models.Studiorum", "Studiorum")
                         .WithMany("Quizes")
                         .HasForeignKey("StudiorumId")
                         .OnDelete(DeleteBehavior.Cascade)

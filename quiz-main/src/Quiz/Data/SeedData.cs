@@ -36,18 +36,18 @@ namespace Quiz.Data
                 context.SaveChanges();
 
                 context.Answers.AddRange(
-               new Answer { QuestionID = q1.Id, Name = "Poszeidón és Medusza", IsCorrect = true },
-               new Answer { QuestionID = q1.Id, Name = "Gaia és Uranosz", IsCorrect = false },
-               new Answer { QuestionID = q1.Id, Name = "A nimfák gyermeke", IsCorrect = false },
-               new Answer { QuestionID = q1.Id, Name = "A titánok gyermeke", IsCorrect = false },
-               new Answer { QuestionID = q2.Id, Name = "Michael Jordan", IsCorrect = false },
-               new Answer { QuestionID = q2.Id, Name = "Magic Johnson", IsCorrect = false },
-               new Answer { QuestionID = q2.Id, Name = "Larry Bird", IsCorrect = false },
-               new Answer { QuestionID = q2.Id, Name = "Lebron James", IsCorrect = true },
-               new Answer { QuestionID = q3.Id, Name = "Kossuth Lajos Széchenyi Istvánt", IsCorrect = true },
-               new Answer { QuestionID = q3.Id, Name = "Széchenyi István Kossuth Ferencet", IsCorrect = false },
-               new Answer { QuestionID = q3.Id, Name = "Gyurcsány Ferenc Orbán Viktort", IsCorrect = false },
-               new Answer { QuestionID = q3.Id, Name = "Orbán Lajos Gyurcsány Istvánt", IsCorrect = false }
+               new Answer { QuestionId = q1.Id, Text = "Poszeidón és Medusza", IsCorrect = true },
+               new Answer { QuestionId = q1.Id, Text = "Gaia és Uranosz", IsCorrect = false },
+               new Answer { QuestionId = q1.Id, Text = "A nimfák gyermeke", IsCorrect = false },
+               new Answer { QuestionId = q1.Id, Text = "A titánok gyermeke", IsCorrect = false },
+               new Answer { QuestionId = q2.Id, Text = "Michael Jordan", IsCorrect = false },
+               new Answer { QuestionId = q2.Id, Text = "Magic Johnson", IsCorrect = false },
+               new Answer { QuestionId = q2.Id, Text = "Larry Bird", IsCorrect = false },
+               new Answer { QuestionId = q2.Id, Text = "Lebron James", IsCorrect = true },
+               new Answer { QuestionId = q3.Id, Text = "Kossuth Lajos Széchenyi Istvánt", IsCorrect = true },
+               new Answer { QuestionId = q3.Id, Text = "Széchenyi István Kossuth Ferencet", IsCorrect = false },
+               new Answer { QuestionId = q3.Id, Text = "Gyurcsány Ferenc Orbán Viktort", IsCorrect = false },
+               new Answer { QuestionId = q3.Id, Text = "Orbán Lajos Gyurcsány Istvánt", IsCorrect = false }
                    );
                 context.SaveChanges();
             }

@@ -12,38 +12,57 @@ import { QuestionCrudService } from '../shared/question-crud.service';
 })
 export class QuestionEditorComponent implements OnInit {
 
- markupText :string[] = ['Answer 02 *',"Answer 02 *","Answer 03 *","Answer 04 *"]
-
+  markupText: string[] = ['Answer 02 *', "Answer 02 *", "Answer 03 *", "Answer 04 *"]
+  newQuestionflag: boolean = false;
   @Input() public formData: Question;
   @Output() questionChangedEvent = new EventEmitter<Question>();
+  @Output() questionDeletedEvent = new EventEmitter<Question>();
 
   constructor(private httpservice: QuestionCrudService, private router: Router) {
-    //this.formData = new Question();
+
   }
 
   ngOnInit() {
-   this.resetForm();
+    console.log(this.formData);
   }
 
-  onEdit(questionForm: NgForm) {
-    console.log(this.formData);
-    this.httpservice.postQuestion(this.formData).subscribe(
+  onEdit() {
+    if (this.newQuestionflag) {
+      console.log(this.formData);
+      this.httpservice.postQuestion(this.formData).subscribe(
+        question => {
+          this.questionChangedEvent.emit(question);
+        },
+        err => { console.log(err); },
+      );
+      this.newQuestionflag = false;
+      let editButton = document.getElementById("submitButton");
+      editButton.innerHTML = "Edit Question";
+    }
+    else {
+      console.log(this.formData);
+      this.httpservice.putQuestion(this.formData, this.formData.id).subscribe(
+        question => {
+          this.questionChangedEvent.emit(question);
+        },
+        err => { console.log(err); }
+      );
+    }
+  }
+
+  deleteQuestion() {
+    this.httpservice.deleteQuestion(this.formData.id).subscribe(
       question => {
-        this.httpservice.parseCreatedQuestion(question);
-        //this.resetForm(questionForm);
-       // this.router.navigate(['/question-list']);
+        this.questionDeletedEvent.emit(question);
       },
       err => { console.log(err); },
-      () => { }
-      
-    )
-    this.questionChangedEvent.emit(this.formData);
+    );
   }
 
-  resetForm(questionCreateForm?: NgForm) {
-    if (questionCreateForm != null)
-      questionCreateForm.form.reset();
-    this.formData = new Question();
-    }
+  resetForm() {
+    let editButton = document.getElementById("submitButton");
+    editButton.innerHTML = "Save new question";
+    this.newQuestionflag = true;
+  }
 }
 

@@ -1,42 +1,35 @@
-<div class="container-contact100">
-  <div class="wrap-contact100">
-    <form #questionForm="ngForm" name="form" class="contact100-form" (submit)="onEdit(questionForm)">
-      <span class="contact100-form-title">
-        Question {{formData.id}}
-      </span>
 
-      <div class="wrap-input100 bg1">
-
-        <span class="label-input100">QUESTION TEXT *</span>
-
-        <input name="question.text"
-               #question.text="ngModel"
-               [(ngModel)]="formData.text"
-               class="input100" type="text"
-               placeholder="Enter question" required
-              >
+<form (ngSubmit)="onEdit()" #questionForm="ngForm">
+  <div class="form-group">
+    <label for="question text">Question text:</label>
+    <input [(ngModel)]="formData.text" name="qText"
+           type="text" class="form-control" id="question text" placeholder="Example input" required>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="answer1">Answer 1</label>
+        <input [(ngModel)]="formData.answers[0].text" name="answer1" type="text" class="form-control" id="answer1" required>
+        <input [(ngModel)]="formData.answers[0].isCorrect" name="answercorrect1" type="checkbox">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="answer2">Answer 2</label>
+        <input [(ngModel)]="formData.answers[1].text" name="answer2" type="text" class="form-control" id="answer2" required>
+        <input [(ngModel)]="formData.answers[1].isCorrect" name="answercorrect2" type="checkbox">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="answer3">Answer 3</label>
+        <input [(ngModel)]="formData.answers[2].text" name="answer3" type="text" class="form-control" id="answer3" required>
+        <input [(ngModel)]="formData.answers[2].isCorrect" name="answercorrect2" type="checkbox">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="answer4">Answer 4</label>
+        <input [(ngModel)]="formData.answers[3].text" name="answer4" type="text" class="form-control" id="answer4" required>
+        <input [(ngModel)]="formData.answers[3].isCorrect" name="answercorrect3" type="checkbox">
       </div>
 
-      <div *ngFor="let text of markupText; index as i;" class="wrap-input100 bg1 rs1-wrap-input100">
-
-        <span class="label-input100">{{text}}</span>
-        
-        <input [(ngModel)]="formData.answers[i].text"
-               name="a1.namee"
-               class="input100" type="text"
-               placeholder="Enter answer and check if correct" required
-               >
-
-        <input [(ngModel)]="formData.answers[i].isCorrect"
-               name="a1.isCorrect"
-               class="checkbox" type="checkbox">
-      </div>
-
-      <div class="container-contact100-form-btn">
-        <button class="contact100-form-btn" type="submit" [disabled]="questionForm.form.invalid">
-         Edit Question
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
-</div>
+  <button id="submitButton" type="submit" class="btn btn-lg"[class.btn-primary]="!newQuestionflag" [class.btn-success]="newQuestionflag" >Edit Question</button>
+  <button *ngIf="formData.id != 0" type="button" class="btn btn-danger btn-lg" (click)="deleteQuestion()"> Delete Question </button>
+</form>

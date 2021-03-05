@@ -115,7 +115,7 @@ namespace Quiz.Controllers
             }
 
             // A kitorlendo kerdeshez tartozo valaszokat is 
-            var answersToDetele = _context.Answers.Where(a => a.QuestionID == question.Id);
+            var answersToDetele = _context.Answers.Where(a => a.QuestionId == question.Id);
             if (!answersToDetele.IsNullOrEmpty())
             {
                 foreach (Answer ans in answersToDetele)

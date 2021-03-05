@@ -9,10 +9,11 @@ namespace Quiz.Models
     {
         public int Id { get; set; }
         public QuizState State { get; set; }
-        public int QuestionId { get; set; }
+        public int CurrentQuestionId { get; set; }
         public int StudiorumId { get; set; }
         public virtual ICollection<AnswerInstance> SubmittedAnswers{ get; set; }
          
+        public Studiorum Studiorum { get; set; }
     }
         public enum QuizState
         {
