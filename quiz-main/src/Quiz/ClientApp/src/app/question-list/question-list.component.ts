@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QuestionCrudService } from '../shared/question-crud.service';
-import { Question } from '../shared/question';
-import { Answer } from '../shared/answer';
+import { QuestionCrudService } from '../services/question-crud.service';
+import { Question } from '../models/question';
+import { Answer } from '../models/answer';
 import { StudiorumCrudService } from '../services/studiorum-crud.service';
-import { Studiorum } from '../shared/studiorum';
+import { Studiorum } from '../models/studiorum';
 import { QuestionEditorComponent } from '../question-editor/question-editor.component';
 
 @Component({

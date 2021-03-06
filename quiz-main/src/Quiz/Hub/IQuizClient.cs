@@ -8,6 +8,9 @@ namespace Quiz.Hub
 {
     public interface IQuizClient
     {
+
+        public Task getQuizPin();
+
         Task ShowQuestion(Question q);
         Task ShowAnswer(string answer, string user);
         Task ShowQuestionResult();

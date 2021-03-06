@@ -1,30 +1,15 @@
 export class Answer {
   id: number;
   text: string;
-}
-
-export class UserAnswer {
-  answerText: string;
+  questionID: number;
   isCorrect: boolean;
-  answerCount: number;
-}
 
-export class UserResult {
-  name: string;
-  score: number;
-}
-
-export class QuestionInstance {
-  question: string;
-  answers: string[];
-
-  constructor(question: string, answers: string[]) {
-    this.answers = answers;
-    this.question = question;
+  constructor(id:number =0,t:string="",qid:number=0,iscorr:boolean=false) {
+    this.id = id;
+    this.text = t;
+    this.questionID = qid;
+    this.isCorrect = iscorr;
   }
-}
 
-export interface User {
-  id: string;
-  name: string;
+
 }

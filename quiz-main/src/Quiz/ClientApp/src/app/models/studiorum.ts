@@ -1,4 +1,4 @@
-import { Question } from '../shared/question';
+import { Question } from './question';
 
 export class Studiorum{
     id:number

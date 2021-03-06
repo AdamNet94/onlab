@@ -12,16 +12,16 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { QuestionComponent } from './question/question.component';
 import {ChartComponent} from './chart/chart.component';
 import { StageComponent } from './stage/stage.component';
-import { QuestionCrudService } from './shared/question-crud.service';
+import { QuestionCrudService } from './services/question-crud.service';
 import { QuestionEditorComponent } from './question-editor/question-editor.component';
 import { QuestionListComponent } from './question-list/question-list.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
-import { LobbyComponent } from './lobby/lobby.component';
-import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
 import { MyStudiorumComponent } from './my-studiorum/my-studiorum.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PlayComponent } from './play/play.component';
 import { StudiorumCrudService } from './services/studiorum-crud.service';
+import { LobbyComponent } from './lobby/lobby.component';
+import { SignalRService } from './services/signal-r.service';
 
 
 @NgModule({
@@ -35,10 +35,9 @@ import { StudiorumCrudService } from './services/studiorum-crud.service';
     QuestionListComponent,
     LeaderboardComponent,
     StageComponent,
-    LobbyComponent,
-    LoobyOutlookComponent,
     MyStudiorumComponent,
     PlayComponent,
+    LobbyComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -54,7 +53,6 @@ import { StudiorumCrudService } from './services/studiorum-crud.service';
       { path: 'my-studiorum/:studiorumId', component: QuestionListComponent },
       { path: 'leaderboard', component: LeaderboardComponent },
       { path: 'lobby', component: LobbyComponent },
-      { path: 'lobby-outlook', component: LoobyOutlookComponent },
       { path: 'my-studiorum', component: MyStudiorumComponent },
       { path: 'play', component: PlayComponent }
     ]),
@@ -63,7 +61,8 @@ import { StudiorumCrudService } from './services/studiorum-crud.service';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
     QuestionCrudService,
-    StudiorumCrudService
+    StudiorumCrudService,
+    SignalRService
   ],
   bootstrap: [AppComponent]
 })

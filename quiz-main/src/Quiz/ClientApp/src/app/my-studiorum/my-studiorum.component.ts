@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Studiorum} from '../shared/studiorum';
+import { Studiorum} from '../models/studiorum';
 import { StudiorumCrudService} from '../services/studiorum-crud.service';
 import { Router } from '@angular/router';
 

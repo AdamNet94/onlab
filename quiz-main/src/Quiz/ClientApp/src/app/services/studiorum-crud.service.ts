@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Studiorum } from '../shared/studiorum';
+import { Studiorum } from '../models/studiorum';
 
 @Injectable({
   providedIn: 'root'

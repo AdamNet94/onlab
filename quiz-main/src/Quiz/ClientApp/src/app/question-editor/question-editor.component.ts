@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
-import { Question } from '../shared/question';
-import { Answer } from '../shared/answer';
+import { Question } from '../models/question';
+import { Answer } from '../models/answer';
 import { Router } from '@angular/router';
 import { FormBuilder, NgForm } from '@angular/forms';
-import { QuestionCrudService } from '../shared/question-crud.service';
+import { QuestionCrudService } from '../services/question-crud.service';
 
 @Component({
   selector: 'app-question-editor',

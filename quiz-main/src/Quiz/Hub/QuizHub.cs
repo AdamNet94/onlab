@@ -1,34 +1,45 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Quiz.Data;
 using Quiz.Models;
+using Quiz.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4.EntityFramework.Options;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Quiz.Hub
 {
     public class QuizHub : Hub<IQuizClient>
     {
-        
+        private readonly IServiceScopeFactory scopeFactory;
+        QuizRepository quizRepository;
         Random r = new Random();
+        public QuizHub(IServiceScopeFactory scopeFactory)
+        {
+            this.scopeFactory = scopeFactory;
+            var scope = scopeFactory.CreateScope();
+            this.quizRepository = new QuizRepository
+                (scope.ServiceProvider.GetRequiredService<ApplicationDbContext>());
+        }   
 
-        public static HubRoom Lobby { get; } = new HubRoom 
+        public static HubRoom Lobby { get; } = new HubRoom
         { 
-            Name = "QuizRoom"
-        
+            Name = "QuizRoom";
         };
+
+        public async Task getQuizPin(int studiorumId)
+        {
+            //return await Clients.Caller.SendAsync("receive", user, message);
+        }
 
         public class HubRoom
         {
-
             public string Name { get; set; }
-
-
-
             public List<User> users = new List<User>();
-
-
         }
 
         public async Task EnterLobby()

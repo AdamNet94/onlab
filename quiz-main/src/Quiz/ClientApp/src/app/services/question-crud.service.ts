@@ -1,11 +1,11 @@
-import { Question } from './question';
-import { Answer } from './answer';
+import { Question } from '../models/question';
+import { Answer } from '../models/answer';
 import { Injectable, Inject, EventEmitter } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { QuizInstance } from './quiz-instance';
-import { AnswerSubmit } from './answer-submit';
+import { QuizInstance } from '../models/quiz-instance';
+import { AnswerSubmit } from '../models/answer-submit';
 
 @Injectable({
   providedIn: 'root'

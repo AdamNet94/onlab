@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quiz.Services;
 using Quiz.Hub;
+using Quiz.Repositories;
 
 namespace Quiz
 {
@@ -37,6 +38,7 @@ namespace Quiz
 
             // IoC konténerhez hozzadadja az osztalyunk
             services.AddTransient<IQuizService, QuizService>();
+            services.AddTransient<IQuizRepository, QuizRepository>();
 
             services.AddCors(options =>
             {
@@ -104,6 +106,11 @@ namespace Quiz
                 endpoints.MapHub<QuizHub>("/quizhub");
                 
             });
+
+            GlobalHost.DependencyResolver.Register(
+        typeof(ChatHub),
+        () => new ChatHub(new ChatMessageRepository()));
+
             app.UseCors("CorsPolicy");
             app.UseSpa(spa =>
             {
