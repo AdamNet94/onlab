@@ -9,7 +9,9 @@ export class SignalRService {
   constructor() { }
 
   private hubConnection: signalR.HubConnection
-  public startConnection = () => {
+  private quizid:number;
+
+    startConnection(){
     this.hubConnection = new signalR.HubConnectionBuilder()
                             .withUrl('https://localhost:4200/quizhub')
                             .build();
@@ -18,10 +20,12 @@ export class SignalRService {
       .then(() => console.log('Connection started'))
       .catch(err => console.log('Error while starting connection: ' + err))
   }
-  public addTransferChartDataListener = () => {
-    this.hubConnection.on('transferchartdata', (data) => {
-      this.data = data;
+
+    getQuizId(){
+    this.hubConnection.invoke('GetQuiz', (data) => {
+      this.quizid = data;
       console.log(data);
     });
   }
+  
 }

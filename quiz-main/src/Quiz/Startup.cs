@@ -107,10 +107,6 @@ namespace Quiz
                 
             });
 
-            GlobalHost.DependencyResolver.Register(
-        typeof(ChatHub),
-        () => new ChatHub(new ChatMessageRepository()));
-
             app.UseCors("CorsPolicy");
             app.UseSpa(spa =>
             {
