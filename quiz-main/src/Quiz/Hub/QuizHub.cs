@@ -22,27 +22,26 @@ namespace Quiz.Hub
              this.quizRepository = repo;
          }
 
-        public async Task GetQuizPin(string roomName)
+        public async Task JoinGroup(string pin,string user)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
-            await Clients.Group(roomName).ReceiveMessage(11,"ez a quizID");
+           await Groups.AddToGroupAsync(Context.ConnectionId, pin);
+           await Clients.Groups(pin).RenderNewPlayer(user);
         }
 
-        public async Task Start()
+        public async Task StartGame(int studiorumId, string pin)
         {
-            await Clients.All.StartGame();
+            var quizId = await this.quizRepository.CreateQuizAsync(studiorumId);
+            await Clients.Group(pin).ReceiveQuizId(quizId);
         }
 
-        public async Task ShowAnswer(int questionId)
+        public async Task SetAnswer()
         {
 
         }
 
-        public async Task SendQuestion(Question q)
+        public async Task SendQuestion()
         {
-            Console.WriteLine();
-            Console.WriteLine("Calling ShowQuestion with id: "+q.Id);
-            await Clients.All.ShowQuestion(q);
+
         }
 
         public async Task EndGame()

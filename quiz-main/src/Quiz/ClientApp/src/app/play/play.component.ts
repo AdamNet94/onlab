@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Quiz } from '../models/quiz';
+import { SignalRService } from '../services/signal-r.service';
 
 @Component({
   selector: 'app-play',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlayComponent implements OnInit {
 
-  constructor() { }
+  private playerName:string = "";
+  private pin:number = 0;
+  private quiz:Quiz;
+
+  constructor(private SignalRconnection:SignalRService) {this.quiz = new Quiz(); }
 
   ngOnInit() {
+    this.SignalRconnection.startConnection(this.pin.toString(),this.playerName);
+    this.SignalRconnection.AddQuizIdListener(this.quiz);
+  }
+
+  onSubmit(){
+    this.SignalRconnection.joinGroup(this.pin.toString(),this.playerName,this.quiz);
   }
 
 }

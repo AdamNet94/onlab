@@ -2,19 +2,30 @@
 
 <div class="input-group input-group-lg">
     <div class="col-auto">
-      <label class="sr-only" for="inlineFormInputGroup">Enter Pin here</label>
+      <label class="sr-only" for="pin">Enter Pin here</label>
       <div class="input-group mb-2">
         <div class="input-group-prepend">
           <div class="input-group-text">PIN: </div>
         </div>
-        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Enter PIN here">
+        <input [(ngModel)]="pin" type="text" class="form-control" id="Pin" placeholder="Enter PIN here">
+      </div>
+    </div>
+    <div class="col-auto">
+      <label class="sr-only" for="name">Name: </label>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Name: </div>
+        </div>
+        <input [(ngModel)]="playerName" type="text" class="form-control" id="name" placeholder="My Name">
       </div>
     </div>
     <span>
-      <button class="btn btn-primary"> Join </button>
+      <button class="btn btn-primary" (click)="onSubmit()"> Join </button>
     </span>
-  </div>
+    <h4 *ngIf="quiz && quiz.quizId > 0" class="join-lobby">
+      You joined, check if you can see you name in the Lobby
+    </h4>
+</div>
 
-  <h4 class="join-lobby">You joined, check if you can see you name in the Lobby
-      (This Label pops up when the server replies with a success)</h4>
+  
 

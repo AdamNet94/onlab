@@ -7,3 +7,7 @@
       <p class="lead"> Join the Quiz and let's get started </p>
     </div>
 </div>
+<button class="btn btn-primary btn-lg" (click)="onStart()">Start Quiz</button>
+<ul *ngIf="players.length" class="list-group">
+  <li *ngFor="let player of players"class="list-group-item">{{player}}</li>
+</ul>

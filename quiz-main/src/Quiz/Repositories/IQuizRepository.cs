@@ -7,6 +7,6 @@ namespace Quiz.Repositories
 {
     public interface IQuizRepository
     {
-        public Task<int> CreateQuiz(int studiorumId);
+        public Task<int> CreateQuizAsync(int studiorumId);
     }
 }

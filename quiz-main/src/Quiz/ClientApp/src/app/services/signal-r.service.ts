@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
+import { Quiz } from '../models/quiz';
+import { QuizState } from '../models/quiz-state';
 
 @Injectable({
   providedIn: 'root'
@@ -9,35 +11,29 @@ export class SignalRService {
   constructor() { }
 
   hubConnection: signalR.HubConnection = new signalR.HubConnectionBuilder()
-    .withUrl('/quizhub').build();
-  private quizid: number;
-  private Pin: number;
+  .withUrl('/quizhub').build();
 
-    startConnection(){
+    startConnection(pin:string,user:string){
+      
       this.hubConnection
         .start()
         .then(() => console.log('Connection started'))
-        .catch(err => console.log('Error while starting connection: ' + err)).then(() =>this.getQuiz())
+        .catch(err => console.log('Error while starting connection: ' + err))
     }
 
-  getQuiz() {
+  joinGroup(pin:string,user:string,quiz:Quiz){
     try {
-      this.hubConnection.invoke("GetQuizPin", "roomNumber1");/*.then(
-        (data) => {
-          console.log(data);
-        })*/
-    } catch (err) {
+      this.hubConnection.invoke("JoinGroup", pin,user).then(()=> quiz.state=QuizState.CheckYourName)
+    }catch (err) {
       console.error(err);
     }
-      
-     
   }
 
-  AddReceiveMessageListener() {
-    this.hubConnection.on('ReceiveMessage', (id,message) => {
-      console.log(id+" "+message);
+  AddQuizIdListener(quiz:Quiz) {
+    this.hubConnection.on('ReceiveQuizId', (id) => {
+      quiz.quizId=id;
+      console.log(id+" ez a quiz id");
     });
   }
-
 
 }

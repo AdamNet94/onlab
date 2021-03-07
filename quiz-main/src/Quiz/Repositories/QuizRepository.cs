@@ -17,7 +17,7 @@ namespace Quiz.Repositories
             this.context = _c;
         }
 
-        public async Task<int> CreateQuiz(int studiorumId)
+        public async Task<int> CreateQuizAsync(int studiorumId)
         {
             int firstQuestionId =  context.Studiorums
                 .Find(studiorumId)

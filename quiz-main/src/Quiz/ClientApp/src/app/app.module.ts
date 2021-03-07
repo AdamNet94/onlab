@@ -22,6 +22,7 @@ import { PlayComponent } from './play/play.component';
 import { StudiorumCrudService } from './services/studiorum-crud.service';
 import { LobbyComponent } from './lobby/lobby.component';
 import { SignalRService } from './services/signal-r.service';
+import { SignalAdminService } from './services/signal-admin.service';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { SignalRService } from './services/signal-r.service';
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
     QuestionCrudService,
     StudiorumCrudService,
-    SignalRService
+    SignalRService,
+    SignalAdminService
   ],
   bootstrap: [AppComponent]
 })
