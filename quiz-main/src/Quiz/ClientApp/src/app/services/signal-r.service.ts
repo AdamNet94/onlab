@@ -8,24 +8,36 @@ export class SignalRService {
 
   constructor() { }
 
-  private hubConnection: signalR.HubConnection
-  private quizid:number;
+  hubConnection: signalR.HubConnection = new signalR.HubConnectionBuilder()
+    .withUrl('/quizhub').build();
+  private quizid: number;
+  private Pin: number;
 
     startConnection(){
-    this.hubConnection = new signalR.HubConnectionBuilder()
-                            .withUrl('https://localhost:4200/quizhub')
-                            .build();
-    this.hubConnection
-      .start()
-      .then(() => console.log('Connection started'))
-      .catch(err => console.log('Error while starting connection: ' + err))
+      this.hubConnection
+        .start()
+        .then(() => console.log('Connection started'))
+        .catch(err => console.log('Error while starting connection: ' + err)).then(() =>this.getQuiz())
+    }
+
+  getQuiz() {
+    try {
+      this.hubConnection.invoke("GetQuizPin", "roomNumber1");/*.then(
+        (data) => {
+          console.log(data);
+        })*/
+    } catch (err) {
+      console.error(err);
+    }
+      
+     
   }
 
-    getQuizId(){
-    this.hubConnection.invoke('GetQuiz', (data) => {
-      this.quizid = data;
-      console.log(data);
+  AddReceiveMessageListener() {
+    this.hubConnection.on('ReceiveMessage', (id,message) => {
+      console.log(id+" "+message);
     });
   }
-  
+
+
 }

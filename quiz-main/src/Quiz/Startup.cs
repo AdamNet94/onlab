@@ -38,7 +38,7 @@ namespace Quiz
 
             // IoC konténerhez hozzadadja az osztalyunk
             services.AddTransient<IQuizService, QuizService>();
-            services.AddTransient<IQuizRepository, QuizRepository>();
+            services.AddScoped<IQuizRepository, QuizRepository>();
 
             services.AddCors(options =>
             {

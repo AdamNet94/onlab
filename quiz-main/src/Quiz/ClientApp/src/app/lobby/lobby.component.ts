@@ -9,18 +9,17 @@ import { SignalRService } from '../services/signal-r.service';
 })
 export class LobbyComponent implements OnInit {
 
-studiorumId:number;
-quizPin:number;
+  studiorumId:number;
+  quizPin:number;
 
   constructor(private route:ActivatedRoute, private signalRConnection :SignalRService) {
     this.studiorumId = Number(route.snapshot.paramMap.get('studiorumId'));
     this.quizPin = this.getRandomInt();
-
-   }
+  }
 
   ngOnInit() {
+    this.signalRConnection.AddReceiveMessageListener();
     this.signalRConnection.startConnection();
-    this.signalRConnection
   }
 
   getRandomInt(max=10000) {

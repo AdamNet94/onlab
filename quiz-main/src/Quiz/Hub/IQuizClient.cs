@@ -10,6 +10,7 @@ namespace Quiz.Hub
     {
 
         public Task getQuizPin();
+        Task ReceiveMessage(int quizId, string message);
 
         Task ShowQuestion(Question q);
         Task ShowAnswer(string answer, string user);

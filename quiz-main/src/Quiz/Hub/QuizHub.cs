@@ -15,25 +15,21 @@ namespace Quiz.Hub
 {
     public class QuizHub : Hub<IQuizClient>
     {
-        private readonly IServiceScopeFactory scopeFactory;
-        QuizRepository quizRepository;
+        IQuizRepository quizRepository;
         Random r = new Random();
-        public QuizHub(IServiceScopeFactory scopeFactory)
-        {
-            this.scopeFactory = scopeFactory;
-            var scope = scopeFactory.CreateScope();
-            this.quizRepository = new QuizRepository
-                (scope.ServiceProvider.GetRequiredService<ApplicationDbContext>());
-        }
+       public QuizHub(IQuizRepository repo)
+         {
+             this.quizRepository = repo;
+         }
 
-        public async Task getQuizPin(int studiorumId)
+        public async Task GetQuizPin(string roomName)
         {
-            //return await Clients.Caller.SendAsync("receive", user, message);
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+            await Clients.Group(roomName).ReceiveMessage(11,"ez a quizID");
         }
 
         public async Task Start()
         {
-            
             await Clients.All.StartGame();
         }
 
