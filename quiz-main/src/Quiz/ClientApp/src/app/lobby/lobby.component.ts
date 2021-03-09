@@ -12,13 +12,13 @@ import { SignalAdminService } from '../services/signal-admin.service';
 export class LobbyComponent implements OnInit {
 
   studiorumId:number;
-  quizPin:number;
+  quizPin:string;
   players:Array<string> = new Array<string>();
   quiz:Quiz=new Quiz();
 
   constructor(private route:ActivatedRoute, private signalAdminConnection :SignalAdminService) {
     this.studiorumId = Number(route.snapshot.paramMap.get('studiorumId'));
-    this.quizPin = this.getRandomInt();
+    this.quizPin = String(route.snapshot.paramMap.get('lobbyId'));
   }
 
   ngOnInit() {
@@ -30,10 +30,6 @@ export class LobbyComponent implements OnInit {
 
   onStart(){
     this.signalAdminConnection.startGame(1,this.quizPin.toString());
-  }
-
-  getRandomInt(max=10000){
-    return Math.floor(Math.random() * Math.floor(max));
   }
 
 }

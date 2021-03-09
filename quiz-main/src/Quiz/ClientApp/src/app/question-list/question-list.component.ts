@@ -27,13 +27,24 @@ export class QuestionListComponent implements OnInit {
     this.studiorumId = Number(route.snapshot.paramMap.get('studiorumId'));
     console.log(this.studiorumId);
     this.httpservice.getStudiorum(this.studiorumId).subscribe(result => {
-      var studiorum1 = new Studiorum();
-      studiorum1 = result;
-      console.log(result);
       this.studiorum = result;
+      if(result.questions.length > 0)
+      {
+        console.log(this.studiorum.questions[0]);
+      }
+      else{
+        var newQuestion = new Question();
+        newQuestion.studiorumId=this.studiorumId;
+        this.studiorum.questions.push(newQuestion);
+      }
+      this.selectedQuestion = this.studiorum.questions[0];
     }, error => console.error(error));
-    console.log(this.studiorum);
-    this.selectedQuestion = this.studiorum.questions[0];
+  }
+
+  isEmpty(){
+    if(this.selectedQuestion!=null)
+        return true;
+    return false;
   }
 
   ngOnInit() {
@@ -43,6 +54,7 @@ export class QuestionListComponent implements OnInit {
   receiveChangedQuestion($event){
     let q:Question = $event as Question;
     let index = this.studiorum.questions.findIndex(element => element.id == q.id);
+
     if (index > 0)
       this.studiorum.questions[index] = q;
       /*
@@ -63,6 +75,10 @@ export class QuestionListComponent implements OnInit {
 
   changeCurrentQuestion(questionIndex: number) {
     this.selectedQuestion = this.studiorum.questions[questionIndex];
+    console.log(this.selectedQuestion.id);
+    if(this.selectedQuestion.id == 0)
+      this.child.resetForm();
+    else this.child.setForm();
   }
 
   createQuestion() {

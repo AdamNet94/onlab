@@ -26,7 +26,6 @@ namespace Quiz.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Question>>> Getquestion()
         {
-            
             return await _context.Questions.Include(q => q.Answers).ToListAsync();
         }
 
@@ -50,14 +49,14 @@ namespace Quiz.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutQuestion(int id, Question question)
+        public async Task<IActionResult> PutQuestion(int id, Question modifiedQuestion)
         {
-            if (id != question.Id)
+            if (id != modifiedQuestion.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(question).State = EntityState.Modified;
+           _context.Entry(modifiedQuestion).State = EntityState.Modified;
 
             try
             {
@@ -77,17 +76,6 @@ namespace Quiz.Controllers
 
             return NoContent();
         }
-
-        /*
-          public async Task<ActionResult<Question>> PostQuestion(Question question)
-        {
-            _context.Questions.Add(question);
-            await _context.SaveChangesAsync();
-
-
-            return CreatedAtAction("GetQuestion", new { id = question.Id }, question);
-        }
-         * */
 
 
         // POST: api/Questions

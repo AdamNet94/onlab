@@ -10,7 +10,7 @@ namespace Quiz.Repositories
     
     public class QuizRepository : IQuizRepository
     {
-        private readonly ApplicationDbContext context;
+        private ApplicationDbContext context;
 
         public QuizRepository(ApplicationDbContext _c)
         {
@@ -19,14 +19,14 @@ namespace Quiz.Repositories
 
         public async Task<int> CreateQuizAsync(int studiorumId)
         {
-            int firstQuestionId =  context.Studiorums
-                .Find(studiorumId)
-                .Questions
-                .Select(q => q.Id).Min();
 
+            var questionsIds = context.Questions.Where(q => q.StudiorumId == studiorumId)
+            .GroupBy(q => q.Id).Select(x => new { minquestId = x.Min(z => z.Id) }).ToList();
+
+            
             var newQuiz = new QuizInstance
             {
-                Id = 0, CurrentQuestionId = firstQuestionId,
+                Id = 0, CurrentQuestionId = questionsIds[0].minquestId,
                 State = QuizState.Start,
                 StudiorumId = studiorumId
             };

@@ -14,7 +14,6 @@ export class SignalRService {
   .withUrl('/quizhub').build();
 
     startConnection(pin:string,user:string){
-      
       this.hubConnection
         .start()
         .then(() => console.log('Connection started'))
@@ -24,6 +23,7 @@ export class SignalRService {
   joinGroup(pin:string,user:string,quiz:Quiz){
     try {
       this.hubConnection.invoke("JoinGroup", pin,user).then(()=> quiz.state=QuizState.CheckYourName)
+      quiz.state=QuizState.CheckYourName;
     }catch (err) {
       console.error(err);
     }
@@ -32,6 +32,7 @@ export class SignalRService {
   AddQuizIdListener(quiz:Quiz) {
     this.hubConnection.on('ReceiveQuizId', (id) => {
       quiz.quizId=id;
+      quiz.state =QuizState.Start;
       console.log(id+" ez a quiz id");
     });
   }

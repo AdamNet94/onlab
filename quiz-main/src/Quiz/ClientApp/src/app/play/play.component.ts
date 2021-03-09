@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Quiz } from '../models/quiz';
+import { QuizState } from '../models/quiz-state';
 import { SignalRService } from '../services/signal-r.service';
 
 @Component({
@@ -22,6 +23,8 @@ export class PlayComponent implements OnInit {
 
   onSubmit(){
     this.SignalRconnection.joinGroup(this.pin.toString(),this.playerName,this.quiz);
+    this.quiz.state=QuizState.CheckYourName;
   }
+
 
 }

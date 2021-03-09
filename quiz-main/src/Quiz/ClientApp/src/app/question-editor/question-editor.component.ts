@@ -1,8 +1,6 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { Question } from '../models/question';
-import { Answer } from '../models/answer';
 import { Router } from '@angular/router';
-import { FormBuilder, NgForm } from '@angular/forms';
 import { QuestionCrudService } from '../services/question-crud.service';
 
 @Component({
@@ -13,17 +11,24 @@ import { QuestionCrudService } from '../services/question-crud.service';
 export class QuestionEditorComponent implements OnInit {
 
   markupText: string[] = ['Answer 02 *', "Answer 02 *", "Answer 03 *", "Answer 04 *"]
-  newQuestionflag: boolean = false;
+  newQuestionflag: boolean;
   @Input() public formData: Question;
   @Output() questionChangedEvent = new EventEmitter<Question>();
   @Output() questionDeletedEvent = new EventEmitter<Question>();
 
   constructor(private httpservice: QuestionCrudService, private router: Router) {
+  }
 
+  hasArrived(){
+    if(this.formData!=null)
+      return true;
+    return false;
   }
 
   ngOnInit() {
-    console.log(this.formData);
+    if(this.formData.id == 0)
+    this.resetForm();
+    else this.newQuestionflag = false;
   }
 
   onEdit() {
@@ -31,6 +36,7 @@ export class QuestionEditorComponent implements OnInit {
       console.log(this.formData);
       this.httpservice.postQuestion(this.formData).subscribe(
         question => {
+          console.log("szerevertől: "+ question);
           this.questionChangedEvent.emit(question);
         },
         err => { console.log(err); },
@@ -42,11 +48,18 @@ export class QuestionEditorComponent implements OnInit {
     else {
       console.log(this.formData);
       this.httpservice.putQuestion(this.formData, this.formData.id).subscribe(
-        question => {
-          this.questionChangedEvent.emit(question);
+        () => {
+          this.questionChangedEvent.emit(this.formData);
         },
         err => { console.log(err); }
       );
+      for(let i=0; i <this.formData.answers.length;i++){
+        let ans =this.formData.answers[i]
+        this.httpservice.putAnswer(ans,ans.id).subscribe(
+          ()=>{},
+          err => { console.log(err); }
+        );
+      }
     }
   }
 
@@ -57,6 +70,12 @@ export class QuestionEditorComponent implements OnInit {
       },
       err => { console.log(err); },
     );
+  }
+
+  setForm(){
+    let editButton = document.getElementById("submitButton");
+    editButton.innerHTML = "Edit question";
+    this.newQuestionflag = false;
   }
 
   resetForm() {

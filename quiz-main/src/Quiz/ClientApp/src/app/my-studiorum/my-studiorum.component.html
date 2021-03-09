@@ -10,10 +10,13 @@
         <div *ngFor="let studiorum of studiorums; index as i;" class="card" >
           <div class="card-header" id="headingOne">
             <h2 class="mb-0">
-              <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" [attr.data-target]="'#studiorum'+ studiorum.id" aria-expanded="true" [attr.aria-controls]="'studiorum'+studiorum.id">
+              <button class="btn btn-link btn-block text-left" 
+              type="button" data-toggle="collapse"
+              [attr.data-target]="'#studiorum'+ studiorum.id"
+              aria-expanded="true" [attr.aria-controls]="'studiorum'+studiorum.id">
                 {{studiorum.title}}
               </button>
-              <button type ="button" class="btn btn-success" routerLink="/lobby"> Start </button>
+              <button [disabled]="isEmpty(i)" type ="button" class="btn btn-success" (click)="startQuiz(i)"> Start </button>
               <button type ="button" class="btn btn-primary" (click)=navigateToQuestions(i)> Edit </button>
               <button type ="button" class="btn btn-danger" (click)="deleteStudiorum(i)">Delete</button>
             </h2>

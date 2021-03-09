@@ -51,9 +51,9 @@ import { SignalAdminService } from './services/signal-admin.service';
       { path: 'chart', component: ChartComponent},
       { path: 'stage', component: StageComponent },
       { path: 'question-editor', component: QuestionEditorComponent },
+      { path: 'lobby/:studiorumId/:lobbyId', component: LobbyComponent },
       { path: 'my-studiorum/:studiorumId', component: QuestionListComponent },
       { path: 'leaderboard', component: LeaderboardComponent },
-      { path: 'lobby', component: LobbyComponent },
       { path: 'my-studiorum', component: MyStudiorumComponent },
       { path: 'play', component: PlayComponent }
     ]),

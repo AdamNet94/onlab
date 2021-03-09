@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Studiorum} from '../models/studiorum';
 import { StudiorumCrudService} from '../services/studiorum-crud.service';
-import { Router } from '@angular/router';
+import { Router,NavigationExtras } from '@angular/router';
 
 
 @Component({
@@ -19,12 +19,27 @@ export class MyStudiorumComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  ngOnInit() {
-   
+  isEmpty(i:number): boolean{
+    let questions = this.studiorums[i].questions;
+    if(questions!= null)
+      if(questions.length > 0)
+        return false;
+    return true;
   }
 
-  navigateToQuestions(id:number) {
-    this.router.navigate(['my-studiorum/studiorumId', { studiorumId: id + 1 }]);
+  ngOnInit() {
+    
+  }
+
+  navigateToQuestions(index:number) {
+    let studiorumId = this.studiorums[index].id;
+    this.router.navigate(['my-studiorum/',studiorumId]);
+  }
+
+  startQuiz(index:number){
+    let studiorumId = this.studiorums[index].id;
+    let lobbyId = this.getRandomInt();
+    this.router.navigate(['lobby/',studiorumId,lobbyId]);
   }
 
   addStudiorum(title: string) {
@@ -40,6 +55,10 @@ export class MyStudiorumComponent implements OnInit {
       err => { console.log(err); },
       () => { this.studiorums.splice(index,1); }
     );
+  }
+
+  getRandomInt(max=10000){
+    return Math.floor(Math.random() * Math.floor(max));
   }
 
 }
