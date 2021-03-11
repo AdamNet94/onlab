@@ -18,6 +18,7 @@ namespace Quiz.Data
         public DbSet<QuizInstance> QuizInstances { get; set; }
         public DbSet<AnswerInstance> AnswerInstances { get; set; }
         public DbSet<Studiorum> Studiorums { get; set; }
+        public DbSet<Player> Players { get; set; }
 
         public ApplicationDbContext(
             DbContextOptions options,

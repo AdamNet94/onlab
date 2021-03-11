@@ -1,8 +1,8 @@
     <div class="container">
-        <h3 class="text-center">Ki nem volt republikánus elnöke az USA-nak?</h3>
+        <h3 class="text-center">{{question.text}}</h3>
         <span id="timer"> {{timeleft}} </span>
     </div>
     <div class="answer-container">
-        <button *ngFor="let answer of dummyanswers"
-        type="button" class="btn btn-light btn-primary btn-lg">{{answer}}</button>
+        <button *ngFor="let answer of question.answers"
+        type="button" class="btn btn-light btn-primary btn-lg">{{answer.text}}</button>
     </div>

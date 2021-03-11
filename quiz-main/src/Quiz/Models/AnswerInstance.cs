@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 namespace Quiz.Models
 {
     public class AnswerInstance
@@ -12,9 +7,10 @@ namespace Quiz.Models
         public int QuestionId { get; set; }
         public int AnswerId { get; set; }
         public int Score { get; set; }
-        public bool isCorrect { get; set; }
-        public string Player { get; set; }
-        public int QuizId {get;set; }
+        public bool IsCorrect { get; set; }
+        public int PlayerId { get; set; }
+        public int QuizInstanceId {get;set; }
         public QuizInstance Quiz { get; set; }
+        public Player Player { get; set; }
     }
 }

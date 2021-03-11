@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
+import { Question } from '../models/question';
 import { Quiz } from '../models/quiz';
 import { QuizState } from '../models/quiz-state';
 
@@ -30,10 +31,21 @@ export class SignalRService {
   }
 
   AddQuizIdListener(quiz:Quiz) {
-    this.hubConnection.on('ReceiveQuizId', (id) => {
-      quiz.quizId=id;
-      quiz.state =QuizState.Start;
-      console.log(id+" ez a quiz id");
+    this.hubConnection.on('ReceiveQuizId', (id:number,question:Question) => {
+      quiz.quizId = id;
+      quiz.currentQuestion = question as Question;
+      quiz.state = QuizState.Question;
+      console.log(id + " ez a quiz id");
+      console.log(question);
+    });
+  }
+
+  AddQuestionListener(quiz:Quiz) {
+    this.hubConnection.on('ShowQuestion', (question:Question) => {
+      quiz.currentQuestion = question as Question;
+      quiz.state = QuizState.Question;
+      console.log("az új kérdés: " + question.text);
+
     });
   }
 

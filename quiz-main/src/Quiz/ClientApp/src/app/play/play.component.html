@@ -27,6 +27,6 @@
     </h4>
 </div>
 
-<app-question *ngIf="quiz.state == 2" #questionChild ></app-question>
+<app-question *ngIf="quiz.state > 1" #questionChild [question]="quiz.currentQuestion" ></app-question>
   
 

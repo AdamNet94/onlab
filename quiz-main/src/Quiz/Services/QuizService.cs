@@ -88,14 +88,14 @@ namespace Quiz.Services
                     if (quizInstance.CurrentQuestionId == this.QuestionCount() || quizInstance.CurrentQuestionId > this.QuestionCount())
                     {
                         
-                        var ansIn = _context.AnswerInstances.ToList();
+                      /*  var ansIn = _context.AnswerInstances.ToList();
                         var grouped = ansIn.GroupBy(a => a.Player, a => a.Score, (key, value) => new { User = key, Score = value });
                         List<UserScore> scores = _context.AnswerInstances.GroupBy(a => a.Player).Select(ai => new UserScore
                         { user = ai.Key, sumScore = ai.Sum(a => a.Score) }).OrderByDescending(a => a.sumScore).ToList();
 
                         quizInstance.State = QuizState.Questionresult;
                         _context.SaveChanges();
-
+                      */
                         //ShowQuestionResults(UserResult[10]{string name, int score})
                     }
                     break;
@@ -135,15 +135,15 @@ namespace Quiz.Services
             }
             if (answerId == correctAnswerId)
                 isGoodANswer = true;
-
+            /*
             var user = new User();
             user.Name = userName;
             var ai = new AnswerInstance
             { QuestionId = questionId, AnswerId = answerId, Score = isGoodANswer ? 1: 0, isCorrect = isGoodANswer, Player = userName};
             _context.AnswerInstances.Add(ai);
             QuizInstance quizInstance = _context.QuizInstances.Find(quizInstanceId);
-            //quizInstance.SubmittedAnswers.Add(ai);
             _context.SaveChanges();
+            */
         }
 
     }

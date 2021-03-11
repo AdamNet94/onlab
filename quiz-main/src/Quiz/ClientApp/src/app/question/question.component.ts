@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CounterService } from '../services/counter.service';
 import { time } from 'console';
+import { Question } from '../models/question';
 
 @Component({
   selector: 'app-question',
@@ -10,9 +11,9 @@ import { time } from 'console';
 })
 export class QuestionComponent implements OnInit {
   
-  private dummyanswers = ["Thedore Roosevelt", "Ulysses Grant","Marty McFly", "Abraham Lincoln"];
+  @Input() public question:Question;
   timeleft = 10;
-  constructor(private router: Router, private counter: CounterService) { }
+  constructor(private router: Router, private counter: CounterService) {}
    
 
   ngOnInit() {
@@ -49,5 +50,4 @@ export class QuestionComponent implements OnInit {
       }
     }
   }
-
 }

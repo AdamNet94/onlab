@@ -10,11 +10,11 @@ import { SignalRService } from '../services/signal-r.service';
 })
 export class PlayComponent implements OnInit {
 
-  private playerName:string = "";
-  private pin:number = 0;
-  private quiz:Quiz;
+  private playerName: string = "";
+  private pin: number = 0;
+  private quiz: Quiz;
 
-  constructor(private SignalRconnection:SignalRService) {this.quiz = new Quiz(); }
+  constructor(private SignalRconnection:SignalRService) {this.quiz = new Quiz();}
 
   ngOnInit() {
     this.SignalRconnection.startConnection(this.pin.toString(),this.playerName);
@@ -25,6 +25,5 @@ export class PlayComponent implements OnInit {
     this.SignalRconnection.joinGroup(this.pin.toString(),this.playerName,this.quiz);
     this.quiz.state=QuizState.CheckYourName;
   }
-
 
 }
