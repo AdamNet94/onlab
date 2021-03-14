@@ -8,3 +8,7 @@ div.answer-container{
 button.answer{
     justify-self: stretch;
 }
+div >span#timer{
+    font-size: xx-large;
+    margin: 15px 15px;
+}

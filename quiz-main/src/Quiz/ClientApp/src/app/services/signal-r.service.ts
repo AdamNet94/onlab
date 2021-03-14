@@ -30,7 +30,7 @@ export class SignalRService {
     }
   }
 
-  AddQuizIdListener(quiz:Quiz) {
+  addQuizIdListener(quiz:Quiz) {
     this.hubConnection.on('ReceiveQuizId', (id:number,question:Question) => {
       quiz.quizId = id;
       quiz.currentQuestion = question as Question;
@@ -40,13 +40,34 @@ export class SignalRService {
     });
   }
 
-  AddQuestionListener(quiz:Quiz) {
+  addQuestionListener(quiz:Quiz) {
     this.hubConnection.on('ShowQuestion', (question:Question) => {
       quiz.currentQuestion = question as Question;
       quiz.state = QuizState.Question;
       console.log("az új kérdés: " + question.text);
-
     });
+  }
+
+  SendAnswer(answerId:number, quiz:Quiz):Promise<void> {
+    try {
+      this.hubConnection.invoke("submitAnswer", quiz.quizId,answerId).then(
+        (data)=> {
+          // data first parameter is the correct answer Id, second is the score
+        var result = data as number[];
+        console.log(data);
+        console.log("correct answer id from server is"+ result[0]);
+        console.log("my Score is :"+ result[1]);
+          quiz.answerScore=result[1];
+          let correctAnswerId=result[0];
+          quiz.currentQuestion.answers.forEach(element => {
+            if(element.id==correctAnswerId)
+               { quiz.correctAnswer=element;}
+          });
+        });
+        return new Promise(()=> {});
+    }catch (err) {
+      console.error(err);
+    }
   }
 
 }

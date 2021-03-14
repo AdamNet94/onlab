@@ -9,7 +9,9 @@ namespace Quiz.Repositories
         public Task<int> CreateQuizAsync(int studiorumId);
         public Task AddUserAsync(string connectionId, string userName);
         public Task<Question> GetQuestionAsync(int quizId);
+        public Task<Answer> GetCorrectAnswerAsync(int quizId);
         public Task<QuizState> GetStateAsync(int quizId);
+        public Task<(Answer,int)> submitAnswerAsync(int quizId,int answerId, string connectionId);
 
 
     }

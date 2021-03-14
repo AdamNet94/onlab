@@ -27,6 +27,24 @@
     </h4>
 </div>
 
-<app-question *ngIf="quiz.state > 1" #questionChild [question]="quiz.currentQuestion" ></app-question>
-  
+<app-question *ngIf="quiz.state > 1"
+  #questionChild [question]="quiz.currentQuestion"
+  (answerSubmittedEvent)="sendAnswer($event)" >
+</app-question>
 
+<div class="answer-result" *ngIf="quiz.state == 3">
+  <div *ngIf="quiz.answerScore > 0; then correctAnswer else incorrectAnswer"></div>
+  <ng-template #correctAnswer>
+    <div class="container">
+      <h1 class="display-4"> You are spot on, correct answer ! </h1>
+      <p class="lead"> Your score is : {{quiz.answerScore}} </p>
+    </div>
+  </ng-template>
+  <ng-template #incorrectAnswer>
+    <div class="container">
+      <h1 class="display-4"> Oh no, this time you got it wrong ! </h1>
+      <p class="lead"> Your score is : 0 </p>
+    </div>
+  </ng-template>
+</div>
+ 

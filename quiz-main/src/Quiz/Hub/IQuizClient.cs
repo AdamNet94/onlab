@@ -8,8 +8,9 @@ namespace Quiz.Hub
         Task RenderNewPlayer(string user);
         Task ReceiveQuizId(int quizId,Question question);
         Task ShowQuestion(Question q);
+        Task ReceiveCorrectAnswer(Answer correctAnswer);
 
-        Task ShowAnswer(string answer, string user);
+        Task ReceiveResult(int correctAnswerId, int score);
         Task ShowQuestionResult();
         Task StartGame();
         Task Next();

@@ -39,7 +39,6 @@ namespace Quiz.Hub
         public async Task Next(int quizId, string pin)
         {
             QuizState state = await quizRepository.GetStateAsync(quizId);
-
             switch (state)
             {
                 case QuizState.Showquestion:
@@ -49,14 +48,19 @@ namespace Quiz.Hub
                         foreach (var answer in currentQuestion.Answers)
                             answer.IsCorrect = false;
                         await Clients.Group(pin).ShowQuestion(currentQuestion);
+                        
                         break;
-                case QuizState.Showanswer: break;
+                case QuizState.Showanswer:
+                    Answer correctAnswer = await this.quizRepository.GetCorrectAnswerAsync(quizId);
+                    await Clients.Caller.ReceiveCorrectAnswer(correctAnswer);
+                    break;
             }
         }
 
-        public async Task SetAnswer()
+        public async Task<int[]> submitAnswer(int quizId, int answerId)
         {
-
+            (Answer correctAnswer,int Score) result = await quizRepository.submitAnswerAsync(quizId, answerId,Context.ConnectionId);
+            return new int[] { result.correctAnswer.Id, result.Score };
         }
     }
 }

@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { CounterService } from '../services/counter.service';
-import { time } from 'console';
 import { Question } from '../models/question';
 
 @Component({
@@ -12,42 +11,54 @@ import { Question } from '../models/question';
 export class QuestionComponent implements OnInit {
   
   @Input() public question:Question;
-  timeleft = 10;
-  constructor(private router: Router, private counter: CounterService) {}
-   
+  readonly initTime = 15;
+  timeleft = this.initTime;
+  answersDisableFlag:boolean = false;
+  @Output() answerSubmittedEvent = new EventEmitter<number>();
+
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    var cnt = this.timeleft;
-    this.counter.CountDown(cnt);
-  }
-  
-  answersDisabled() {
-    const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
-    let answer;
-    for (let id of ids) {
-        answer = <HTMLInputElement>document.getElementById(id);
-        answer.classList.remove('answer');
-        answer.classList.add('answer-disabled');
-        answer.disabled = true;
-    }
+    //this.CountDown(this);
   }
 
-  answerSelected(event: Event): void {
-    const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
-    const elementId: string = (event.target as Element).id;
-    let answer;
-    for (let id of ids) {
-      if (id == elementId) {
-        answer = <HTMLInputElement>document.getElementById(id);
-        answer.classList.remove('answer');
-        answer.classList.add('answer-selected');
-        answer.disabled = true;
-      } else {
-        answer = <HTMLInputElement>document.getElementById(id);
-        answer.classList.remove('answer');
-        answer.classList.add('answer-disabled');
-        answer.disabled = true;
+  ngOnChanges(changes: SimpleChanges): void {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'question': {
+            this.NextQuestion(changes.question.currentValue)
+          }
+        }
       }
     }
   }
+  
+  submitAnswer(index:number){
+      this.answerSubmittedEvent.emit(this.question.answers[index].id);
+  }
+
+  NextQuestion(nextQuestion:Question){
+    this.question = nextQuestion;
+    this.answersDisableFlag= false;
+    this.timeleft=this.initTime;
+    this.CountDown(this);
+  }
+
+  CountDown(qc:QuestionComponent) {
+    var counter = setInterval(Counting, 1000);
+    function Counting()
+      {
+        if (qc.timeleft == 0 || qc.timeleft < 0 )
+         {
+           clearInterval(counter);
+           qc.answersDisableFlag = true;
+         }
+        else {
+          qc.timeleft-=1;
+        }
+    }
+  }
+
 }

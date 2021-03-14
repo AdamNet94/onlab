@@ -1,13 +1,18 @@
-<h1></h1>
-<label for="" type="text"></label>
 
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-      <h1 class="display-4"> Game's PIN :{{quizPin}} </h1>
-      <p class="lead"> Join the Quiz and let's get started </p>
-    </div>
+<div *ngIf="quiz.state == 0" class="container">
+  <div  class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4"> Game's PIN :{{quizPin}} </h1>
+        <p class="lead"> Join the Quiz and let's get started </p>
+      </div>
+  </div>
+  <button class="btn btn-primary btn-lg" (click)="onStart()">Start Quiz</button>
+  <ul *ngIf="players.length" class="list-group">
+    <li *ngFor="let player of players"class="list-group-item">{{player}}</li>
+  </ul>
 </div>
-<button class="btn btn-primary btn-lg" (click)="onStart()">Start Quiz</button>
-<ul *ngIf="players.length" class="list-group">
-  <li *ngFor="let player of players"class="list-group-item">{{player}}</li>
-</ul>
+
+<app-question *ngIf="quiz.state > 1"
+  #questionChild [question]="quiz.currentQuestion">
+</app-question>
+<button class="btn btn-primary btn-lg" (click)="Next()"> Next </button>
