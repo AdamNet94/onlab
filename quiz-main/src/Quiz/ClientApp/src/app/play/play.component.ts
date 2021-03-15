@@ -12,7 +12,7 @@ import { SignalRService } from '../services/signal-r.service';
 })
 export class PlayComponent implements OnInit {
 
-  private playerName: string = "";
+  private playerName: string = " ";
   private pin: number = 0;
   private quiz: Quiz;
 

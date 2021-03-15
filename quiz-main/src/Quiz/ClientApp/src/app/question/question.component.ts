@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { Router } from '@angular/router';
 import { CounterService } from '../services/counter.service';
 import { Question } from '../models/question';
+import { QuizState } from '../models/quiz-state';
+import { Answer } from '../models/answer';
 
 @Component({
   selector: 'app-question',
@@ -11,16 +13,18 @@ import { Question } from '../models/question';
 export class QuestionComponent implements OnInit {
   
   @Input() public question:Question;
+  @Input() public answerFromServer:Answer;
   readonly initTime = 15;
   timeleft = this.initTime;
   answersDisableFlag:boolean = false;
   @Output() answerSubmittedEvent = new EventEmitter<number>();
+  @Output() timeIsUpEvent = new EventEmitter<QuizState>();
 
 
   constructor(private router: Router) {}
 
   ngOnInit() {
-    //this.CountDown(this);
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {

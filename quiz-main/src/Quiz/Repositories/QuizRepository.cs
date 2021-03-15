@@ -49,7 +49,9 @@ namespace Quiz.Repositories
             Question currentQuestion = await context.Questions.Where(q => q.StudiorumId == quiz.StudiorumId && q.Id > quiz.CurrentQuestionId)
                                                          .OrderBy<Question, int>(q => q.Id)
                                                          .Include(q => q.Answers).FirstOrDefaultAsync();
-            quiz.CurrentQuestionId = currentQuestion.Id;
+            if (currentQuestion != null)
+                quiz.CurrentQuestionId = currentQuestion.Id;
+            else return null;
             // after we send the question, state has to change: a forward thinking logic
             quiz.State = QuizState.Showanswer;
             await context.SaveChangesAsync();
@@ -95,6 +97,30 @@ namespace Quiz.Repositories
             await context.SaveChangesAsync();
             Answer correctAnswer = await context.Answers.Where(a => a.QuestionId == quiz.CurrentQuestionId && a.IsCorrect == true).SingleOrDefaultAsync();
             return correctAnswer;
+        }
+
+        public async Task<List<AnswerStat>> GetAnswerSats(int quizId)
+        {
+            QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
+            var answerInstances = await context.AnswerInstances.Where(ai => ai.QuizInstanceId == quizId &&
+                                                                      ai.QuestionId == quiz.CurrentQuestionId)
+                                                                      .Select(ai => ai.AnswerId)
+                                                                      .ToListAsync();
+
+            List<AnswerStat> answerstats = new List<AnswerStat>();
+            var stats = new Dictionary<int,int>();
+            var possibleAnswers = context.Answers.Where(a => a.QuestionId == quiz.CurrentQuestionId).ToList();
+
+            foreach (var possibleans in possibleAnswers)
+                answerstats.Add(new AnswerStat(possibleans, 0));
+
+            foreach (var ansId in answerInstances)
+                foreach (var ansstat in answerstats)
+                {
+                    if (ansstat.answer.Id == ansId)
+                        ansstat.count++;
+                }
+            return answerstats;
         }
     }
 }

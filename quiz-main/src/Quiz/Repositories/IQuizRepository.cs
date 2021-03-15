@@ -1,5 +1,6 @@
 ﻿
 using Quiz.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Quiz.Repositories
@@ -11,6 +12,7 @@ namespace Quiz.Repositories
         public Task<Question> GetQuestionAsync(int quizId);
         public Task<Answer> GetCorrectAnswerAsync(int quizId);
         public Task<QuizState> GetStateAsync(int quizId);
+        public Task<List<AnswerStat>> GetAnswerSats(int quizId);
         public Task<(Answer,int)> submitAnswerAsync(int quizId,int answerId, string connectionId);
 
 

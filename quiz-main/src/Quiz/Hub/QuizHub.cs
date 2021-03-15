@@ -2,8 +2,9 @@
 using Quiz.Models;
 using Quiz.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using System.Timers;
 
 namespace Quiz.Hub
 {
@@ -43,17 +44,24 @@ namespace Quiz.Hub
             {
                 case QuizState.Showquestion:
                         Question currentQuestion = await this.quizRepository.GetQuestionAsync(quizId);
-
+                    if (currentQuestion == null)
+                            goto case QuizState.Quizresult;
                         //making sure we do not send to the client side which answer is the correct one
                         foreach (var answer in currentQuestion.Answers)
                             answer.IsCorrect = false;
                         await Clients.Group(pin).ShowQuestion(currentQuestion);
-                        
                         break;
                 case QuizState.Showanswer:
-                    Answer correctAnswer = await this.quizRepository.GetCorrectAnswerAsync(quizId);
-                    await Clients.Caller.ReceiveCorrectAnswer(correctAnswer);
-                    break;
+                        Answer correctAnswer = await this.quizRepository.GetCorrectAnswerAsync(quizId);
+                        List<AnswerStat> stats = await this.quizRepository.GetAnswerSats(quizId);
+                        await Clients.Caller.ReceiveCorrectAnswer(correctAnswer,stats);
+                        
+                        //Timer timer = new Timer(5000);
+                        
+                        break;
+                case QuizState.Questionresult:break;
+
+                case QuizState.Quizresult:break;
             }
         }
 

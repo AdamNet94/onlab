@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { Answer } from '../models/answer';
+import { AnswerStats } from '../models/AnswerStats';
 import { Quiz } from '../models/quiz';
 import { QuizState } from '../models/quiz-state';
 import { SignalRService } from './signal-r.service';
@@ -23,16 +24,23 @@ export class SignalAdminService extends SignalRService {
     }
 
   addRenderNewPlayerListener(users:Array<string>){
-    this.hubConnection.on("RenderNewPlayer", (newUser) =>{
+    this.hubConnection.on("RenderNewPlayer", (newUser) => {
       users.push(newUser);
       console.log(newUser);
     })
   }
 
-  addReceiveCorrectAnswerListener(quiz:Quiz){
-    this.hubConnection.on("ReceiveCorrectAnswer", (answer:Answer) =>{
-      quiz.correctAnswer=answer;
+  addReceiveCorrectAnswerListener(quiz:Quiz, chartData:Array<AnswerStats>){
+    this.hubConnection.on("ReceiveCorrectAnswer", (answer:Answer,stats:Array<AnswerStats>) =>{
+      
+      stats.forEach( element =>
+        chartData.push(element)
+      );
+      console.log(chartData);
+      console.log("chartData changed");
+      quiz.answerFromServer=answer;
       quiz.state=QuizState.ShowCorrectAnswer;
+      console.log("quizstate changed");
     })
   }
 

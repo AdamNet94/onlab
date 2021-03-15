@@ -28,7 +28,7 @@
 </div>
 
 <app-question *ngIf="quiz.state > 1"
-  #questionChild [question]="quiz.currentQuestion"
+  #questionChild [question]="quiz.currentQuestion" [answerFromServer]="quiz.answerFromServer"
   (answerSubmittedEvent)="sendAnswer($event)" >
 </app-question>
 

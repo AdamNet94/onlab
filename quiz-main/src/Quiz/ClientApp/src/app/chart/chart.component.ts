@@ -1,42 +1,71 @@
-import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AnswerStats } from '../models/AnswerStats';
+import * as Chart from 'chart.js';
+
 
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit,OnChanges {
 
-  chart: Chart;
-
+  chart:Chart;
+  public barChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true
+  };
+  public barChartLabels;
+  public barChartType = 'bar';
+  public barChartLegend = true;
+  datasets;
+  @Input() data:Array<AnswerStats>;
+  counts:Array<number>= new Array<number>();
+  answerTexts:Array<string> = new Array<string>();
+  chartready:boolean = false;
   constructor() { }
 
   ngOnInit() {
-    this.chart = new Chart('canvas', {
-      type: 'bar',
-      data: {
-        labels: ['A', 'B', 'C', 'D'],
-        datasets: [
-          {
-            data: [1,3,4,10],
-            backgroundColor: [
-              '#737373',
-              '#F2F2F2',
-              '#F2DBD5',
-              '#D9B2A9'
-            ],
-            fill: false,
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        legend: {
-            display: false,
-        },
-    }
-    });
+
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'data': {
+            this.refreshChart();
+            console.log("refreshed Dataset in cahrt comp");
+          }
+        }
+      }
+    }
+  }
+
+  refreshChart(){
+    console.log(this.data);
+    this.data.forEach( anstats => {
+      this.answerTexts.push(anstats.answer.text);
+      this.counts.push(anstats.count);
+    })
+    console.log("Chartból: ");
+    console.log(this.counts);
+    console.log(this.answerTexts);
+    this.barChartLabels = this.answerTexts;
+    this.datasets = [
+      {
+        data: this.counts,
+        backgroundColor: [
+          '#737373',
+          '#F2F2F2',
+          '#F2DBD5',
+          '#D9B2A9'
+        ],
+        label:'',
+        fill: false,
+      }
+    ]
+    this.chartready=true;
+  }
+    
 }

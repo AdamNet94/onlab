@@ -13,6 +13,14 @@
 </div>
 
 <app-question *ngIf="quiz.state > 1"
-  #questionChild [question]="quiz.currentQuestion">
+  #questionChild [question]="quiz.currentQuestion" [answerFromServer]="quiz.answerFromServer"
+  (timeIsUpEvent)="Next()">
 </app-question>
 <button class="btn btn-primary btn-lg" (click)="Next()"> Next </button>
+<button class="btn btn-primary btn-lg" (click)="refreshChart()"> refresh chart </button>
+
+<div *ngIf="quiz.state == 4" class="container">
+    <app-chart #chartChild
+    [data]="chartData">
+    </app-chart>
+</div>

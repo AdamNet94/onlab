@@ -23,7 +23,7 @@ import { StudiorumCrudService } from './services/studiorum-crud.service';
 import { LobbyComponent } from './lobby/lobby.component';
 import { SignalRService } from './services/signal-r.service';
 import { SignalAdminService } from './services/signal-admin.service';
-
+import { ChartsModule, ThemeService } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -57,14 +57,15 @@ import { SignalAdminService } from './services/signal-admin.service';
       { path: 'my-studiorum', component: MyStudiorumComponent },
       { path: 'play', component: PlayComponent }
     ]),
-    NgbModule
+    ChartsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
     QuestionCrudService,
     StudiorumCrudService,
     SignalRService,
-    SignalAdminService
+    SignalAdminService,
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })

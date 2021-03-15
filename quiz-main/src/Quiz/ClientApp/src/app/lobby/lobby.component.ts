@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { runInThisContext } from 'vm';
+import { ChartComponent } from '../chart/chart.component';
+import { AnswerStats } from '../models/AnswerStats';
 import { Quiz } from '../models/quiz';
 import { QuizState } from '../models/quiz-state';
 import { QuestionComponent } from '../question/question.component';
@@ -17,8 +20,11 @@ export class LobbyComponent implements OnInit {
   quizPin:string;
   players:Array<string> = new Array<string>();
   quiz:Quiz=new Quiz();
+  chartData:Array<AnswerStats> = Array<AnswerStats>();
+
   @ViewChild(QuestionComponent, { static: false }) questionChild;
-  
+  @ViewChild(ChartComponent, { static: false }) chartChild;
+
   constructor(private route:ActivatedRoute, private signalAdminConnection :SignalAdminService) {
     this.studiorumId = Number(route.snapshot.paramMap.get('studiorumId'));
     this.quizPin = String(route.snapshot.paramMap.get('lobbyId'));
@@ -27,7 +33,7 @@ export class LobbyComponent implements OnInit {
   ngOnInit() {
     this.signalAdminConnection.addQuizIdListener(this.quiz);
     this.signalAdminConnection.addRenderNewPlayerListener(this.players);
-    this.signalAdminConnection.addReceiveCorrectAnswerListener(this.quiz);
+    this.signalAdminConnection.addReceiveCorrectAnswerListener(this.quiz,this.chartData);
     this.signalAdminConnection.addQuestionListener(this.quiz);
     this.signalAdminConnection.startConnectionAdmin(this.quizPin.toString(),"admin"+this.quizPin.toString());
     console.log(this.players);
@@ -35,6 +41,13 @@ export class LobbyComponent implements OnInit {
 
   onStart(){
     this.signalAdminConnection.startGame(1,this.quizPin.toString());
+  }
+
+  refreshChart(){
+    console.log(this.chartData);
+    this.chartChild.data=this.chartData;
+      this.chartChild.refreshChart();
+    console.log("chartdata refreshed");
   }
 
   Next(){
@@ -46,5 +59,4 @@ export class LobbyComponent implements OnInit {
           console.log(this.quiz.correctAnswer.text);
       }*/
   }
-
 }
