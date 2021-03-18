@@ -12,3 +12,10 @@ div >span#timer{
     font-size: xx-large;
     margin: 15px 15px;
 }
+button.btn:hover{
+    background-color: rgb(125, 165, 168);
+}
+
+.correct-answer{
+    background-color:  rgb(13, 218, 13) !important;
+}

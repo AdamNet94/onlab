@@ -56,9 +56,7 @@ namespace Quiz.Hub
                         List<AnswerStat> stats = await this.quizRepository.GetAnswerSats(quizId);
                         await Clients.Caller.ReceiveCorrectAnswer(correctAnswer,stats);
                         
-                        //Timer timer = new Timer(5000);
-                        
-                        break;
+                    break;
                 case QuizState.Questionresult:break;
 
                 case QuizState.Quizresult:break;

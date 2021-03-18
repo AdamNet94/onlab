@@ -4,5 +4,6 @@
     </div>
     <div class="answer-container">
         <button *ngFor="let answer of question.answers; index as i;"
-        type="button" [disabled]="answersDisableFlag" [class.btn-success]="answerFromServer.Id == answer.Id" class="btn btn-light btn-primary btn-lg" (click)="submitAnswer(i)">{{answer.text}}</button>
+        type="button" [disabled]="answersDisableFlag" [class.correct-answer]="answer.isCorrect" class="btn btn-light btn-primary btn btn-lg" (click)="submitAnswer(i)">{{answer.text}}</button>
     </div>
+    <!--[disabled]="answersDisableFlag"-->

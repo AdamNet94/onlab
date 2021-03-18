@@ -1,0 +1,7 @@
+.correct-answer:hover{
+    background-color: green;
+}
+
+.correct-answer{
+    background-color: green !important;
+}

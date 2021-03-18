@@ -23,12 +23,12 @@
       <button class="btn btn-primary" (click)="onSubmit()"> Join </button>
     </span>
     <h4 *ngIf ="quiz.state == 1" class="join-lobby">
-      You joined, check if you can see you name in the Lobby
+      You joined, check if you can see your name in the Lobby
     </h4>
 </div>
 
 <app-question *ngIf="quiz.state > 1"
-  #questionChild [question]="quiz.currentQuestion" [answerFromServer]="quiz.answerFromServer"
+  #questionChild [question]="quiz.currentQuestion"
   (answerSubmittedEvent)="sendAnswer($event)" >
 </app-question>
 

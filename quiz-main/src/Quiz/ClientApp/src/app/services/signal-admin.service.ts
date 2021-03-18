@@ -32,15 +32,13 @@ export class SignalAdminService extends SignalRService {
 
   addReceiveCorrectAnswerListener(quiz:Quiz, chartData:Array<AnswerStats>){
     this.hubConnection.on("ReceiveCorrectAnswer", (answer:Answer,stats:Array<AnswerStats>) =>{
-      
+      chartData.splice(0,chartData.length);
       stats.forEach( element =>
         chartData.push(element)
       );
-      console.log(chartData);
-      console.log("chartData changed");
-      quiz.answerFromServer=answer;
+      quiz.currentQuestion.answers.find(a => a.id == answer.id).isCorrect=true;
       quiz.state=QuizState.ShowCorrectAnswer;
-      console.log("quizstate changed");
+      console.log(quiz.answerFromServer);
     })
   }
 
