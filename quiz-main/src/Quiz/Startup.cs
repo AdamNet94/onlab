@@ -11,6 +11,15 @@ using Microsoft.Extensions.Hosting;
 using Quiz.Services;
 using Quiz.Hub;
 using Quiz.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
+using Okta.AspNet;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Quiz
 {
@@ -35,10 +44,15 @@ namespace Quiz
 
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
+            
             // IoC konténerhez hozzadadja az osztalyunk
             services.AddTransient<IQuizService, QuizService>();
             services.AddScoped<IQuizRepository, QuizRepository>();
+
+            // megakadályza a cirkuláris referencia loopot sorosításal ha EF coreban egymsára mtuató navigation propertyk vannak
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddCors(options =>
             {
@@ -51,6 +65,15 @@ namespace Quiz
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+            /*
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://dev-99811018/oauth2/default";
+                options.Audience = "api://default";
+            });*/
+
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
@@ -84,6 +107,12 @@ namespace Quiz
             {
                 app.UseSpaStaticFiles();
             }
+
+            // cannot use Okta library beacuse it require IAppBuilder and not .Net 5 IApplicationBuilder
+           /* app.UseOktaWebApi(new OktaWebApiOptions()
+            {
+                OktaDomain = "https://${yourOktaDomain}",
+            });*/
 
             //Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

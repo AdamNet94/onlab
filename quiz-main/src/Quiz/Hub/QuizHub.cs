@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Quiz.Models;
 using Quiz.Repositories;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using System.Timers;
 
+
 namespace Quiz.Hub
 {
+    [Authorize]
     public class QuizHub : Hub<IQuizClient>
     {
         IQuizRepository quizRepository;
@@ -19,6 +24,8 @@ namespace Quiz.Hub
 
         public async Task JoinGroup(string pin,string user)
         {
+           var userIdentifier = this.Context.UserIdentifier;
+           var userfromContext = this.Context.User;
            await quizRepository.AddUserAsync(Context.ConnectionId, user);
            await Groups.AddToGroupAsync(Context.ConnectionId, pin);
            await Clients.Groups(pin).RenderNewPlayer(user);
@@ -65,8 +72,26 @@ namespace Quiz.Hub
 
         public async Task<int[]> submitAnswer(int quizId, int answerId)
         {
+
             (Answer correctAnswer,int Score) result = await quizRepository.submitAnswerAsync(quizId, answerId,Context.ConnectionId);
             return new int[] { result.correctAnswer.Id, result.Score };
         }
+
+        private async Task<ApplicationUser> GetUser()
+        {
+            var access_token = "";
+            var userIdentifier = this.Context.UserIdentifier;
+            var user = this.Context.User;
+           /* var claims = HttpContext.User.Claims.ToList();
+            foreach (var claim in claims)
+            {
+                if (claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
+                    access_token = claim.Value;
+            }*/
+            //var applicationUser = await context.Users.Where(u => u.Id == access_token).Include(u => u.Studiorums).SingleOrDefaultAsync();
+
+            return new ApplicationUser();
+        }
+
     }
 }

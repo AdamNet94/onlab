@@ -16,6 +16,7 @@ export class MyStudiorumComponent implements OnInit {
   constructor(private router: Router, private httpservice: StudiorumCrudService) {
     this.httpservice.getStudiorums().subscribe(result => {
       this.studiorums = result;
+      console.log(result);
     }, error => console.error(error));
   }
 
@@ -46,6 +47,7 @@ export class MyStudiorumComponent implements OnInit {
     var newStudiorum = new Studiorum(0,title);
     this.httpservice.postStudiorum(newStudiorum).subscribe(result => {
       this.studiorums.push(result);
+      console.log(result);
     }, error => console.error(error));
   }
 

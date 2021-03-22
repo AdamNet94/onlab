@@ -19,6 +19,21 @@ namespace Quiz.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("ApplicationUserStudiorum", b =>
+                {
+                    b.Property<string>("OwnersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("StudiorumsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OwnersId", "StudiorumsId");
+
+                    b.HasIndex("StudiorumsId");
+
+                    b.ToTable("ApplicationUserStudiorum");
+                });
+
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
                 {
                     b.Property<string>("UserCode")
@@ -387,10 +402,13 @@ namespace Quiz.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ConnectionId")
+                    b.Property<string>("NickName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<int>("TotalScore")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -455,6 +473,21 @@ namespace Quiz.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Studiorums");
+                });
+
+            modelBuilder.Entity("ApplicationUserStudiorum", b =>
+                {
+                    b.HasOne("Quiz.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("OwnersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Quiz.Models.Studiorum", null)
+                        .WithMany()
+                        .HasForeignKey("StudiorumsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

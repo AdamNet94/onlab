@@ -3,18 +3,22 @@ import * as signalR from '@aspnet/signalr';
 import { Question } from '../models/question';
 import { Quiz } from '../models/quiz';
 import { QuizState } from '../models/quiz-state';
+import { AuthorizeService } from 'src/api-authorization/authorize.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
 
-  constructor() { }
-
+  loginToken;
+  constructor() {}; 
+  //,{ accessTokenFactory: () => this.loginToken })
+ /**/
   hubConnection: signalR.HubConnection = new signalR.HubConnectionBuilder()
-  .withUrl('/quizhub').build();
-
-    startConnection(pin:string,user:string){
+  .withUrl('/quizhub', { accessTokenFactory: () => this.loginToken }
+  ).build();
+  
+    startConnection(pin:string,user:string) {
       this.hubConnection
         .start()
         .then(() => console.log('Connection started'))

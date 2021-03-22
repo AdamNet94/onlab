@@ -5,6 +5,7 @@ import { QuizState } from '../models/quiz-state';
 import { QuestionComponent } from '../question/question.component';
 import { SignalRService } from '../services/signal-r.service';
 
+
 @Component({
   selector: 'app-play',
   templateUrl: './play.component.html',
@@ -32,6 +33,7 @@ export class PlayComponent implements OnInit {
   }
 
   sendAnswer($event){
+
       this.questionChild.answersDisableFlag = true;
       let answerId:number = $event as number;
       this.SignalRconnection.SendAnswer(answerId,this.quiz);

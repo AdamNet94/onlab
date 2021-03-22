@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Quiz.Migrations
 {
-    public partial class Init : Migration
+    public partial class newInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -91,8 +91,9 @@ namespace Quiz.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConnectionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NickName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalScore = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -219,6 +220,30 @@ namespace Quiz.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ApplicationUserStudiorum",
+                columns: table => new
+                {
+                    OwnersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudiorumsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserStudiorum", x => new { x.OwnersId, x.StudiorumsId });
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserStudiorum_AspNetUsers_OwnersId",
+                        column: x => x.OwnersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserStudiorum_Studiorums_StudiorumsId",
+                        column: x => x.StudiorumsId,
+                        principalTable: "Studiorums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Questions",
                 columns: table => new
                 {
@@ -326,6 +351,11 @@ namespace Quiz.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserStudiorum_StudiorumsId",
+                table: "ApplicationUserStudiorum",
+                column: "StudiorumsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -408,6 +438,9 @@ namespace Quiz.Migrations
 
             migrationBuilder.DropTable(
                 name: "Answers");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationUserStudiorum");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

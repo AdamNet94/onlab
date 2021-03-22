@@ -25,6 +25,8 @@ import { SignalRService } from './services/signal-r.service';
 import { SignalAdminService } from './services/signal-admin.service';
 import { ChartsModule, ThemeService } from 'ng2-charts';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,16 +48,16 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', component: PlayComponent, pathMatch: 'full' },
+      { path: '', component: PlayComponent,pathMatch: 'full' },
       { path: 'question', component: QuestionComponent},
       { path: 'chart', component: ChartComponent},
       { path: 'stage', component: StageComponent },
       { path: 'question-editor', component: QuestionEditorComponent },
       { path: 'lobby/:studiorumId/:lobbyId', component: LobbyComponent },
-      { path: 'my-studiorum/:studiorumId', component: QuestionListComponent },
+      { path: 'my-studiorum/:studiorumId', component: QuestionListComponent,},
       { path: 'leaderboard', component: LeaderboardComponent },
-      { path: 'my-studiorum', component: MyStudiorumComponent },
-      { path: 'play', component: PlayComponent }
+      { path: 'my-studiorum', component: MyStudiorumComponent, canActivate: [AuthorizeGuard]},
+      { path: 'play', component: PlayComponent, canActivate: [AuthorizeGuard] }
     ]),
     ChartsModule
   ],

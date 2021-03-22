@@ -23,7 +23,7 @@
           </div>
     
           <div id="studiorum{{studiorum.id}}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body">
+            <div *ngIf="studiorum.questions" class="card-body">
                 <ul *ngIf="studiorums[i].questions.length" class="list-group">
                     <li *ngFor="let question of studiorums[i].questions" class="list-group-item">{{question.text}}</li>
                 </ul>

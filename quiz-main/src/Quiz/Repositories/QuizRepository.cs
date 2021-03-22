@@ -39,7 +39,7 @@ namespace Quiz.Repositories
 
         public async Task AddUserAsync(string connectionId, string userName)
         {
-            await context.Players.AddAsync(new Player { Id = 0, ConnectionId = connectionId, Name = userName });
+            await context.Players.AddAsync(new Player { Id = 0, UserId = connectionId, NickName = userName });
             await context.SaveChangesAsync();
         }
 
@@ -58,8 +58,6 @@ namespace Quiz.Repositories
             return currentQuestion;
         }
 
-
-
         public async Task<QuizState> GetStateAsync(int quizId)
         {
             QuizInstance quizInstance = await context.QuizInstances.FindAsync(quizId);
@@ -68,7 +66,7 @@ namespace Quiz.Repositories
 
         public async Task<(Answer,int)> submitAnswerAsync(int quizId, int answerId, string connectionId)
         {
-            Player p = await context.Players.Where(p => p.ConnectionId == connectionId).SingleOrDefaultAsync();
+            Player p = await context.Players.Where(p => p.UserId == connectionId).SingleOrDefaultAsync();
             QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
             Answer answer = await context.Answers.FindAsync(answerId);
             int score = answer.IsCorrect ? 1000 : 0;
