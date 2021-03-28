@@ -15,7 +15,7 @@ public class ConfigureJwtBearerOptions : IPostConfigureOptions<JwtBearerOptions>
                 var path = context.HttpContext.Request.Path;
 
                 if (!string.IsNullOrEmpty(accessToken) &&
-                    path.StartsWithSegments("/hubs"))
+                    path.StartsWithSegments("/quizhub"))
                 {
                     context.Token = accessToken;
                 }

@@ -37,12 +37,6 @@ namespace Quiz.Repositories
             return newQuiz.Id;
         }
 
-        public async Task AddUserAsync(string connectionId, string userName)
-        {
-            await context.Players.AddAsync(new Player { Id = 0, UserId = connectionId, NickName = userName });
-            await context.SaveChangesAsync();
-        }
-
         public async Task<Question> GetQuestionAsync(int quizId)
         {
             QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
@@ -64,9 +58,9 @@ namespace Quiz.Repositories
             return quizInstance.State;
         }
 
-        public async Task<(Answer,int)> submitAnswerAsync(int quizId, int answerId, string connectionId)
+        public async Task<(Answer,int)> SubmitAnswerAsync(int quizId, int answerId, string nickName)
         {
-            Player p = await context.Players.Where(p => p.UserId == connectionId).SingleOrDefaultAsync();
+            Player p = await context.Players.Where(p => p.NickName == nickName).SingleOrDefaultAsync();
             QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
             Answer answer = await context.Answers.FindAsync(answerId);
             int score = answer.IsCorrect ? 1000 : 0;
@@ -120,5 +114,31 @@ namespace Quiz.Repositories
                 }
             return answerstats;
         }
+
+        public async Task<Player> CreatePlayerAsync(string userId, string nickName)
+        {
+            Player newPlayer = new Player { Id = 0, NickName = nickName, UserId = userId, TotalScore = 0 };
+            await context.Players.AddAsync(newPlayer);
+            await context.SaveChangesAsync();
+
+            return newPlayer;
+        }
+
+        public async Task<List<TopPlayer>> GetTopPlayersAsync(int quizId)
+        {
+            List<TopPlayer> topPlayers = new List<TopPlayer>();
+
+            var result = await context.AnswerInstances.Where(a => a.QuizInstanceId == quizId).GroupBy(a => a.PlayerId).Select(group => new {playerId = group.Key,totalScore = group.Sum(y => y.Score) }).ToListAsync();
+            result.OrderByDescending(x => x.totalScore);
+            result = result.Take(result.Count < 3 ? result.Count : 3 ).ToList();
+            for (int i = 0; i < result.Count; i++)
+            {
+                var player = await context.Players.FindAsync(result[i].playerId);
+                topPlayers.Add(new TopPlayer(player.NickName, result[i].totalScore));
+            }
+
+            return topPlayers;
+        }
+
     }
 }

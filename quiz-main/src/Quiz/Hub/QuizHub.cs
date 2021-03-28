@@ -7,16 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
-using System.Timers;
+
 
 
 namespace Quiz.Hub
 {
-    [Authorize]
     public class QuizHub : Hub<IQuizClient>
     {
         IQuizRepository quizRepository;
-        Random r = new Random();
+
        public QuizHub(IQuizRepository repo)
        {
           this.quizRepository = repo;
@@ -24,9 +23,7 @@ namespace Quiz.Hub
 
         public async Task JoinGroup(string pin,string user)
         {
-           var userIdentifier = this.Context.UserIdentifier;
-           var userfromContext = this.Context.User;
-           await quizRepository.AddUserAsync(Context.ConnectionId, user);
+           await quizRepository.CreatePlayerAsync("userId should be Access_token", user);
            await Groups.AddToGroupAsync(Context.ConnectionId, pin);
            await Clients.Groups(pin).RenderNewPlayer(user);
         }
@@ -62,36 +59,34 @@ namespace Quiz.Hub
                         Answer correctAnswer = await this.quizRepository.GetCorrectAnswerAsync(quizId);
                         List<AnswerStat> stats = await this.quizRepository.GetAnswerSats(quizId);
                         await Clients.Caller.ReceiveCorrectAnswer(correctAnswer,stats);
-                        
                     break;
-                case QuizState.Questionresult:break;
-
-                case QuizState.Quizresult:break;
+                case QuizState.Quizresult:
+                    var topPlayers = await quizRepository.GetTopPlayersAsync(quizId);
+                    await Clients.Caller.ReceiveFinalResults(topPlayers);
+                    break;
             }
         }
 
-        public async Task<int[]> submitAnswer(int quizId, int answerId)
+        public async Task<int[]> submitAnswer(int quizId, int answerId,string nickName)
         {
-
-            (Answer correctAnswer,int Score) result = await quizRepository.submitAnswerAsync(quizId, answerId,Context.ConnectionId);
+            (Answer correctAnswer,int Score) result = await quizRepository.SubmitAnswerAsync(quizId, answerId, nickName);
             return new int[] { result.correctAnswer.Id, result.Score };
         }
 
-        private async Task<ApplicationUser> GetUser()
+       /* private async Task<ApplicationUser> GetUser()
         {
             var access_token = "";
-            var userIdentifier = this.Context.UserIdentifier;
-            var user = this.Context.User;
-           /* var claims = HttpContext.User.Claims.ToList();
+            var user = HttpContext.User.Identity;
+            var claims = HttpContext.User.Claims.ToList();
             foreach (var claim in claims)
             {
                 if (claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
                     access_token = claim.Value;
-            }*/
-            //var applicationUser = await context.Users.Where(u => u.Id == access_token).Include(u => u.Studiorums).SingleOrDefaultAsync();
+            }
+            var applicationUser = await _context.Users.Where(u => u.Id == access_token).Include(u => u.Studiorums).SingleOrDefaultAsync();
 
-            return new ApplicationUser();
-        }
+            return applicationUser;
+        }*/
 
     }
 }

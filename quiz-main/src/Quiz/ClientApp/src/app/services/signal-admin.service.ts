@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@aspnet/signalr';
+import * as signalR from '@microsoft/signalr';
 import { Answer } from '../models/answer';
 import { AnswerStats } from '../models/AnswerStats';
+import { Player } from '../models/player';
 import { Quiz } from '../models/quiz';
 import { QuizState } from '../models/quiz-state';
+import { QuestionCrudService } from './question-crud.service';
 import { SignalRService } from './signal-r.service';
 
 
@@ -16,7 +18,7 @@ export class SignalAdminService extends SignalRService {
     super();
   }
 
-  startConnectionAdmin(pin:string,user:string){      
+  startConnectionAdmin(pin:string,user:string){
       this.hubConnection
         .start()
         .then(() => console.log('Connection started'))
@@ -28,6 +30,17 @@ export class SignalAdminService extends SignalRService {
       users.push(newUser);
       console.log(newUser);
     })
+  }
+
+  addReceiveFinalResults(quiz:Quiz){
+    this.hubConnection.on("ReceiveFinalResults", (players:Player[]) => {
+      players.forEach( element =>
+        quiz.topPlayers.push(element)
+      );
+      console.log("top player from server" +quiz.topPlayers);
+      console.log("top player from server" +quiz.topPlayers[0].nickName);
+
+    });
   }
 
   addReceiveCorrectAnswerListener(quiz:Quiz, chartData:Array<AnswerStats>){

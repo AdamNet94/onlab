@@ -35,6 +35,7 @@ export class LobbyComponent implements OnInit {
     this.signalAdminConnection.addRenderNewPlayerListener(this.players);
     this.signalAdminConnection.addReceiveCorrectAnswerListener(this.quiz,this.chartData);
     this.signalAdminConnection.addQuestionListener(this.quiz);
+    this.signalAdminConnection.addReceiveFinalResults(this.quiz);
     this.signalAdminConnection.startConnectionAdmin(this.quizPin.toString(),"admin"+this.quizPin.toString());
     console.log(this.players);
   }

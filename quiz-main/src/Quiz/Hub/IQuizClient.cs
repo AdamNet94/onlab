@@ -10,6 +10,7 @@ namespace Quiz.Hub
         Task ReceiveQuizId(int quizId,Question question);
         Task ShowQuestion(Question q);
         Task ReceiveCorrectAnswer(Answer correctAnswer, List<AnswerStat> stats);
+        Task ReceiveFinalResults(List<TopPlayer> topPlayers);
 
         Task ReceiveResult(int correctAnswerId, int score);
         Task ShowQuestionResult();

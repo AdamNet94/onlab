@@ -23,7 +23,7 @@ export class QuestionCrudService {
   getQuestions() {
     return this.httpClient.get<Question[]>(this.baseUrl + 'api/Questions');
   }
-
+  
   getQuestion(id: number) {
     return this.httpClient.get<Question>(this.baseUrl + 'api/Questions/id');
   }
@@ -52,8 +52,9 @@ export class QuestionCrudService {
     return this.httpClient.delete<Question>(this.baseUrl + 'api/Questions/' + id);
   }
 
-  getQuizInstanceId(){
-    return this.httpClient.get<number>(this.baseUrl + 'api/Quiz');
+  getHeader(){
+    //return this.httpClient.get<string>(this.baseUrl + 'api/Quiz'); 
+    return this.httpClient.get<string>(this.baseUrl + 'api/Quiz'); 
   }
 
   quizNext(quizInstanceId: number){

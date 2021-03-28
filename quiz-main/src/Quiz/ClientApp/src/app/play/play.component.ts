@@ -24,11 +24,11 @@ export class PlayComponent implements OnInit {
   ngOnInit() {
     this.SignalRconnection.startConnection(this.pin.toString(),this.playerName);
     this.SignalRconnection.addQuizIdListener(this.quiz);
-    this.SignalRconnection.addQuestionListener(this.quiz);
+   this.SignalRconnection.addQuestionListener(this.quiz);
   }
 
   onSubmit() {
-    this.SignalRconnection.joinGroup(this.pin.toString(),this.playerName,this.quiz);
+    this.SignalRconnection.joinGroup(this.pin.toString(),this.playerName+this.pin,this.quiz);
     this.quiz.state=QuizState.CheckYourName;
   }
 
@@ -36,7 +36,7 @@ export class PlayComponent implements OnInit {
 
       this.questionChild.answersDisableFlag = true;
       let answerId:number = $event as number;
-      this.SignalRconnection.SendAnswer(answerId,this.quiz);
+      this.SignalRconnection.SendAnswer(answerId,this.quiz,this.playerName+this.pin);
       console.log(this.quiz.answerScore); this.quiz.state=QuizState.AnswerSubmitted;
   }
 }

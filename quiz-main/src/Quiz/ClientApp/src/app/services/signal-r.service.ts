@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@aspnet/signalr';
+import * as signalR from '@microsoft/signalr';
 import { Question } from '../models/question';
 import { Quiz } from '../models/quiz';
 import { QuizState } from '../models/quiz-state';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
+import { HttpClient } from '@angular/common/http';
+import { QuestionCrudService } from './question-crud.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
-
-  loginToken;
-  constructor() {}; 
-  //,{ accessTokenFactory: () => this.loginToken })
- /**/
-  hubConnection: signalR.HubConnection = new signalR.HubConnectionBuilder()
-  .withUrl('/quizhub', { accessTokenFactory: () => this.loginToken }
-  ).build();
+  
+  hubConnection:signalR.HubConnection=new signalR.HubConnectionBuilder()
+  .withUrl('/quizhub',{ accessTokenFactory: () => "e7e18169-d6a8-4c80-9a4f-a13337d2f664"}).build();
+  private header:string;
+  constructor() { }
+  //,{ accessTokenFactory: () => "e7e18169-d6a8-4c80-9a4f-a13337d2f664" } as signalR.IHttpConnectionOptions )
+ /*{ accessTokenFactory: () => this.loginToken }*/
   
     startConnection(pin:string,user:string) {
       this.hubConnection
@@ -52,9 +53,9 @@ export class SignalRService {
     });
   }
 
-  SendAnswer(answerId:number, quiz:Quiz):Promise<void> {
+  SendAnswer(answerId:number,quiz:Quiz,nickName:string):Promise<void> {
     try {
-      this.hubConnection.invoke("submitAnswer", quiz.quizId,answerId).then(
+      this.hubConnection.invoke("submitAnswer", quiz.quizId,answerId,nickName).then(
         (data)=> {
           // data first parameter is the correct answer Id, second is the score
         var result = data as number[];
@@ -73,5 +74,22 @@ export class SignalRService {
       console.error(err);
     }
   }
+
+}
+
+export class CustomHttpClient extends signalR.HttpClient
+{
+  private autHeader:string;
+
+  public send(request: signalR.HttpRequest): Promise<signalR.HttpResponse> {
+    request.headers = {"Authorization": this.autHeader };
+    // Now we have manipulated the request how we want we can just call the base class method
+    return;
+  }
+    constructor(auth:string) {
+        super(); 
+        this.autHeader = auth;
+    }
+
 
 }

@@ -7,9 +7,6 @@
 </head>
 <body >
 
-
-
-
 <div class="pyro">
     <div class="before"></div>
     <div class="after"></div>
@@ -17,28 +14,27 @@
  <!-- <div class="bg"></div>-->
 
 <h2>The Best of the Bests!</h2>
+<div *ngIf="topPlayers.Count > 0">
+    <div class="rectangle">
+    <img src="./assets/Silver.png" class="imgSilver" alt="Silver" style="width:125px" >
+    <h3 class ="first">{{topPlayers[0].nickName}}</h3>
+    <h4 class="fpoints">{{topPlayers[0].totalScore}}</h4>
+    </div>
 
-<div class="rectangle">
-<img src="./assets/Silver.png" class="imgSilver" alt="Silver" style="width:125px" >
-<h3 class ="first">Első</h3>
-<h4 class="fpoints">300 pont</h4>
+    <div class="rectangle2"></div>
+    <img src="./assets/Gold.png" class="imgGold" alt="Silver" style="width:125px" >
+    <h3 class ="second">{{topPlayers[1].nickName}}</h3>
+    <h4 class="spoints">{{topPlayers[1].totalScore}}</h4>
+
+
+    <div class="rectangle3"></div>
+    <img src="./assets/Bronse.png" class="imgBronse" alt="Silver" style="width:125px" >
+    <h3 class ="third">{{topPlayers[2].nickName}}</h3>
+    <h4 class="tpoints">{{topPlayers[2].totalScore}}</h4>
+
+    <h4 class="yourPosition">Összes versenyző: 100. Te: 10. lettél!</h4>
+
 </div>
-
-<div class="rectangle2"></div>
-<img src="./assets/Gold.png" class="imgGold" alt="Silver" style="width:125px" >
-<h3 class ="second">Második</h3>
-<h4 class="spoints">200 pont</h4>
-
-
-
-<div class="rectangle3"></div>
-<img src="./assets/Bronse.png" class="imgBronse" alt="Silver" style="width:125px" >
-<h3 class ="third">Harmadik</h3>
-<h4 class="tpoints">100 pont</h4>
-
-<h4 class="yourPosition">Összes versenyző: 100. Te: 10. lettél!</h4>
-
-
 
 </body>
 </html> 
