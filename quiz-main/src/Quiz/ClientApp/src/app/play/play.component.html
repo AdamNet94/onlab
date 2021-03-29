@@ -36,7 +36,7 @@
   <div *ngIf="quiz.answerScore > 0; then correctAnswer else incorrectAnswer"></div>
   <ng-template #correctAnswer>
     <div class="container">
-      <h1 class="display-4"> You are spot on, correct answer ! </h1>
+      <h1 class="display-4"> Spot on, correct answer ! </h1>
       <p class="lead"> Your score is : {{quiz.answerScore}} </p>
     </div>
   </ng-template>
@@ -47,4 +47,3 @@
     </div>
   </ng-template>
 </div>
- 

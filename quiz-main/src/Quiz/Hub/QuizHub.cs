@@ -59,7 +59,7 @@ namespace Quiz.Hub
                         Answer correctAnswer = await this.quizRepository.GetCorrectAnswerAsync(quizId);
                         List<AnswerStat> stats = await this.quizRepository.GetAnswerSats(quizId);
                         await Clients.Caller.ReceiveCorrectAnswer(correctAnswer,stats);
-                    break;
+                        break;
                 case QuizState.Quizresult:
                     var topPlayers = await quizRepository.GetTopPlayersAsync(quizId);
                     await Clients.Caller.ReceiveFinalResults(topPlayers);

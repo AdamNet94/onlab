@@ -7,8 +7,8 @@ namespace Quiz.Models
 {
     public class TopPlayer
     {
-        int totalScore = 0;
-        string nickName = "";
+        public int totalScore { get; set; }
+        public string nickName { get; set; }
 
         public TopPlayer(string name, int score)
         {

@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Player } from '../models/player';
 
 @Component({
   selector: 'app-stage',
   templateUrl: './stage.component.html',
   styleUrls: ['./stage.component.css'],
-
-  styles: [`
+styles: [`
   .Bg {
     background-image: url('/assets/firework.jpg') !important;
     background-size: cover;
@@ -14,10 +13,24 @@ import { Player } from '../models/player';
   }
 `]
 })
-export class StageComponent implements OnInit {
+export class StageComponent implements OnInit{
 
-  topPlayers: Array<Player> = new Array<Player>();
+  @Input() topPlayers: Player[] = [];
   constructor() { }
+
+  /*
+  ngOnChanges(changes: SimpleChanges): void {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'topPlayers': {
+            
+          }
+        }
+      }
+    }
+  }
+  */
 
   ngOnInit() {
     

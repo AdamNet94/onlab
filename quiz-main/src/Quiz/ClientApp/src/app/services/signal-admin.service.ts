@@ -33,13 +33,18 @@ export class SignalAdminService extends SignalRService {
   }
 
   addReceiveFinalResults(quiz:Quiz){
-    this.hubConnection.on("ReceiveFinalResults", (players:Player[]) => {
-      players.forEach( element =>
-        quiz.topPlayers.push(element)
-      );
-      console.log("top player from server" +quiz.topPlayers);
-      console.log("top player from server" +quiz.topPlayers[0].nickName);
-
+    this.hubConnection.on("ReceiveFinalResults", (players:Array<Player>) => {
+      console.log("topplayer from server: ");
+      var playersServer = players as Array<Player>;
+      console.log(players.length);
+      playersServer.forEach( element =>
+        {
+          console.log(element);
+        var topPlayer:Player = new Player(element.nickName,element.totalScore);
+        quiz.topPlayers.push(topPlayer);
+        });
+      console.log("in quiz.topplayer: " +quiz.topPlayers[0].nickName);
+      quiz.state=QuizState.FinalResult;
     });
   }
 

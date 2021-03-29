@@ -27,6 +27,7 @@ export class LobbyComponent implements OnInit {
 
   constructor(private route:ActivatedRoute, private signalAdminConnection :SignalAdminService) {
     this.studiorumId = Number(route.snapshot.paramMap.get('studiorumId'));
+    console.log("a studiorum id a lobbyban: " +this.studiorumId);
     this.quizPin = String(route.snapshot.paramMap.get('lobbyId'));
   }
 
@@ -41,7 +42,7 @@ export class LobbyComponent implements OnInit {
   }
 
   onStart(){
-    this.signalAdminConnection.startGame(1,this.quizPin.toString());
+    this.signalAdminConnection.startGame(this.studiorumId,this.quizPin.toString());
   }
 
   refreshChart(){
@@ -53,7 +54,7 @@ export class LobbyComponent implements OnInit {
 
   Next(){
     this.signalAdminConnection.Next(this.quiz.quizId,this.quizPin);
-    console.log(this.quiz.correctAnswer.text);
+    console.log(this.quiz.state);
     /*if(this.quiz.state == QuizState.ShowCorrectAnswer)
       {
         if(this.quiz.correctAnswer.id > 0 )

@@ -13,7 +13,7 @@
 </div>
 
 
-<app-question *ngIf="quiz.state > 1"
+<app-question *ngIf="quiz.state > 1 && quiz.state < 5"
   #questionChild [question]="quiz.currentQuestion"
   (timeIsUpEvent)="Next()">
 </app-question>
@@ -25,3 +25,10 @@
     [data]="chartData">
     </app-chart>
 </div>
+
+<div *ngIf="quiz.state == 5" class="container">
+  <app-stage
+  [topPlayers]="quiz.topPlayers">
+  </app-stage>
+</div>
+
