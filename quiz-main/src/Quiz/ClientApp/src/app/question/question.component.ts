@@ -13,7 +13,7 @@ import { Answer } from '../models/answer';
 export class QuestionComponent implements OnInit {
   
   @Input() public question:Question;
-  readonly initTime = 5;
+  readonly initTime = 20;
   timeleft = this.initTime;
   answersDisableFlag:boolean = false;
   @Output() answerSubmittedEvent = new EventEmitter<number>();

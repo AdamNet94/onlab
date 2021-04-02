@@ -5,3 +5,13 @@
 .correct-answer{
     background-color: green !important;
 }
+h2.question-counter{
+    margin: 10px 10px;
+}
+span.player-badge{
+    font-size: x-large;
+    margin: 10px 10px 10px;
+}
+div >button.btn-primary{
+    margin-bottom: 40px;
+}

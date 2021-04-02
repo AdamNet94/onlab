@@ -9,9 +9,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 
-
 namespace Quiz.Hub
 {
+    [Authorize(AuthenticationSchemes = "Identity.Application")]
     public class QuizHub : Hub<IQuizClient>
     {
         IQuizRepository quizRepository;
@@ -21,23 +21,23 @@ namespace Quiz.Hub
           this.quizRepository = repo;
        }
 
-        public async Task JoinGroup(string pin,string user)
+        public async Task JoinGroup(string pin,string nickName)
         {
-           await quizRepository.CreatePlayerAsync("userId should be Access_token", user);
+           string userEmail = GetUser();
+           await quizRepository.CreatePlayerAsync(userEmail, nickName);
            await Groups.AddToGroupAsync(Context.ConnectionId, pin);
-           await Clients.Groups(pin).RenderNewPlayer(user);
+           await Clients.Groups(pin).RenderNewPlayer(nickName);
         }
 
         public async Task StartGame(int studiorumId, string pin)
         {
+            string userEmail = GetUser();
             var quizId = await this.quizRepository.CreateQuizAsync(studiorumId);
             var firstQuestion = await quizRepository.GetQuestionAsync(quizId);
 
             // making sure we do not send to the client side which answer is correct
             foreach (var answer in firstQuestion.Answers)
-            {
                 answer.IsCorrect = false;
-            }
             await Clients.Group(pin).ReceiveQuizId(quizId,firstQuestion);
         }
 
@@ -69,24 +69,22 @@ namespace Quiz.Hub
 
         public async Task<int[]> submitAnswer(int quizId, int answerId,string nickName)
         {
+            Console.WriteLine(Context.ConnectionId);
             (Answer correctAnswer,int Score) result = await quizRepository.SubmitAnswerAsync(quizId, answerId, nickName);
-            return new int[] { result.correctAnswer.Id, result.Score };
+             return new int[] { result.correctAnswer.Id, result.Score };
         }
 
-       /* private async Task<ApplicationUser> GetUser()
+        private string GetUser()
         {
-            var access_token = "";
-            var user = HttpContext.User.Identity;
-            var claims = HttpContext.User.Claims.ToList();
-            foreach (var claim in claims)
+            var userIdentities = Context.User.Identities;
+            string userEmail = "";
+            foreach (var ident in userIdentities)
             {
-                if (claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
-                    access_token = claim.Value;
+                if (ident.NameClaimType == "name")
+                    userEmail = ident.Name;
             }
-            var applicationUser = await _context.Users.Where(u => u.Id == access_token).Include(u => u.Studiorums).SingleOrDefaultAsync();
-
-            return applicationUser;
-        }*/
+            return userEmail;
+        }
 
     }
 }

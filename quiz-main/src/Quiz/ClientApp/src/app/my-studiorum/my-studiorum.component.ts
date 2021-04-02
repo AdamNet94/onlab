@@ -40,7 +40,7 @@ export class MyStudiorumComponent implements OnInit {
   startQuiz(index:number){
     let studiorumId = this.studiorums[index].id;
     let lobbyId = this.getRandomInt();
-    this.router.navigate(['lobby/',studiorumId,lobbyId]);
+    this.router.navigate(['lobby/',studiorumId,lobbyId], { queryParams: { questionCount:this.studiorums[index].questions.length }});
   }
 
   addStudiorum(title: string) {

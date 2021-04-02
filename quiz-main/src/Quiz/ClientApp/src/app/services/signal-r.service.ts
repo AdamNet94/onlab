@@ -66,7 +66,7 @@ export class SignalRService {
           let correctAnswerId=result[0];
           quiz.currentQuestion.answers.forEach(element => {
             if(element.id==correctAnswerId)
-               { quiz.correctAnswer=element;}
+               { element.isCorrect=true;}
           });
         });
         return new Promise(()=> {});

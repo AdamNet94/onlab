@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { runInThisContext } from 'vm';
+import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
 import { ChartComponent } from '../chart/chart.component';
 import { AnswerStats } from '../models/AnswerStats';
 import { Quiz } from '../models/quiz';
@@ -21,14 +21,19 @@ export class LobbyComponent implements OnInit {
   players:Array<string> = new Array<string>();
   quiz:Quiz=new Quiz();
   chartData:Array<AnswerStats> = Array<AnswerStats>();
+  questionCount:number = 0;
+  questionNumber:number = 0;
 
   @ViewChild(QuestionComponent, { static: false }) questionChild;
   @ViewChild(ChartComponent, { static: false }) chartChild;
 
   constructor(private route:ActivatedRoute, private signalAdminConnection :SignalAdminService) {
     this.studiorumId = Number(route.snapshot.paramMap.get('studiorumId'));
-    console.log("a studiorum id a lobbyban: " +this.studiorumId);
     this.quizPin = String(route.snapshot.paramMap.get('lobbyId'));
+    this.route.queryParams.subscribe(params => {
+      this.questionCount = params['questionCount'];
+    });
+    console.log("query param question count = "+ this.questionCount);
   }
 
   ngOnInit() {
@@ -54,11 +59,5 @@ export class LobbyComponent implements OnInit {
 
   Next(){
     this.signalAdminConnection.Next(this.quiz.quizId,this.quizPin);
-    console.log(this.quiz.state);
-    /*if(this.quiz.state == QuizState.ShowCorrectAnswer)
-      {
-        if(this.quiz.correctAnswer.id > 0 )
-          console.log(this.quiz.correctAnswer.text);
-      }*/
   }
 }

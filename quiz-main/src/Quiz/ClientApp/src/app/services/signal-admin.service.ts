@@ -56,7 +56,6 @@ export class SignalAdminService extends SignalRService {
       );
       quiz.currentQuestion.answers.find(a => a.id == answer.id).isCorrect=true;
       quiz.state=QuizState.ShowCorrectAnswer;
-      console.log(quiz.answerFromServer);
     })
   }
 
