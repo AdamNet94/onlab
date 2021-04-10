@@ -5,19 +5,33 @@
         <p class="lead"> Join the Quiz and let's get started </p>
       </div>
   </div>
-  <button class="btn btn-primary btn-lg" (click)="onStart()">Start Quiz</button>
+  <div class="contaier below-bar">
+    <div>
+      <img src="/assets/people.svg" width="64" height="64">
+      <span style="font-size: 48px;" > {{players.length}}</span>
+    </div>
+    <button class="btn btn-success btn-lg" (click)="onStart()">Start Quiz</button>
+  </div>
   <div *ngIf="players.length">
     <span *ngFor="let player of players"class="badge badge-primary player-badge">{{player}}</span>
   </div>
 </div>
 
-<div *ngIf="quiz.state > 1 && quiz.state < 5">
-  <h2 class="questin-counter" >{{questionNumber}} of {{questionCount}}</h2>
+
+
+<div *ngIf = "quiz.state > 1 && quiz.state < 5">
   <app-question 
     #questionChild [question]="quiz.currentQuestion"
     (timeIsUpEvent)="Next()">
   </app-question>
-  <button class="btn btn-primary btn-lg" (click)="Next()"> Next </button>
+  <div class="container below-bar">
+    <h2 class="question-counter"> {{quiz.questionNumber}} of {{questionCount}}</h2>
+    <h2>
+      <img src="/assets/people.svg" width="64" height="64">
+        {{quiz.answerArrived}}
+    </h2>
+    <button class="btn btn-primary btn-lg" (click)="Next()"> Next </button>
+  </div>
 </div>
 
 

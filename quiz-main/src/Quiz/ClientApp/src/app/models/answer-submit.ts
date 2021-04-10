@@ -1,5 +1,5 @@
 export class AnswerSubmit{
-    quizId:number;
-    questionId:number;
     answerId:number;
+    timeLeft:number;
+    initTime:number;
 }

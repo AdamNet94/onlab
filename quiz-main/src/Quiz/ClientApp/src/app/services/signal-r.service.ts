@@ -6,6 +6,8 @@ import { QuizState } from '../models/quiz-state';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
 import { HttpClient } from '@angular/common/http';
 import { QuestionCrudService } from './question-crud.service';
+import { AnswerSubmit } from '../models/answer-submit';
+import { Player } from '../models/player';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +15,9 @@ import { QuestionCrudService } from './question-crud.service';
 export class SignalRService {
   
   hubConnection:signalR.HubConnection=new signalR.HubConnectionBuilder()
-  .withUrl('/quizhub',{ accessTokenFactory: () => "e7e18169-d6a8-4c80-9a4f-a13337d2f664"}).build();
-  private header:string;
+  .withUrl('/quizhub').build();
+
   constructor() { }
-  //,{ accessTokenFactory: () => "e7e18169-d6a8-4c80-9a4f-a13337d2f664" } as signalR.IHttpConnectionOptions )
- /*{ accessTokenFactory: () => this.loginToken }*/
   
     startConnection(pin:string,user:string) {
       this.hubConnection
@@ -35,11 +35,12 @@ export class SignalRService {
     }
   }
 
-  addQuizIdListener(quiz:Quiz) {
+  addQuizIdListener(quiz:Quiz, nickName:string) {
     this.hubConnection.on('ReceiveQuizId', (id:number,question:Question) => {
       quiz.quizId = id;
       quiz.currentQuestion = question as Question;
       quiz.state = QuizState.Question;
+      this.hubConnection.invoke("CreatePlayer",id,nickName);
       console.log(id + " ez a quiz id");
       console.log(question);
     });
@@ -49,47 +50,31 @@ export class SignalRService {
     this.hubConnection.on('ShowQuestion', (question:Question) => {
       quiz.currentQuestion = question as Question;
       quiz.state = QuizState.Question;
+      quiz.questionNumber++;
       console.log("az új kérdés: " + question.text);
     });
   }
 
-  SendAnswer(answerId:number,quiz:Quiz,nickName:string):Promise<void> {
+  SendAnswer(submitAnswer:AnswerSubmit,quiz:Quiz) {
     try {
-      this.hubConnection.invoke("submitAnswer", quiz.quizId,answerId,nickName).then(
-        (data)=> {
-          // data first parameter is the correct answer Id, second is the score
-        var result = data as number[];
-        console.log(data);
-        console.log("correct answer id from server is"+ result[0]);
-        console.log("my Score is :"+ result[1]);
-          quiz.answerScore=result[1];
-          let correctAnswerId=result[0];
-          quiz.currentQuestion.answers.forEach(element => {
-            if(element.id==correctAnswerId)
-               { element.isCorrect=true;}
-          });
-        });
-        return new Promise(()=> {});
+      this.hubConnection.invoke("SubmitAnswer", quiz.quizId,submitAnswer);
     }catch (err) {
       console.error(err);
     }
   }
 
-}
-
-export class CustomHttpClient extends signalR.HttpClient
-{
-  private autHeader:string;
-
-  public send(request: signalR.HttpRequest): Promise<signalR.HttpResponse> {
-    request.headers = {"Authorization": this.autHeader };
-    // Now we have manipulated the request how we want we can just call the base class method
-    return;
-  }
-    constructor(auth:string) {
-        super(); 
-        this.autHeader = auth;
+  GetAnswerResult(quiz:Quiz, player:Player){
+    try {
+      this.hubConnection.invoke("GetAnswerScore", quiz.quizId).then(
+        (answerScore) => 
+       { 
+         quiz.answerScore = answerScore;
+        quiz.state=QuizState.AnswerSubmitted;
+        player.totalScore+=answerScore;
+       });
+    }catch (err) {
+      console.error(err);
     }
-
+  }
 
 }

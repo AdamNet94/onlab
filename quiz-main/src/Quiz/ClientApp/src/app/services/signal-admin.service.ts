@@ -63,6 +63,12 @@ export class SignalAdminService extends SignalRService {
     this.hubConnection.invoke("StartGame",studiorumid,quizpin);
   }
 
+  addAnswerCountDecresedListener(quiz:Quiz){
+    this.hubConnection.on("AnswerCountDecresed", () =>{
+      quiz.answerArrived++;
+    })
+  }
+
   joinGroup(pin:string,user:string){
     try {
       this.hubConnection.invoke("JoinGroup", pin,user);

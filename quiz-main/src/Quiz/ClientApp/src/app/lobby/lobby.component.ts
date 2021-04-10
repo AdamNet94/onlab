@@ -21,8 +21,7 @@ export class LobbyComponent implements OnInit {
   players:Array<string> = new Array<string>();
   quiz:Quiz=new Quiz();
   chartData:Array<AnswerStats> = Array<AnswerStats>();
-  questionCount:number = 0;
-  questionNumber:number = 0;
+  questionCount:number;
 
   @ViewChild(QuestionComponent, { static: false }) questionChild;
   @ViewChild(ChartComponent, { static: false }) chartChild;
@@ -37,7 +36,7 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.signalAdminConnection.addQuizIdListener(this.quiz);
+    this.signalAdminConnection.addQuizIdListener(this.quiz,"admin"+this.quizPin);
     this.signalAdminConnection.addRenderNewPlayerListener(this.players);
     this.signalAdminConnection.addReceiveCorrectAnswerListener(this.quiz,this.chartData);
     this.signalAdminConnection.addQuestionListener(this.quiz);

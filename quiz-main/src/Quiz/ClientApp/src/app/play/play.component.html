@@ -16,21 +16,29 @@
         <div class="input-group-prepend">
           <div class="input-group-text">Name: </div>
         </div>
-        <input [(ngModel)]="playerName" type="text" class="form-control" id="name" placeholder="My Name">
+        <input [(ngModel)]="player.nickName" type="text" class="form-control" id="name" placeholder="My Name">
       </div>
     </div>
     <span>
       <button class="btn btn-primary" (click)="onSubmit()"> Join </button>
     </span>
     <h4 *ngIf ="quiz.state == 1" class="join-lobby">
-      You joined, check if you can see your name in the Lobby
+      You joined, Can you see your name in the Lobby?
     </h4>
 </div>
 
-<app-question *ngIf="quiz.state > 1"
-  #questionChild [question]="quiz.currentQuestion"
-  (answerSubmittedEvent)="sendAnswer($event)" >
-</app-question>
+<div class="container" *ngIf="quiz.state > 1">
+  <app-question
+    #questionChild [question]="quiz.currentQuestion"
+    (answerSubmittedEvent)="sendAnswer($event)"
+    (timeIsUpEvent)="getAnswerResult()">
+  </app-question>
+
+  <div class="container below-bar">
+    <h2>{{player.nickName}}</h2>
+    <h2>Total Score: {{player.totalScore}}</h2>
+  </div>
+</div>
 
 <div class="answer-result" *ngIf="quiz.state == 3">
   <div *ngIf="quiz.answerScore > 0; then correctAnswer else incorrectAnswer"></div>

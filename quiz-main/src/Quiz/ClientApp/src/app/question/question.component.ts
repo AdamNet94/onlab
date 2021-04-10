@@ -4,6 +4,7 @@ import { CounterService } from '../services/counter.service';
 import { Question } from '../models/question';
 import { QuizState } from '../models/quiz-state';
 import { Answer } from '../models/answer';
+import { AnswerSubmit } from '../models/answer-submit';
 
 @Component({
   selector: 'app-question',
@@ -13,11 +14,15 @@ import { Answer } from '../models/answer';
 export class QuestionComponent implements OnInit {
   
   @Input() public question:Question;
-  readonly initTime = 20;
+  readonly initTime = 10;
   timeleft = this.initTime;
+  colors:string[]=['#e21b3c',
+  '#d89e00',
+  '#1368ce',
+  '#26890c'];
   answersDisableFlag:boolean = false;
-  @Output() answerSubmittedEvent = new EventEmitter<number>();
-  @Output() timeIsUpEvent = new EventEmitter<QuizState>();
+  @Output() answerSubmittedEvent = new EventEmitter<AnswerSubmit>();
+  @Output() timeIsUpEvent = new EventEmitter<void>();
 
 
   constructor(private router: Router) {}
@@ -39,7 +44,13 @@ export class QuestionComponent implements OnInit {
   }
   
   submitAnswer(index:number){
-      this.answerSubmittedEvent.emit(this.question.answers[index].id);
+    
+    var answerPacakge:AnswerSubmit = {
+      answerId: this.question.answers[index].id,
+      timeLeft:this.timeleft,
+      initTime: this.initTime
+    };
+      this.answerSubmittedEvent.emit(answerPacakge);
   }
 
   NextQuestion(nextQuestion:Question){
@@ -57,6 +68,7 @@ export class QuestionComponent implements OnInit {
          {
            clearInterval(counter);
            qc.answersDisableFlag = true;
+           qc.timeIsUpEvent.emit();
          }
         else {
           qc.timeleft-=1;

@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
 import { Answer } from '../models/answer';
+import { AnswerSubmit } from '../models/answer-submit';
+import { Player } from '../models/player';
 import { Quiz } from '../models/quiz';
 import { QuizState } from '../models/quiz-state';
 import { QuestionComponent } from '../question/question.component';
@@ -13,7 +15,7 @@ import { SignalRService } from '../services/signal-r.service';
 })
 export class PlayComponent implements OnInit {
 
-  private playerName: string = " ";
+  private player:Player = new Player("",0);
   private pin: number = 0;
   private quiz: Quiz;
 
@@ -22,21 +24,23 @@ export class PlayComponent implements OnInit {
   constructor(private SignalRconnection:SignalRService) {this.quiz = new Quiz();}
 
   ngOnInit() {
-    this.SignalRconnection.startConnection(this.pin.toString(),this.playerName);
-    this.SignalRconnection.addQuizIdListener(this.quiz);
+   this.SignalRconnection.startConnection(this.pin.toString(),this.player.nickName);
    this.SignalRconnection.addQuestionListener(this.quiz);
   }
 
   onSubmit() {
-    this.SignalRconnection.joinGroup(this.pin.toString(),this.playerName+this.pin,this.quiz);
+    this.SignalRconnection.joinGroup(this.pin.toString(),this.player.nickName,this.quiz);
+    this.SignalRconnection.addQuizIdListener(this.quiz,this.player.nickName);
     this.quiz.state=QuizState.CheckYourName;
   }
 
   sendAnswer($event){
-
       this.questionChild.answersDisableFlag = true;
-      let answerId:number = $event as number;
-      this.SignalRconnection.SendAnswer(answerId,this.quiz,this.playerName+this.pin);
-      console.log(this.quiz.answerScore); this.quiz.state=QuizState.AnswerSubmitted;
+      let answerSubmit:AnswerSubmit = $event as AnswerSubmit;
+      this.SignalRconnection.SendAnswer(answerSubmit,this.quiz);
+  }
+
+  getAnswerResult() {
+    this.SignalRconnection.GetAnswerResult(this.quiz, this.player);
   }
 }

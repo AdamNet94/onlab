@@ -55,12 +55,10 @@ export class ChartComponent implements OnInit,OnChanges {
     this.datasets = [
       {
         data: this.counts,
-        backgroundColor: [
-          '#737373',
-          '#F2F2F2',
-          '#F2DBD5',
-          '#D9B2A9'
-        ],
+        backgroundColor: ['#e21b3c',
+        '#d89e00',
+        '#1368ce',
+        '#26890c'],
         label:'',
         fill: false,
       }

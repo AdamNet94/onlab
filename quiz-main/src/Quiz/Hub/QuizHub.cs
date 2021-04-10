@@ -24,7 +24,7 @@ namespace Quiz.Hub
         public async Task JoinGroup(string pin,string nickName)
         {
            string userEmail = GetUser();
-           await quizRepository.CreatePlayerAsync(userEmail, nickName);
+          //await quizRepository.CreatePlayerAsync(userEmail, nickName);
            await Groups.AddToGroupAsync(Context.ConnectionId, pin);
            await Clients.Groups(pin).RenderNewPlayer(nickName);
         }
@@ -38,7 +38,12 @@ namespace Quiz.Hub
             // making sure we do not send to the client side which answer is correct
             foreach (var answer in firstQuestion.Answers)
                 answer.IsCorrect = false;
-            await Clients.Group(pin).ReceiveQuizId(quizId,firstQuestion);
+            Clients.Group(pin).ReceiveQuizId(quizId,firstQuestion);
+        }
+
+        public async Task CreatePlayer(int quizId,string nickName)
+        {
+            await quizRepository.CreatePlayerAsync(GetUser(), nickName, quizId);
         }
 
         public async Task Next(int quizId, string pin)
@@ -67,11 +72,16 @@ namespace Quiz.Hub
             }
         }
 
-        public async Task<int[]> submitAnswer(int quizId, int answerId,string nickName)
+        public async Task<int> GetAnswerScore(int quizId)
         {
-            Console.WriteLine(Context.ConnectionId);
-            (Answer correctAnswer,int Score) result = await quizRepository.SubmitAnswerAsync(quizId, answerId, nickName);
-             return new int[] { result.correctAnswer.Id, result.Score };
+            return await quizRepository.getUserAnswerResultAsync(GetUser(), quizId);
+        }
+
+        public async Task SubmitAnswer(int quizId, AnswerSubmit answerSubmit)
+        {
+            string userId = GetUser();
+            await quizRepository.SubmitAnswerAsync(quizId, answerSubmit, userId);
+            //await Clients.Group(pin.ToString()).AnswerCountDecresed();
         }
 
         private string GetUser()

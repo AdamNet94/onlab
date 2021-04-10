@@ -12,9 +12,10 @@ namespace Quiz.Repositories
         public Task<Answer> GetCorrectAnswerAsync(int quizId);
         public Task<QuizState> GetStateAsync(int quizId);
         public Task<List<AnswerStat>> GetAnswerSats(int quizId);
-        public Task<(Answer, int)> SubmitAnswerAsync(int quizId, int answerId, string connectionId);
-        public Task<Player> CreatePlayerAsync(string UserId, string nickName);
+        public Task<bool> SubmitAnswerAsync(int quizId, AnswerSubmit answerSubmit, string userId);
+        public Task<Player> CreatePlayerAsync(string UserId, string nickName, int quizId);
         public Task<List<TopPlayer>> GetTopPlayersAsync(int quizid);
+        public Task<int> getUserAnswerResultAsync(string userId, int quizId);
 
     }
 }

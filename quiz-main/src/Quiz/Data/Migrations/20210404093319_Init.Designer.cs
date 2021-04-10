@@ -10,8 +10,8 @@ using Quiz.Data;
 namespace Quiz.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210321103121_newInit")]
-    partial class newInit
+    [Migration("20210404093319_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -407,6 +407,9 @@ namespace Quiz.Migrations
                     b.Property<string>("NickName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("QuizInstanceId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TotalScore")
                         .HasColumnType("int");
 
@@ -561,7 +564,7 @@ namespace Quiz.Migrations
                         .IsRequired();
 
                     b.HasOne("Quiz.Models.QuizInstance", "Quiz")
-                        .WithMany("SubmittedAnswers")
+                        .WithMany()
                         .HasForeignKey("QuizInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -594,11 +597,6 @@ namespace Quiz.Migrations
             modelBuilder.Entity("Quiz.Models.Question", b =>
                 {
                     b.Navigation("Answers");
-                });
-
-            modelBuilder.Entity("Quiz.Models.QuizInstance", b =>
-                {
-                    b.Navigation("SubmittedAnswers");
                 });
 
             modelBuilder.Entity("Quiz.Models.Studiorum", b =>
