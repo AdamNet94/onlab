@@ -65,8 +65,8 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
     QuestionCrudService,
     StudiorumCrudService,
-    SignalRService,
-    SignalAdminService,
+    //SignalRService,
+    //SignalAdminService,
     ThemeService
   ],
   bootstrap: [AppComponent]

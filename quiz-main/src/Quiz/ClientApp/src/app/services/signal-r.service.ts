@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Question } from '../models/question';
 import { Quiz } from '../models/quiz';
@@ -12,12 +12,19 @@ import { Player } from '../models/player';
 @Injectable({
   providedIn: 'root'
 })
-export class SignalRService {
+export class SignalRService implements OnDestroy {
   
-  hubConnection:signalR.HubConnection=new signalR.HubConnectionBuilder()
+  builder = new signalR.HubConnectionBuilder();
+  readonly hubConnection:signalR.HubConnection = new signalR.HubConnectionBuilder()
   .withUrl('/quizhub').build();
 
   constructor() { }
+
+  ngOnDestroy(): void {
+    this.hubConnection.off("ReceiveQuizId");
+    this.hubConnection.off("ShowQuestion");
+    this.hubConnection.stop();
+  }
   
     startConnection(pin:string,user:string) {
       this.hubConnection

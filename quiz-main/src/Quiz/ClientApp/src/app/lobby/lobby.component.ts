@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
 import { ChartComponent } from '../chart/chart.component';
@@ -23,6 +23,7 @@ export class LobbyComponent implements OnInit {
   chartData:Array<AnswerStats> = Array<AnswerStats>();
   questionCount:number;
 
+
   @ViewChild(QuestionComponent, { static: false }) questionChild;
   @ViewChild(ChartComponent, { static: false }) chartChild;
 
@@ -34,7 +35,7 @@ export class LobbyComponent implements OnInit {
     });
     console.log("query param question count = "+ this.questionCount);
   }
-
+  
   ngOnInit() {
     this.signalAdminConnection.addQuizIdListener(this.quiz,"admin"+this.quizPin);
     this.signalAdminConnection.addRenderNewPlayerListener(this.players);
@@ -49,14 +50,25 @@ export class LobbyComponent implements OnInit {
     this.signalAdminConnection.startGame(this.studiorumId,this.quizPin.toString());
   }
 
-  refreshChart(){
+  refreshChart() {
     console.log(this.chartData);
     this.chartChild.data=this.chartData;
-      this.chartChild.refreshChart();
+    this.chartChild.refreshChart();
     console.log("chartdata refreshed");
   }
 
-  Next(){
+  Next() {
     this.signalAdminConnection.Next(this.quiz.quizId,this.quizPin);
   }
+
+  ngOnDestroy(): void {
+    this.signalAdminConnection.hubConnection.off("ReceiveQuizId");
+    this.signalAdminConnection.hubConnection.off("ShowQuestion");
+    this.signalAdminConnection.hubConnection.off("RenderNewPlayer");
+    this.signalAdminConnection.hubConnection.off("ReceiveFinalResults");
+    this.signalAdminConnection.hubConnection.off("ReceiveCorrectAnswer");
+    this.signalAdminConnection.hubConnection.off("AnswerCountDecresed");
+    this.signalAdminConnection.hubConnection.stop().then(() => console.log("on destroyed called and conenction stopped"));
+  }
+
 }

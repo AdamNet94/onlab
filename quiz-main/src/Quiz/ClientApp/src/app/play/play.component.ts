@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnDestroy} from '@angular/core';
 import { Answer } from '../models/answer';
 import { AnswerSubmit } from '../models/answer-submit';
 import { Player } from '../models/player';
@@ -13,7 +13,7 @@ import { SignalRService } from '../services/signal-r.service';
   templateUrl: './play.component.html',
   styleUrls: ['./play.component.css']
 })
-export class PlayComponent implements OnInit {
+export class PlayComponent implements OnInit, OnDestroy {
 
   private player:Player = new Player("",0);
   private pin: number = 0;
@@ -43,4 +43,11 @@ export class PlayComponent implements OnInit {
   getAnswerResult() {
     this.SignalRconnection.GetAnswerResult(this.quiz, this.player);
   }
+
+  ngOnDestroy(): void {
+    this.SignalRconnection.hubConnection.off("ReceiveQuizId");
+    this.SignalRconnection.hubConnection.off("ShowQuestion");
+    this.SignalRconnection.hubConnection.stop().then(() => console.log("on destroyed called and conenction stopped"));
+  }
+
 }
