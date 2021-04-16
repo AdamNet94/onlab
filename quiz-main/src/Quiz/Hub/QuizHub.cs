@@ -77,11 +77,11 @@ namespace Quiz.Hub
             return await quizRepository.getUserAnswerResultAsync(GetUser(), quizId);
         }
 
-        public async Task SubmitAnswer(int quizId, AnswerSubmit answerSubmit)
+        public async Task SubmitAnswer(int quizId, AnswerSubmit answerSubmit,string pin)
         {
             string userId = GetUser();
             await quizRepository.SubmitAnswerAsync(quizId, answerSubmit, userId);
-            //await Clients.Group(pin.ToString()).AnswerCountDecresed();
+            await Clients.Group(pin).AnswerCountDecresed();
         }
 
         private string GetUser()

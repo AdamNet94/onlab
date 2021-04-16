@@ -5,11 +5,25 @@ import { Question } from '../models/question';
 import { QuizState } from '../models/quiz-state';
 import { Answer } from '../models/answer';
 import { AnswerSubmit } from '../models/answer-submit';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-question',
+  animations: [
+    trigger('flyInOut', [
+      state('in', style({ transform: 'translateX(0)' })),
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)' }),
+        animate(400)
+      ]),
+      transition(':leave', [
+        animate(400, style({ transform: 'translateX(100%)' }))
+      ])
+    ])
+  ],
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.css']
+  styleUrls: ['./question.component.css'],
+  
 })
 export class QuestionComponent implements OnInit {
   

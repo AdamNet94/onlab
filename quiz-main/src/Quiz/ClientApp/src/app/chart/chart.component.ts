@@ -13,7 +13,19 @@ export class ChartComponent implements OnInit,OnChanges {
   chart:Chart;
   public barChartOptions = {
     scaleShowVerticalLines: false,
-    responsive: true
+    responsive: true,
+    scales: {
+      xAxes: [{
+          ticks: {
+              fontSize: 18
+          }
+      }],
+      yAxes: [{
+        ticks: {
+            fontSize: 18
+        }
+    }]
+  }
   };
   public barChartLabels;
   public barChartType = 'bar';

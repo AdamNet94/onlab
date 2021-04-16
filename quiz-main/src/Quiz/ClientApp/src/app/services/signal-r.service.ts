@@ -62,9 +62,9 @@ export class SignalRService implements OnDestroy {
     });
   }
 
-  SendAnswer(submitAnswer:AnswerSubmit,quiz:Quiz) {
+  SendAnswer(submitAnswer:AnswerSubmit,quiz:Quiz,pin:string) {
     try {
-      this.hubConnection.invoke("SubmitAnswer", quiz.quizId,submitAnswer);
+      this.hubConnection.invoke("SubmitAnswer", quiz.quizId,submitAnswer,pin);
     }catch (err) {
       console.error(err);
     }

@@ -2,7 +2,7 @@
         <h2 class="text-center">{{question.text}}</h2>
         <span class="badge badge-warning" id="timer"> {{timeleft}} </span>
     </div>
-    <div class="answer-container">
+    <div @flyInOut *ngIf="!answersDisableFlag" class="answer-container">
         <button *ngFor="let answer of question.answers; index as i;"
         type="button" [disabled]="answersDisableFlag" [style.background]="colors[i]" [class.correct-answer]="answer.isCorrect"
         class="btn btn-lg answer" (click)="submitAnswer(i)">{{answer.text}}</button>

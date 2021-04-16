@@ -1,3 +1,4 @@
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
@@ -35,14 +36,16 @@ export class LobbyComponent implements OnInit {
     });
     console.log("query param question count = "+ this.questionCount);
   }
-  
+
   ngOnInit() {
     this.signalAdminConnection.addQuizIdListener(this.quiz,"admin"+this.quizPin);
     this.signalAdminConnection.addRenderNewPlayerListener(this.players);
     this.signalAdminConnection.addReceiveCorrectAnswerListener(this.quiz,this.chartData);
     this.signalAdminConnection.addQuestionListener(this.quiz);
     this.signalAdminConnection.addReceiveFinalResults(this.quiz);
+    this.signalAdminConnection.addAnswerCountDecresedListener(this.quiz);
     this.signalAdminConnection.startConnectionAdmin(this.quizPin.toString(),"admin"+this.quizPin.toString());
+    
     console.log(this.players);
   }
 
@@ -59,6 +62,7 @@ export class LobbyComponent implements OnInit {
 
   Next() {
     this.signalAdminConnection.Next(this.quiz.quizId,this.quizPin);
+    this.quiz.answerArrived=0;
   }
 
   ngOnDestroy(): void {

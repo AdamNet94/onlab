@@ -37,7 +37,7 @@ export class PlayComponent implements OnInit, OnDestroy {
   sendAnswer($event){
       this.questionChild.answersDisableFlag = true;
       let answerSubmit:AnswerSubmit = $event as AnswerSubmit;
-      this.SignalRconnection.SendAnswer(answerSubmit,this.quiz);
+      this.SignalRconnection.SendAnswer(answerSubmit,this.quiz,this.pin.toString());
   }
 
   getAnswerResult() {

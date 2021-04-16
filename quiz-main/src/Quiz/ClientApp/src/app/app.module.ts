@@ -24,6 +24,7 @@ import { LobbyComponent } from './lobby/lobby.component';
 import { SignalRService } from './services/signal-r.service';
 import { SignalAdminService } from './services/signal-admin.service';
 import { ChartsModule, ThemeService } from 'ng2-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -59,7 +60,8 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
       { path: 'my-studiorum', component: MyStudiorumComponent, canActivate: [AuthorizeGuard]},
       { path: 'play', component: PlayComponent, canActivate: [AuthorizeGuard] }
     ]),
-    ChartsModule
+    ChartsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

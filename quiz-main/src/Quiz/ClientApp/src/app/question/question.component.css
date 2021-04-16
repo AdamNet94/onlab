@@ -3,24 +3,24 @@ div{
 }
 
 div.question-container{
-    margin-bottom: 40px;
+    margin-bottom: 2vw;
 }
 div.answer-container{
     display:grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 40%  40%; 
-    column-gap: 10px;
-    row-gap: 15px;
+    grid-template-rows: 50%  50%; 
+    column-gap: 1vw;
+    row-gap: 1.5vw;
+    margin-bottom: 2vw;
 }
 button.answer{
     justify-self: stretch;
     color: ivory;
-    font-size: large;
     font-weight: bolder;
-    height: 60px;
+    font-size: 1.7vw;
 }
-div >span#timer{
-    font-size: xx-large;
+div >span#timer {
+    font-size: 2vw;
     margin: 15px 15px;
 }
 button.btn:hover{
