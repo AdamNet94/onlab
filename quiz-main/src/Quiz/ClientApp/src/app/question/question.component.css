@@ -17,8 +17,9 @@ button.answer{
     justify-self: stretch;
     color: ivory;
     font-weight: bolder;
-    font-size: 1.7vw;
+    font-size: x-large;
 }
+
 div >span#timer {
     font-size: 2vw;
     margin: 15px 15px;
@@ -29,5 +30,6 @@ button.btn:hover{
 }
 
 .correct-answer{
-    background-color:  rgb(13, 218, 13) !important;
+    background-color:  white !important;
+    color: green !important;
 }

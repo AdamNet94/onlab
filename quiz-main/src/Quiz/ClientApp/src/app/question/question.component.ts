@@ -81,7 +81,6 @@ export class QuestionComponent implements OnInit {
         if (qc.timeleft == 0 || qc.timeleft < 0 )
          {
            clearInterval(counter);
-           qc.answersDisableFlag = true;
            qc.timeIsUpEvent.emit();
          }
         else {

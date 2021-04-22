@@ -30,6 +30,7 @@ export class QuestionCrudService {
 
   getAnswers() {
     this.httpClient.get<Answer[]>(this.baseUrl + 'api/Answers');
+    
   }
 
   getAnswer(id: number) {

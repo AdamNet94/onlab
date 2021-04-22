@@ -19,7 +19,7 @@
 
 
 
-<div *ngIf = "quiz.state > 1 && quiz.state < 5">
+<div *ngIf = "quiz.state > 1 && quiz.state < 6">
   <app-question 
     #questionChild [question]="quiz.currentQuestion"
     (timeIsUpEvent)="Next()">
@@ -34,8 +34,6 @@
   </div>
 </div>
 
-
-
 <div *ngIf="quiz.state == 4" class="container">
     <app-chart #chartChild 
     [data]="chartData">
@@ -43,6 +41,12 @@
 </div>
 
 <div *ngIf="quiz.state == 5" class="container">
+  <app-leaderboard #chartChild 
+  [players]="quiz.topPlayers">
+  </app-leaderboard>
+</div>
+
+<div *ngIf="quiz.state == 6" class="container">
   <app-stage
   [topPlayers]="quiz.topPlayers">
   </app-stage>

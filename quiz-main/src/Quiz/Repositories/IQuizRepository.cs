@@ -16,6 +16,7 @@ namespace Quiz.Repositories
         public Task<Player> CreatePlayerAsync(string UserId, string nickName, int quizId);
         public Task<List<TopPlayer>> GetTopPlayersAsync(int quizid);
         public Task<int> getUserAnswerResultAsync(string userId, int quizId);
+        public Task<List<TopPlayer>> GetTopPlayersCurrentQuestion(int quizId);
 
     }
 }

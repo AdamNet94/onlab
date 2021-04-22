@@ -124,6 +124,8 @@ namespace Quiz.Repositories
                     if (ansstat.answer.Id == ansId)
                         ansstat.count++;
                 }
+            quiz.State = QuizState.Questionresult;
+            await context.SaveChangesAsync();
             return answerstats;
         }
 
@@ -154,6 +156,24 @@ namespace Quiz.Repositories
 
             return topPlayers;
         }
+
+        public async Task<List<TopPlayer>> GetTopPlayersCurrentQuestion(int quizId)
+        {
+            QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
+            List<TopPlayer> topPlayers = new List<TopPlayer>();
+            var answers = await context.AnswerInstances.Where(a => a.QuestionId == quiz.CurrentQuestionId && a.QuizInstanceId == quiz.Id).OrderByDescending(x => x.Score).ToListAsync();
+            answers = answers.Take(answers.Count < 3 ? answers.Count : 3).ToList();
+
+            for (int i = 0; i < answers.Count; i++)
+            {
+                var player = await context.Players.FindAsync(answers[i].PlayerId);
+                topPlayers.Add(new TopPlayer(player.NickName, answers[i].Score));
+            }
+            quiz.State = QuizState.Showquestion;
+            await context.SaveChangesAsync();
+            return topPlayers;
+        }
+
         private async Task<QuizInstance> getQuiz(int quizId)
         {
             return await context.QuizInstances.FindAsync(quizId);

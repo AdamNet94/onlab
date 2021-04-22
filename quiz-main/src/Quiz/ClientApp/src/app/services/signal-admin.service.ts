@@ -33,18 +33,19 @@ export class SignalAdminService extends SignalRService {
   }
 
   addReceiveFinalResults(quiz:Quiz){
-    this.hubConnection.on("ReceiveFinalResults", (players:Array<Player>) => {
+    this.hubConnection.on("ReceiveAnswerResults", (players:Array<Player>,isFinal:boolean) => {
       console.log("topplayer from server: ");
       var playersServer = players as Array<Player>;
+      quiz.topPlayers = [];
       console.log(players.length);
       playersServer.forEach( element =>
         {
-          console.log(element);
+        console.log(element);
         var topPlayer:Player = new Player(element.nickName,element.totalScore);
         quiz.topPlayers.push(topPlayer);
         });
       console.log("in quiz.topplayer: " +quiz.topPlayers[0].nickName);
-      quiz.state=QuizState.FinalResult;
+      quiz.state= isFinal ? QuizState.FinalResult: QuizState.ShowScoreBoard;
     });
   }
 
@@ -61,6 +62,14 @@ export class SignalAdminService extends SignalRService {
 
   startGame(studiorumid:number,quizpin:string){
     this.hubConnection.invoke("StartGame",studiorumid,quizpin);
+  }
+
+  getCurrentQuestionTopPlayers(quiz:Quiz) {
+    this.hubConnection.invoke("CurrentQuestionTopPlayers",quiz.quizId).then(
+      (topPlayers:Array<Player>) => {
+        quiz.topPlayers = topPlayers;
+      }
+    );
   }
 
   addAnswerCountDecresedListener(quiz:Quiz){

@@ -62,14 +62,14 @@ export class LobbyComponent implements OnInit {
 
   Next() {
     this.signalAdminConnection.Next(this.quiz.quizId,this.quizPin);
-    this.quiz.answerArrived=0;
+    this.quiz.answerArrived = 0;
   }
 
   ngOnDestroy(): void {
     this.signalAdminConnection.hubConnection.off("ReceiveQuizId");
     this.signalAdminConnection.hubConnection.off("ShowQuestion");
     this.signalAdminConnection.hubConnection.off("RenderNewPlayer");
-    this.signalAdminConnection.hubConnection.off("ReceiveFinalResults");
+    this.signalAdminConnection.hubConnection.off("ReceiveAnswerResults");
     this.signalAdminConnection.hubConnection.off("ReceiveCorrectAnswer");
     this.signalAdminConnection.hubConnection.off("AnswerCountDecresed");
     this.signalAdminConnection.hubConnection.stop().then(() => console.log("on destroyed called and conenction stopped"));

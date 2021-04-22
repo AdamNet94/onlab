@@ -4,5 +4,6 @@ export enum QuizState {
     Question,
     AnswerSubmitted,
     ShowCorrectAnswer,
+    ShowScoreBoard,
     FinalResult,
 }

@@ -65,10 +65,15 @@ namespace Quiz.Hub
                         List<AnswerStat> stats = await this.quizRepository.GetAnswerSats(quizId);
                         await Clients.Caller.ReceiveCorrectAnswer(correctAnswer,stats);
                         break;
+
+                case QuizState.Questionresult:
+                        var topPlayersOfCurrentRound = await quizRepository.GetTopPlayersCurrentQuestion(quizId);
+                        await Clients.Caller.ReceiveAnswerResults(topPlayersOfCurrentRound, false);
+                        break;
                 case QuizState.Quizresult:
-                    var topPlayers = await quizRepository.GetTopPlayersAsync(quizId);
-                    await Clients.Caller.ReceiveFinalResults(topPlayers);
-                    break;
+                        var topPlayers = await quizRepository.GetTopPlayersAsync(quizId);
+                        await Clients.Caller.ReceiveAnswerResults(topPlayers,true);
+                        break;
             }
         }
 
@@ -82,6 +87,12 @@ namespace Quiz.Hub
             string userId = GetUser();
             await quizRepository.SubmitAnswerAsync(quizId, answerSubmit, userId);
             await Clients.Group(pin).AnswerCountDecresed();
+        }
+
+        public async Task<List<TopPlayer>> CurrentQuestionTopPlayers(int quizId)
+        {
+            List<TopPlayer> topPlayersOfCurrentRound = await quizRepository.GetTopPlayersCurrentQuestion(quizId);
+            return topPlayersOfCurrentRound;
         }
 
         private string GetUser()

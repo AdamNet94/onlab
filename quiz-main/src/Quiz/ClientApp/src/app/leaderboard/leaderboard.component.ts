@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { PLAYERS } from './players';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Player } from '../models/player';
 
 @Component({
   selector: 'app-leaderboard',
@@ -8,16 +9,13 @@ import { PLAYERS } from './players';
 })
 export class LeaderboardComponent implements OnInit {
 
-  players = PLAYERS;
+  @Input() players:Player[];
+  quizPin:string;
 
-  sortTable() {
-    this.players.sort((a,b) => (b.points > a.points) ? 1 : ((a.points > b.points) ? -1 : 0));
-  }
-
-  constructor() { }
+  constructor() {  }
 
   ngOnInit() {
-    this.sortTable();
+
   }
 
 }
