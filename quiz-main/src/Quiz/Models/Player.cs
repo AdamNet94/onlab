@@ -11,6 +11,7 @@ namespace Quiz.Models
         public int Id { get; set; }
         public string UserId { get; set; }
         public string NickName { get; set; }
+        public string Pin { get; set; }
         public int QuizInstanceId { get; set; }
         public int TotalScore { get; set; }
     }     

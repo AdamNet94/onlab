@@ -10,8 +10,8 @@ using Quiz.Data;
 namespace Quiz.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210404093319_Init")]
-    partial class Init
+    [Migration("20210423163521_initx")]
+    partial class initx
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -405,6 +405,9 @@ namespace Quiz.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("NickName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pin")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuizInstanceId")

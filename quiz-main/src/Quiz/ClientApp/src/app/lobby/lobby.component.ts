@@ -30,7 +30,7 @@ export class LobbyComponent implements OnInit {
 
   constructor(private route:ActivatedRoute, private signalAdminConnection :SignalAdminService) {
     this.studiorumId = Number(route.snapshot.paramMap.get('studiorumId'));
-    this.quizPin = String(route.snapshot.paramMap.get('lobbyId'));
+    this.quizPin= String(route.snapshot.paramMap.get('lobbyId'));
     this.route.queryParams.subscribe(params => {
       this.questionCount = params['questionCount'];
     });
@@ -38,19 +38,20 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.signalAdminConnection.addQuizIdListener(this.quiz,"admin"+this.quizPin);
+    this.signalAdminConnection.addQuizIdListener(this.quiz,"admin"+this.quizPin,this.quizPin);
     this.signalAdminConnection.addRenderNewPlayerListener(this.players);
     this.signalAdminConnection.addReceiveCorrectAnswerListener(this.quiz,this.chartData);
     this.signalAdminConnection.addQuestionListener(this.quiz);
     this.signalAdminConnection.addReceiveFinalResults(this.quiz);
     this.signalAdminConnection.addAnswerCountDecresedListener(this.quiz);
-    this.signalAdminConnection.startConnectionAdmin(this.quizPin.toString(),"admin"+this.quizPin.toString());
+    this.signalAdminConnection.startConnectionAdmin(this.quizPin,"admin"+this.quizPin);
     
     console.log(this.players);
   }
 
   onStart(){
-    this.signalAdminConnection.startGame(this.studiorumId,this.quizPin.toString());
+    this.signalAdminConnection.startGame(this.studiorumId,this.quizPin);
+    console.log("starting the game");
   }
 
   refreshChart() {

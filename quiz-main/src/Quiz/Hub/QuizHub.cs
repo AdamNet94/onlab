@@ -20,30 +20,41 @@ namespace Quiz.Hub
        {
           this.quizRepository = repo;
        }
-
-        public async Task JoinGroup(string pin,string nickName)
+        public async Task JoinGroupAdmin(string pin, string nickName)
         {
-           string userEmail = GetUser();
-          //await quizRepository.CreatePlayerAsync(userEmail, nickName);
-           await Groups.AddToGroupAsync(Context.ConnectionId, pin);
-           await Clients.Groups(pin).RenderNewPlayer(nickName);
+            await Groups.AddToGroupAsync(Context.ConnectionId, pin);
         }
 
+        public async Task<bool> JoinGroup(string pin,string nickName)
+        {
+            if (await quizRepository.IsNameTaken(pin, nickName))
+                return true;
+            else
+            {
+                string userEmail = GetUser();
+                await Groups.AddToGroupAsync(Context.ConnectionId, pin);
+                //quizId is 0 at this point, it will be refreshed once the quiz starts
+                await quizRepository.CreatePlayerAsync(GetUser(), nickName, 0, pin);
+                await Clients.Groups(pin).RenderNewPlayer(nickName);
+                return false;
+            }
+        }
+          
         public async Task StartGame(int studiorumId, string pin)
         {
-            string userEmail = GetUser();
             var quizId = await this.quizRepository.CreateQuizAsync(studiorumId);
             var firstQuestion = await quizRepository.GetQuestionAsync(quizId);
+            await quizRepository.RefreshQuizIdinPlayersTable(quizId, pin);
 
             // making sure we do not send to the client side which answer is correct
             foreach (var answer in firstQuestion.Answers)
                 answer.IsCorrect = false;
-            Clients.Group(pin).ReceiveQuizId(quizId,firstQuestion);
+            await Clients.Group(pin).ReceiveQuizId(quizId,firstQuestion);
         }
 
-        public async Task CreatePlayer(int quizId,string nickName)
+        public async Task CreatePlayer(int quizId,string nickName,string pin)
         {
-            await quizRepository.CreatePlayerAsync(GetUser(), nickName, quizId);
+            await quizRepository.CreatePlayerAsync(GetUser(), nickName, quizId,pin);
         }
 
         public async Task Next(int quizId, string pin)

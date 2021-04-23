@@ -405,6 +405,9 @@ namespace Quiz.Migrations
                     b.Property<string>("NickName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Pin")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("QuizInstanceId")
                         .HasColumnType("int");
 

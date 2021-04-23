@@ -1,35 +1,49 @@
 <h2>Play Studiorum</h2>
-<div *ngIf ="quiz.state < 2" class="input-group input-group-lg">
-    <div class="col-auto">
-      <label class="sr-only" for="pin">Enter Pin here</label>
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <div class="input-group-text">PIN: </div>
-        </div>
-        <input [(ngModel)]="pin" type="text" class="form-control" id="Pin" placeholder="Enter PIN here">
+
+<form #f="ngForm" (ngSubmit)="onSubmit()" *ngIf="quiz.state < 2" class="input-group input-group-lg">
+  <div class="col-auto">
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <div class="input-group-text">PIN: </div>
+      </div>
+      <input ngModel name="lobbyPin" #lobbyPin="ngModel" [(ngModel)]="pin" type="text" required minlength="3" maxlength="4" pattern='^[0-9]+$'
+      class="form-control" id="Pin" placeholder="Enter PIN here">
+    </div>
+    <div *ngIf="lobbyPin.invalid && (lobbyPin.dirty || lobbyPin.touched)" class="alert alert-danger">
+      <div *ngIf="lobbyPin.errors">
+        Pin is required to be a number between 0 and 10000
       </div>
     </div>
-    <div class="col-auto">
-      <label class="sr-only" for="name">Name: </label>
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <div class="input-group-text">Name: </div>
-        </div>
-        <input [(ngModel)]="player.nickName" type="text" class="form-control" id="name" placeholder="My Name">
+  </div>
+  <div class="col-auto">
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <div class="input-group-text">Name:</div>
+      </div>
+      <input ngModel name="nickName" #nickName="ngModel" [(ngModel)]="player.nickName" required minlength="2" maxlength="20"
+        type="text" class="form-control" id="name" placeholder="Your nickname">
+    </div>
+    <div *ngIf="nickName.invalid && (nickName.dirty || nickName.touched)" class="alert alert-danger">
+      <div *ngIf="nickName.errors">
+        Name is required.
       </div>
     </div>
-    <span>
-      <button class="btn btn-primary" (click)="onSubmit()"> Join </button>
-    </span>
-    <h4 *ngIf ="quiz.state == 1" class="join-lobby">
-      You joined, Can you see your name in the Lobby?
-    </h4>
-</div>
+    <div *ngIf="isnameTaken" class="alert alert-danger">
+      <div *ngIf="nickName.errors">
+        There is a palyer with this name already in the game, please choose another nickname
+      </div>
+    </div>
+  </div>
+  <span>
+    <button class="btn btn-primary" [disabled]="!f.valid" > Join </button>
+  </span>
+  <h4 *ngIf="quiz.state == 1" class="join-lobby">
+    You joined, Can you see your name in the Lobby?
+  </h4>
+</form>
 
 <div class="container" *ngIf="quiz.state > 1">
-  <app-question
-    #questionChild [question]="quiz.currentQuestion"
-    (answerSubmittedEvent)="sendAnswer($event)"
+  <app-question #questionChild [question]="quiz.currentQuestion" (answerSubmittedEvent)="sendAnswer($event)"
     (timeIsUpEvent)="getAnswerResult()">
   </app-question>
 

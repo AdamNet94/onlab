@@ -18,6 +18,7 @@ export class PlayComponent implements OnInit, OnDestroy {
   private player:Player = new Player("",0);
   private pin: number = 0;
   private quiz: Quiz;
+  private isnameTaken:boolean = false;
 
   @ViewChild(QuestionComponent, { static: false }) questionChild;
 
@@ -30,7 +31,7 @@ export class PlayComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.SignalRconnection.joinGroup(this.pin.toString(),this.player.nickName,this.quiz);
-    this.SignalRconnection.addQuizIdListener(this.quiz,this.player.nickName);
+    this.SignalRconnection.addQuizIdListener(this.quiz,this.player.nickName,this.pin.toString());
     this.quiz.state=QuizState.CheckYourName;
   }
 

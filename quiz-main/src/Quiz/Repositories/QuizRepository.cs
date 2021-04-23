@@ -20,10 +20,6 @@ namespace Quiz.Repositories
 
         public async Task<int> CreateQuizAsync(int studiorumId)
         {
-
-            /* var questionsIds = context.Questions.Where(q => q.StudiorumId == studiorumId)
-             .GroupBy(q => q.Id).Select(x => new { minquestId = x.Min(z => z.Id) }).ToList();*/
-
             var newQuiz = new QuizInstance
             {
                 Id = 0, CurrentQuestionId = 0,
@@ -129,12 +125,14 @@ namespace Quiz.Repositories
             return answerstats;
         }
 
-        public async Task<Player> CreatePlayerAsync(string userId, string nickName, int quizId)
+        public async Task<Player> CreatePlayerAsync(string userId, string nickName, int quizId,string pin)
         {
-            Player newPlayer = await context.Players.Where(p => p.UserId == userId && p.QuizInstanceId == quizId).FirstOrDefaultAsync();
+            
+           /* Player newPlayer = await context.Players.Where(p => p.UserId == userId && p.QuizInstanceId == quizId).FirstOrDefaultAsync();
             if (newPlayer != null)
-                return newPlayer;
-            newPlayer = new Player { Id = 0, NickName = nickName, UserId = userId, TotalScore = 0, QuizInstanceId= quizId};
+                return newPlayer;*/
+            // quizID is 0 at this point, it will be refreshed
+            Player newPlayer = new Player { Id = 0, NickName = nickName, UserId = userId, TotalScore = 0, QuizInstanceId= quizId,Pin = pin};
             await context.Players.AddAsync(newPlayer);
             await context.SaveChangesAsync();
 
@@ -184,6 +182,21 @@ namespace Quiz.Repositories
             double hanyados = Convert.ToDouble(timeLeft)/ InitTime;
             int eredmény = Convert.ToInt32(hanyados * 1000);
             return eredmény;
+        }
+        public async Task<bool> IsNameTaken(string pin, string nickName)
+        {
+            return await context.Players.Where(p => p.NickName == nickName && p.Pin == pin).AnyAsync();
+        }
+
+        public async Task RefreshQuizIdinPlayersTable(int quizId, string pin)
+        {
+            List<Player> players = await context.Players.Where(p => p.Pin == pin).ToListAsync();
+
+            foreach (var player in players)
+            {
+                player.QuizInstanceId = quizId;
+            }
+            await context.SaveChangesAsync();
         }
 
     }

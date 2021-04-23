@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Quiz.Migrations
 {
-    public partial class Init : Migration
+    public partial class initx : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -93,6 +93,7 @@ namespace Quiz.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NickName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Pin = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     QuizInstanceId = table.Column<int>(type: "int", nullable: false),
                     TotalScore = table.Column<int>(type: "int", nullable: false)
                 },

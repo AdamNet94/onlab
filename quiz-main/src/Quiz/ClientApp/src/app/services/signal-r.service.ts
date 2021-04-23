@@ -35,19 +35,24 @@ export class SignalRService implements OnDestroy {
 
   joinGroup(pin:string,user:string,quiz:Quiz){
     try {
-      this.hubConnection.invoke("JoinGroup", pin,user).then(()=> quiz.state=QuizState.CheckYourName)
-      quiz.state=QuizState.CheckYourName;
-    }catch (err) {
+      this.hubConnection.invoke("JoinGroup", pin,user).then(
+        (isNameTaken:boolean) => 
+        {
+          if(!isNameTaken)
+          console.log("taken?"+ isNameTaken);
+            quiz.state=QuizState.CheckYourName
+        });
+    } catch (err) {
       console.error(err);
     }
   }
 
-  addQuizIdListener(quiz:Quiz, nickName:string) {
+  addQuizIdListener(quiz:Quiz, nickName:string,pin:string) {
     this.hubConnection.on('ReceiveQuizId', (id:number,question:Question) => {
       quiz.quizId = id;
       quiz.currentQuestion = question as Question;
       quiz.state = QuizState.Question;
-      this.hubConnection.invoke("CreatePlayer",id,nickName);
+      this.hubConnection.invoke("CreatePlayer",id,nickName,pin);
       console.log(id + " ez a quiz id");
       console.log(question);
     });

@@ -60,8 +60,13 @@ export class SignalAdminService extends SignalRService {
     })
   }
 
-  startGame(studiorumid:number,quizpin:string){
-    this.hubConnection.invoke("StartGame",studiorumid,quizpin);
+  startGame(studiorumid:number,quizPin:string) {
+    try {
+      this.hubConnection.invoke("StartGame",studiorumid,quizPin);
+    }
+    catch(err){
+      console.error(err);
+    }
   }
 
   getCurrentQuestionTopPlayers(quiz:Quiz) {
@@ -80,7 +85,7 @@ export class SignalAdminService extends SignalRService {
 
   joinGroup(pin:string,user:string){
     try {
-      this.hubConnection.invoke("JoinGroup", pin,user);
+      this.hubConnection.invoke("JoinGroupAdmin", pin,user);
     }catch (err) {
       console.error(err);
     }
