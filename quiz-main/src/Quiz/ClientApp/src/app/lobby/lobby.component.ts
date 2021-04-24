@@ -25,7 +25,7 @@ export class LobbyComponent implements OnInit {
   questionCount:number;
 
 
-  @ViewChild(QuestionComponent, { static: false }) questionChild;
+  @ViewChild(QuestionComponent, { static: false }) questionChild:QuestionComponent;
   @ViewChild(ChartComponent, { static: false }) chartChild;
 
   constructor(private route:ActivatedRoute, private signalAdminConnection :SignalAdminService) {
@@ -45,8 +45,14 @@ export class LobbyComponent implements OnInit {
     this.signalAdminConnection.addReceiveFinalResults(this.quiz);
     this.signalAdminConnection.addAnswerCountDecresedListener(this.quiz);
     this.signalAdminConnection.startConnectionAdmin(this.quizPin,"admin"+this.quizPin);
-    
     console.log(this.players);
+  }
+
+  skip() {
+    this.questionChild.timeleft = 0;
+    this.signalAdminConnection.skipQuestion(this.quizPin);
+    this.next();
+    
   }
 
   onStart(){
@@ -61,7 +67,7 @@ export class LobbyComponent implements OnInit {
     console.log("chartdata refreshed");
   }
 
-  Next() {
+  next() {
     this.signalAdminConnection.Next(this.quiz.quizId,this.quizPin);
     this.quiz.answerArrived = 0;
   }

@@ -83,6 +83,14 @@ export class SignalAdminService extends SignalRService {
     })
   }
 
+  skipQuestion(pin:string) {
+    try {
+      this.hubConnection.invoke("SkipQuestionOnPlayers", pin);
+    }catch (err) {
+      console.error(err);
+    }
+  }
+
   joinGroup(pin:string,user:string){
     try {
       this.hubConnection.invoke("JoinGroupAdmin", pin,user);

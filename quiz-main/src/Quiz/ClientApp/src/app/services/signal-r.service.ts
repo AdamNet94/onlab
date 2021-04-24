@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { QuestionCrudService } from './question-crud.service';
 import { AnswerSubmit } from '../models/answer-submit';
 import { Player } from '../models/player';
+import { PlayComponent } from '../play/play.component';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +53,7 @@ export class SignalRService implements OnDestroy {
       quiz.quizId = id;
       quiz.currentQuestion = question as Question;
       quiz.state = QuizState.Question;
-      this.hubConnection.invoke("CreatePlayer",id,nickName,pin);
+      //this.hubConnection.invoke("CreatePlayer",id,nickName,pin);
       console.log(id + " ez a quiz id");
       console.log(question);
     });
@@ -64,6 +65,14 @@ export class SignalRService implements OnDestroy {
       quiz.state = QuizState.Question;
       quiz.questionNumber++;
       console.log("az új kérdés: " + question.text);
+    });
+  }
+
+  addSkipQuestionListener(playComponent:PlayComponent,quiz:Quiz,palyer:Player){
+    this.hubConnection.on('SkipQuestion', () => {
+      if(playComponent.questionChild)
+        playComponent.questionChild.timeleft=0;
+        this.GetAnswerResult(quiz,palyer);
     });
   }
 

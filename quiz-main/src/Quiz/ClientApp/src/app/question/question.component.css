@@ -18,6 +18,7 @@ button.answer{
     color: ivory;
     font-weight: bolder;
     font-size: x-large;
+    opacity: 70%;
 }
 
 div >span#timer {
@@ -26,10 +27,14 @@ div >span#timer {
 }
 button.btn:hover{
     color:black;
-    opacity: 0.8;
+    opacity: 1.0;
 }
 
 .correct-answer{
     background-color:  white !important;
     color: green !important;
+}
+.selected-answer{
+    border-color: blue  !important;;
+    border-width: 3px !important;
 }

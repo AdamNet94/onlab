@@ -7,6 +7,11 @@ import { Answer } from '../models/answer';
 import { AnswerSubmit } from '../models/answer-submit';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
+/*,
+      transition(':leave', [
+        animate(400, style({ transform: 'translateX(100%)' }))
+      ])*/
+
 @Component({
   selector: 'app-question',
   animations: [
@@ -15,9 +20,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
       transition(':enter', [
         style({ transform: 'translateX(-100%)' }),
         animate(400)
-      ]),
-      transition(':leave', [
-        animate(400, style({ transform: 'translateX(100%)' }))
       ])
     ])
   ],
@@ -30,6 +32,7 @@ export class QuestionComponent implements OnInit {
   @Input() public question:Question;
   readonly initTime = 10;
   timeleft = this.initTime;
+  answerSelected:number = -1 ;
   colors:string[]=['#e21b3c',
   '#d89e00',
   '#1368ce',
@@ -37,7 +40,6 @@ export class QuestionComponent implements OnInit {
   answersDisableFlag:boolean = false;
   @Output() answerSubmittedEvent = new EventEmitter<AnswerSubmit>();
   @Output() timeIsUpEvent = new EventEmitter<void>();
-
 
   constructor(private router: Router) {}
 
@@ -58,7 +60,7 @@ export class QuestionComponent implements OnInit {
   }
   
   submitAnswer(index:number){
-    
+    this.answerSelected = index;
     var answerPacakge:AnswerSubmit = {
       answerId: this.question.answers[index].id,
       timeLeft:this.timeleft,
@@ -71,6 +73,7 @@ export class QuestionComponent implements OnInit {
     this.question = nextQuestion;
     this.answersDisableFlag= false;
     this.timeleft=this.initTime;
+    this.answerSelected = -1;
     this.CountDown(this);
   }
 

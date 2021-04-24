@@ -12,6 +12,8 @@ namespace Quiz.Hub
         Task ReceiveCorrectAnswer(Answer correctAnswer, List<AnswerStat> stats);
         Task ReceiveAnswerResults(List<TopPlayer> topPlayers, bool isFinalResults);
         Task AnswerCountDecresed();
+        Task SkipQuestion();
+
 
         Task ReceiveResult(int correctAnswerId, int score);
         Task ShowQuestionResult();

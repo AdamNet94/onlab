@@ -20,10 +20,10 @@ namespace Quiz.Hub
        {
           this.quizRepository = repo;
        }
-        public async Task JoinGroupAdmin(string pin, string nickName)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId, pin);
-        }
+       public async Task JoinGroupAdmin(string pin, string nickName)
+       {
+          await Groups.AddToGroupAsync(Context.ConnectionId, pin);
+       }
 
         public async Task<bool> JoinGroup(string pin,string nickName)
         {
@@ -37,7 +37,8 @@ namespace Quiz.Hub
                 await quizRepository.CreatePlayerAsync(GetUser(), nickName, 0, pin);
                 await Clients.Groups(pin).RenderNewPlayer(nickName);
                 return false;
-            }
+            }            
+
         }
           
         public async Task StartGame(int studiorumId, string pin)
@@ -56,6 +57,17 @@ namespace Quiz.Hub
         {
             await quizRepository.CreatePlayerAsync(GetUser(), nickName, quizId,pin);
         }
+
+        public async Task SkipQuestionOnPlayers(string pin)
+        {
+            await Clients.Group(pin).SkipQuestion();
+        }
+
+        private async Task LateJoin(int quizId, string pin)
+        {
+
+        }
+
 
         public async Task Next(int quizId, string pin)
         {
