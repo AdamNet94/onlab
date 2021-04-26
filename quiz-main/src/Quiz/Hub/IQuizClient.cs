@@ -7,8 +7,9 @@ namespace Quiz.Hub
     public interface IQuizClient
     {
         Task RenderNewPlayer(string user);
-        Task ReceiveQuizId(int quizId,Question question);
+        Task ReceiveQuizId(int quizId);
         Task ShowQuestion(Question q);
+        Task PreviewQuestion(Question q);
         Task ReceiveCorrectAnswer(Answer correctAnswer, List<AnswerStat> stats);
         Task ReceiveAnswerResults(List<TopPlayer> topPlayers, bool isFinalResults);
         Task AnswerCountDecresed();

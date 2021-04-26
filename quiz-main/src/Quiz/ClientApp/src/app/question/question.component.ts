@@ -6,12 +6,13 @@ import { QuizState } from '../models/quiz-state';
 import { Answer } from '../models/answer';
 import { AnswerSubmit } from '../models/answer-submit';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 /*,
       transition(':leave', [
         animate(400, style({ transform: 'translateX(100%)' }))
       ])*/
-
+      
 @Component({
   selector: 'app-question',
   animations: [
@@ -25,7 +26,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   ],
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css'],
-  
 })
 export class QuestionComponent implements OnInit {
   
@@ -33,11 +33,13 @@ export class QuestionComponent implements OnInit {
   readonly initTime = 10;
   timeleft = this.initTime;
   answerSelected:number = -1 ;
-  colors:string[]=['#e21b3c',
+  colors:string[] = ['#e21b3c',
   '#d89e00',
   '#1368ce',
   '#26890c'];
   answersDisableFlag:boolean = false;
+  questionPreview:boolean = false;
+  previewTime:number = 3;
   @Output() answerSubmittedEvent = new EventEmitter<AnswerSubmit>();
   @Output() timeIsUpEvent = new EventEmitter<void>();
 
@@ -74,7 +76,32 @@ export class QuestionComponent implements OnInit {
     this.answersDisableFlag= false;
     this.timeleft=this.initTime;
     this.answerSelected = -1;
-    this.CountDown(this);
+    if(this.question.answers == undefined || this.question.answers.length == 0)
+      {
+        console.log("nextquestion -> questionPreview" );
+        this.questionPreview = false;
+        console.log(this.questionPreview);
+      }
+    else {
+      console.log("nextquestion -> REAL ANSWERS COMING");
+      this.questionPreview= true;
+      console.log(this.questionPreview);
+      this.CountDown(this);
+    }
+  }
+
+  PreviewCountDown(qc:QuestionComponent) {
+    var counter = setInterval(Counting, 1000);
+    function Counting()
+      {
+        if (qc.timeleft == 0 || qc.timeleft < 0 )
+         {
+           clearInterval(counter);
+         }
+        else {
+          qc.timeleft-=1;
+        }
+    }
   }
 
   CountDown(qc:QuestionComponent) {
@@ -85,6 +112,7 @@ export class QuestionComponent implements OnInit {
          {
            clearInterval(counter);
            qc.timeIsUpEvent.emit();
+           
          }
         else {
           qc.timeleft-=1;

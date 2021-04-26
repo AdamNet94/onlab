@@ -22,7 +22,7 @@
 <div *ngIf = "quiz.state > 1 && quiz.state < 6">
   <app-question 
     #questionChild [question]="quiz.currentQuestion"
-    (timeIsUpEvent)="Next()">
+    (timeIsUpEvent)="next()">
   </app-question>
   <div class="container below-bar">
     <h2 class="question-counter"> {{quiz.questionNumber}} of {{questionCount}}</h2>

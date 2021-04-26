@@ -45,7 +45,7 @@ export class LobbyComponent implements OnInit {
     this.signalAdminConnection.addReceiveFinalResults(this.quiz);
     this.signalAdminConnection.addAnswerCountDecresedListener(this.quiz);
     this.signalAdminConnection.startConnectionAdmin(this.quizPin,"admin"+this.quizPin);
-    console.log(this.players);
+    this.signalAdminConnection.addPreviewQuestionListener(this.quiz);
   }
 
   skip() {

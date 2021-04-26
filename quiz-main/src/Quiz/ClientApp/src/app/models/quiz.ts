@@ -10,6 +10,7 @@ export class Quiz {
     topPlayers:Array<Player>;
     questionNumber:number = 1;
     answerArrived:number = 0;
+    nameIsTaken:boolean = false;
 
     constructor(qId:number =0, s:QuizState = QuizState.Start, q:Question = new Question()) {
         this.state=s; this.currentQuestion = q;this.quizId = qId;

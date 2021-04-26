@@ -1,16 +1,23 @@
+<div class="container">
     <div class="container question-container">
         <h1 class="text-center">{{question.text}}</h1>
         <span class="badge badge-warning" id="timer"> {{timeleft}} </span>
     </div>
-    <div @flyInOut class="answer-container">
-        <button *ngFor="let answer of question.answers; index as i;"
-        type="button" [disabled]="answersDisableFlag" [style.background]="colors[i]" [class.correct-answer]="answer.isCorrect"
-        [class.selected-answer]="i == answerSelected"
-        class="btn btn-lg answer" (click)="submitAnswer(i)">
-        {{answer.text}} 
-        <img [hidden]="!answer.isCorrect" src="/assets/check2.jpg" width="32" height="32">
-    </button>
-    </div>
+    <div *ngIf="questionPreview;then thenBlock else elseBlock" class="container answer-container" ></div>
+    <ng-template #thenBlock>
+        <div @flyInOut class="container answer-container">
+            <button *ngFor="let answer of question.answers; index as i;"
+            type="button" [disabled]="answersDisableFlag" [style.background]="colors[i]" [class.correct-answer]="answer.isCorrect"
+            [class.selected-answer]="i == answerSelected"
+            class="btn btn-lg answer" (click)="submitAnswer(i)">
+            {{answer.text}} 
+            <img [hidden]="!answer.isCorrect" src="/assets/check2.jpg" width="32" height="32">
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #elseBlock>Content to render when condition is false.</ng-template>
+
+</div>
     <!--[disabled]="answersDisableFlag"-->
     
     

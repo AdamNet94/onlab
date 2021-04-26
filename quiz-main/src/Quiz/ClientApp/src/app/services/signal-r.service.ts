@@ -35,13 +35,17 @@ export class SignalRService implements OnDestroy {
     }
 
   joinGroup(pin:string,user:string,quiz:Quiz){
+    
     try {
       this.hubConnection.invoke("JoinGroup", pin,user).then(
-        (isNameTaken:boolean) => 
+        (isTakenFromServer:boolean) => 
         {
-          if(!isNameTaken)
-          console.log("taken?"+ isNameTaken);
-            quiz.state=QuizState.CheckYourName
+         quiz.nameIsTaken = isTakenFromServer;
+         if(!isTakenFromServer)
+          {
+            
+            quiz.state=QuizState.CheckYourName;
+          }
         });
     } catch (err) {
       console.error(err);
@@ -49,13 +53,19 @@ export class SignalRService implements OnDestroy {
   }
 
   addQuizIdListener(quiz:Quiz, nickName:string,pin:string) {
-    this.hubConnection.on('ReceiveQuizId', (id:number,question:Question) => {
+    this.hubConnection.on('ReceiveQuizId', (id:number) => {
       quiz.quizId = id;
+      console.log(id + " ez a quiz id");
+    });
+  }
+
+  addPreviewQuestionListener(quiz:Quiz){
+    this.hubConnection.on('PreviewQuestion', (question:Question) => {
       quiz.currentQuestion = question as Question;
       quiz.state = QuizState.Question;
-      //this.hubConnection.invoke("CreatePlayer",id,nickName,pin);
-      console.log(id + " ez a quiz id");
-      console.log(question);
+      quiz.questionNumber++;
+      console.log("Kérdés Preview meghívva: " + question.text);
+      console.log("a válaszok: " + question.answers);
     });
   }
 
@@ -63,12 +73,13 @@ export class SignalRService implements OnDestroy {
     this.hubConnection.on('ShowQuestion', (question:Question) => {
       quiz.currentQuestion = question as Question;
       quiz.state = QuizState.Question;
-      quiz.questionNumber++;
-      console.log("az új kérdés: " + question.text);
+      console.log("ShowQuestion meghívva a teljes válaszokkal");
+      console.log(question.text);
+      console.log(question.answers);
     });
   }
 
-  addSkipQuestionListener(playComponent:PlayComponent,quiz:Quiz,palyer:Player){
+  addSkipQuestionListener(playComponent:PlayComponent,quiz:Quiz,palyer:Player) {
     this.hubConnection.on('SkipQuestion', () => {
       if(playComponent.questionChild)
         playComponent.questionChild.timeleft=0;

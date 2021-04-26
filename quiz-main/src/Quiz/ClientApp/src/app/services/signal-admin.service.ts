@@ -22,7 +22,7 @@ export class SignalAdminService extends SignalRService {
       this.hubConnection
         .start()
         .then(() => console.log('Connection started'))
-        .catch(err => console.log('Error while starting connection: ' + err)).then(()=> this.joinGroup(pin,user))
+        .catch(err => console.log('Error while starting connection: ' + err)).then(()=> this.joinGroupAdmin(pin,user))
     }
 
   addRenderNewPlayerListener(users:Array<string>){
@@ -91,7 +91,7 @@ export class SignalAdminService extends SignalRService {
     }
   }
 
-  joinGroup(pin:string,user:string){
+  joinGroupAdmin(pin:string,user:string){
     try {
       this.hubConnection.invoke("JoinGroupAdmin", pin,user);
     }catch (err) {

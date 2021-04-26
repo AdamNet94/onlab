@@ -28,11 +28,6 @@
         Name is required.
       </div>
     </div>
-    <div *ngIf="isnameTaken" class="alert alert-danger">
-      <div *ngIf="nickName.errors">
-        There is a palyer with this name already in the game, please choose another nickname
-      </div>
-    </div>
   </div>
   <span>
     <button class="btn btn-primary" [disabled]="!f.valid" > Join </button>
@@ -41,6 +36,10 @@
     You joined, Can you see your name in the Lobby?
   </h4>
 </form>
+
+  <div *ngIf="quiz.nameIsTaken">
+    <h3 class="alert alert-danger">There is a palyer with this name already in the game, please choose another nickname</h3>
+  </div>
 
 <div class="container" *ngIf="quiz.state > 1">
   <app-question #questionChild [question]="quiz.currentQuestion" (answerSubmittedEvent)="sendAnswer($event)"

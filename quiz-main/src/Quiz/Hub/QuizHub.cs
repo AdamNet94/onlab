@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
-
+using System.Timers;
 
 namespace Quiz.Hub
 {
@@ -37,20 +37,16 @@ namespace Quiz.Hub
                 await quizRepository.CreatePlayerAsync(GetUser(), nickName, 0, pin);
                 await Clients.Groups(pin).RenderNewPlayer(nickName);
                 return false;
-            }            
-
+            }
         }
           
         public async Task StartGame(int studiorumId, string pin)
         {
             var quizId = await this.quizRepository.CreateQuizAsync(studiorumId);
-            var firstQuestion = await quizRepository.GetQuestionAsync(quizId);
             await quizRepository.RefreshQuizIdinPlayersTable(quizId, pin);
-
-            // making sure we do not send to the client side which answer is correct
-            foreach (var answer in firstQuestion.Answers)
-                answer.IsCorrect = false;
-            await Clients.Group(pin).ReceiveQuizId(quizId,firstQuestion);
+            await Clients.Group(pin).ReceiveQuizId(quizId);
+            //sending the question right away
+            await Next(quizId, pin);
         }
 
         public async Task CreatePlayer(int quizId,string nickName,string pin)
@@ -78,17 +74,28 @@ namespace Quiz.Hub
                         Question currentQuestion = await this.quizRepository.GetQuestionAsync(quizId);
                     if (currentQuestion == null)
                             goto case QuizState.Quizresult;
-                        //making sure we do not send to the client side which answer is the correct one
-                        foreach (var answer in currentQuestion.Answers)
-                            answer.IsCorrect = false;
-                        await Clients.Group(pin).ShowQuestion(currentQuestion);
-                        break;
+                    Question questionWithAnswers = new Question();
+                    questionWithAnswers.Answers = new List<Answer>();
+                    questionWithAnswers.Text = currentQuestion.Text;
+                    //making sure to null out the isCorrect field
+                    foreach (var answer in currentQuestion.Answers)
+                    {
+                        answer.IsCorrect = false;
+                        questionWithAnswers.Answers.Add(answer);
+                    }
+                    currentQuestion.Answers.Clear();
+                    await Clients.Group(pin).PreviewQuestion(currentQuestion);
+                    Timer timer = new Timer();
+                    timer.Elapsed += (sender, e) => { sendQuestionWithAnswers(pin, questionWithAnswers); };
+                    timer.Interval = 3000;
+                    timer.AutoReset = false;
+                    timer.Enabled = true;
+                    break;
                 case QuizState.Showanswer:
                         Answer correctAnswer = await this.quizRepository.GetCorrectAnswerAsync(quizId);
                         List<AnswerStat> stats = await this.quizRepository.GetAnswerSats(quizId);
                         await Clients.Caller.ReceiveCorrectAnswer(correctAnswer,stats);
                         break;
-
                 case QuizState.Questionresult:
                         var topPlayersOfCurrentRound = await quizRepository.GetTopPlayersCurrentQuestion(quizId);
                         await Clients.Caller.ReceiveAnswerResults(topPlayersOfCurrentRound, false);
@@ -98,6 +105,13 @@ namespace Quiz.Hub
                         await Clients.Caller.ReceiveAnswerResults(topPlayers,true);
                         break;
             }
+        }
+
+         
+        private void sendQuestionWithAnswers(string pin, Question questionWithAnswers)
+        {
+            Console.WriteLine("sendQuestionWithAnswers called ");
+            Clients.Group(pin).ShowQuestion(questionWithAnswers);
         }
 
         public async Task<int> GetAnswerScore(int quizId)

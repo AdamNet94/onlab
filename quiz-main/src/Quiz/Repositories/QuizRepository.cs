@@ -56,8 +56,13 @@ namespace Quiz.Repositories
 
         public async Task<bool> SubmitAnswerAsync(int quizId, AnswerSubmit answerSubmit, string userId)
         {
-            Player p = await context.Players.Where(p => p.UserId == userId && p.QuizInstanceId == quizId).SingleOrDefaultAsync();
             QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
+            Console.WriteLine(quiz.State);
+            //making sure we dont submit answer after time is up, bc of the forward thinking logic during the question
+            // the state is actually Showanswer and not ShowQuestion
+            if (quiz.State != QuizState.Showanswer)
+                return false;
+            Player p = await context.Players.Where(p => p.UserId == userId && p.QuizInstanceId == quizId).SingleOrDefaultAsync();
             Answer answer = await context.Answers.FindAsync(answerSubmit.answerId);
 
             int score = answer.IsCorrect ? CalculateScore(answerSubmit.timeLeft, answerSubmit.initTime) : 0;

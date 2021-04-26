@@ -16,6 +16,7 @@ namespace Quiz.Models
         public enum QuizState
         {
             Start,
+            PreviewQuestion,
             Showquestion,
             Showanswer,
             Questionresult,
