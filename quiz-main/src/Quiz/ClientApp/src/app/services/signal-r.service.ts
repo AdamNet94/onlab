@@ -35,16 +35,21 @@ export class SignalRService implements OnDestroy {
     }
 
   joinGroup(pin:string,user:string,quiz:Quiz){
-    
     try {
       this.hubConnection.invoke("JoinGroup", pin,user).then(
-        (isTakenFromServer:boolean) => 
+        (quizId:number) => 
         {
-         quiz.nameIsTaken = isTakenFromServer;
-         if(!isTakenFromServer)
-          {
-            
-            quiz.state=QuizState.CheckYourName;
+          //if it returns a a -1 a a quizID it means the name was taken already if it turns the real quizID
+          // then it created the player
+         if (quizId < 0)
+         {
+            quiz.nameIsTaken = true;
+         }
+          else {
+            quiz.nameIsTaken = false;
+            quiz.quizId = quizId;
+            console.log("a quiz-state a joinGroup visszatérése után"+ quiz.state);
+            quiz.state = quiz.state == QuizState.Question ? QuizState.Question: QuizState.CheckYourName;
           }
         });
     } catch (err) {
@@ -69,6 +74,7 @@ export class SignalRService implements OnDestroy {
     });
   }
 
+
   addQuestionListener(quiz:Quiz) {
     this.hubConnection.on('ShowQuestion', (question:Question) => {
       quiz.currentQuestion = question as Question;
@@ -79,31 +85,31 @@ export class SignalRService implements OnDestroy {
     });
   }
 
-  addSkipQuestionListener(playComponent:PlayComponent,quiz:Quiz,palyer:Player) {
+  /*addSkipQuestionListener(playComponent:PlayComponent,quiz:Quiz,palyer:Player) {
     this.hubConnection.on('SkipQuestion', () => {
-      if(playComponent.questionChild)
-        playComponent.questionChild.timeleft=0;
         this.GetAnswerResult(quiz,palyer);
     });
-  }
+  }*/
 
-  SendAnswer(submitAnswer:AnswerSubmit,quiz:Quiz,pin:string) {
+  SendAnswer(answerId:number,quiz:Quiz,pin:string) {
     try {
-      this.hubConnection.invoke("SubmitAnswer", quiz.quizId,submitAnswer,pin);
+      this.hubConnection.invoke("SubmitAnswer", quiz.quizId,answerId,pin);
     }catch (err) {
       console.error(err);
     }
   }
 
-  GetAnswerResult(quiz:Quiz, player:Player){
+  GetAnswerResultListener(quiz:Quiz, player:Player){
     try {
-      this.hubConnection.invoke("GetAnswerScore", quiz.quizId).then(
-        (answerScore) => 
-       { 
-         quiz.answerScore = answerScore;
-        quiz.state=QuizState.AnswerSubmitted;
-        player.totalScore+=answerScore;
-       });
+      this.hubConnection.on('InvokeGetAnswer', () => {
+        this.hubConnection.invoke("GetAnswerScore", quiz.quizId).then(
+          (answerScore) => 
+        { 
+          quiz.answerScore = answerScore;
+          quiz.state=QuizState.AnswerSubmitted;
+          player.totalScore+=answerScore;
+        });
+      });
     }catch (err) {
       console.error(err);
     }

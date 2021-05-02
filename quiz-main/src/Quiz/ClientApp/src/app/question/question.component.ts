@@ -20,7 +20,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
       state('in', style({ transform: 'translateX(0)' })),
       transition(':enter', [
         style({ transform: 'translateX(-100%)' }),
-        animate(400)
+        animate(300)
       ])
     ])
   ],
@@ -30,8 +30,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 export class QuestionComponent implements OnInit {
   
   @Input() public question:Question;
-  readonly initTime = 10;
-  timeleft = this.initTime;
+  @Input() public timeLeft:number;
   answerSelected:number = -1 ;
   colors:string[] = ['#e21b3c',
   '#d89e00',
@@ -40,13 +39,13 @@ export class QuestionComponent implements OnInit {
   answersDisableFlag:boolean = false;
   questionPreview:boolean = false;
   previewTime:number = 3;
-  @Output() answerSubmittedEvent = new EventEmitter<AnswerSubmit>();
+  @Output() answerSubmittedEvent = new EventEmitter<number>();
   @Output() timeIsUpEvent = new EventEmitter<void>();
 
   constructor(private router: Router) {}
 
   ngOnInit() {
-
+    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -62,19 +61,14 @@ export class QuestionComponent implements OnInit {
   }
   
   submitAnswer(index:number){
+    this.answersDisableFlag = true;
     this.answerSelected = index;
-    var answerPacakge:AnswerSubmit = {
-      answerId: this.question.answers[index].id,
-      timeLeft:this.timeleft,
-      initTime: this.initTime
-    };
-      this.answerSubmittedEvent.emit(answerPacakge);
+    this.answerSubmittedEvent.emit(this.question.answers[index].id);
   }
 
   NextQuestion(nextQuestion:Question){
     this.question = nextQuestion;
     this.answersDisableFlag= false;
-    this.timeleft=this.initTime;
     this.answerSelected = -1;
     if(this.question.answers == undefined || this.question.answers.length == 0)
       {
@@ -86,38 +80,8 @@ export class QuestionComponent implements OnInit {
       console.log("nextquestion -> REAL ANSWERS COMING");
       this.questionPreview= true;
       console.log(this.questionPreview);
-      this.CountDown(this);
     }
   }
 
-  PreviewCountDown(qc:QuestionComponent) {
-    var counter = setInterval(Counting, 1000);
-    function Counting()
-      {
-        if (qc.timeleft == 0 || qc.timeleft < 0 )
-         {
-           clearInterval(counter);
-         }
-        else {
-          qc.timeleft-=1;
-        }
-    }
-  }
-
-  CountDown(qc:QuestionComponent) {
-    var counter = setInterval(Counting, 1000);
-    function Counting()
-      {
-        if (qc.timeleft == 0 || qc.timeleft < 0 )
-         {
-           clearInterval(counter);
-           qc.timeIsUpEvent.emit();
-           
-         }
-        else {
-          qc.timeleft-=1;
-        }
-    }
-  }
 
 }

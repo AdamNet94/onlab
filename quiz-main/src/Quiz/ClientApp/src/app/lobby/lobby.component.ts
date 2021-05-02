@@ -1,11 +1,8 @@
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
 import { ChartComponent } from '../chart/chart.component';
 import { AnswerStats } from '../models/AnswerStats';
 import { Quiz } from '../models/quiz';
-import { QuizState } from '../models/quiz-state';
 import { QuestionComponent } from '../question/question.component';
 import { SignalAdminService } from '../services/signal-admin.service';
 
@@ -24,7 +21,6 @@ export class LobbyComponent implements OnInit {
   chartData:Array<AnswerStats> = Array<AnswerStats>();
   questionCount:number;
 
-
   @ViewChild(QuestionComponent, { static: false }) questionChild:QuestionComponent;
   @ViewChild(ChartComponent, { static: false }) chartChild;
 
@@ -41,24 +37,20 @@ export class LobbyComponent implements OnInit {
     this.signalAdminConnection.addQuizIdListener(this.quiz,"admin"+this.quizPin,this.quizPin);
     this.signalAdminConnection.addRenderNewPlayerListener(this.players);
     this.signalAdminConnection.addReceiveCorrectAnswerListener(this.quiz,this.chartData);
-    this.signalAdminConnection.addQuestionListener(this.quiz);
+    //this.signalAdminConnection.addQuestionListener(this.quiz);
     this.signalAdminConnection.addReceiveFinalResults(this.quiz);
-    this.signalAdminConnection.addAnswerCountDecresedListener(this.quiz);
-    this.signalAdminConnection.startConnectionAdmin(this.quizPin,"admin"+this.quizPin);
+    this.signalAdminConnection.startConnectionAdmin(this.studiorumId,this.quizPin,this.quiz.quetionTime,this.quiz);
     this.signalAdminConnection.addPreviewQuestionListener(this.quiz);
+    this.signalAdminConnection.addAnswerCountDecresedListener(this.quiz);
+    this.signalAdminConnection.addQuestionAdminListener(this.quiz,this);
   }
 
   skip() {
-    this.questionChild.timeleft = 0;
+    this.quiz.timeRemained = 0;
     this.signalAdminConnection.skipQuestion(this.quizPin);
     this.next();
-    
   }
 
-  onStart(){
-    this.signalAdminConnection.startGame(this.studiorumId,this.quizPin);
-    console.log("starting the game");
-  }
 
   refreshChart() {
     console.log(this.chartData);
@@ -70,6 +62,23 @@ export class LobbyComponent implements OnInit {
   next() {
     this.signalAdminConnection.Next(this.quiz.quizId,this.quizPin);
     this.quiz.answerArrived = 0;
+  }
+
+  CountDown(lc:LobbyComponent) {
+    var counter = setInterval(Counting, 1000);
+    function Counting()
+      {
+        if (lc.quiz.timeRemained == 0 || lc.quiz.timeRemained < 0 )
+         {
+           clearInterval(counter);
+           lc.next();
+         }
+        else {
+          lc.quiz.timeRemained-=1;
+          lc.signalAdminConnection.StartCounting(lc.quiz.quizId);
+          console.log("contDown called");
+        }
+    }
   }
 
   ngOnDestroy(): void {

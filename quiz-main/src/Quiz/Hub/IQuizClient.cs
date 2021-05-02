@@ -14,8 +14,11 @@ namespace Quiz.Hub
         Task ReceiveAnswerResults(List<TopPlayer> topPlayers, bool isFinalResults);
         Task AnswerCountDecresed();
         Task SkipQuestion();
+        Task InvokeGetAnswer();
 
 
+        Task TimerCallBack();
+        Task TimeDecreased(int timeRemained);
         Task ReceiveResult(int correctAnswerId, int score);
         Task ShowQuestionResult();
         Task StartGame();

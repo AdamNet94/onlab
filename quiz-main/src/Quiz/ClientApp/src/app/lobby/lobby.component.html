@@ -10,7 +10,7 @@
       <img src="/assets/people.svg" width="64" height="64">
       <span style="font-size: 48px;" > {{players.length}}</span>
     </div>
-    <button class="btn btn-success btn-lg" (click)="onStart()">Start Quiz</button>
+    <button class="btn btn-success btn-lg" (click)="next()">Start Quiz</button>
   </div>
   <div *ngIf="players.length">
     <span *ngFor="let player of players"class="badge badge-primary player-badge">{{player}}</span>
@@ -22,6 +22,7 @@
 <div *ngIf = "quiz.state > 1 && quiz.state < 6">
   <app-question 
     #questionChild [question]="quiz.currentQuestion"
+    [timeLeft]="quiz.timeRemained"
     (timeIsUpEvent)="next()">
   </app-question>
   <div class="container below-bar">

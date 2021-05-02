@@ -18,12 +18,15 @@ namespace Quiz.Repositories
             this.context = _c;
         }
 
-        public async Task<int> CreateQuizAsync(int studiorumId)
+        public async Task<int> CreateQuizAsync(int studiorumId, string pin,int questionTime)
         {
             var newQuiz = new QuizInstance
             {
                 Id = 0, CurrentQuestionId = 0,
                 State = QuizState.Showquestion,
+                Pin = pin,
+                QuestionStartTime = questionTime,
+                CurrentQuestionTime = questionTime,
                 StudiorumId = studiorumId,
             };
 
@@ -33,20 +36,34 @@ namespace Quiz.Repositories
             return newQuiz.Id;
         }
 
-        public async Task<Question> GetQuestionAsync(int quizId)
+        public async Task ChangeQuizState(int quizId,QuizState newQuizState)
         {
             QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
-            Question currentQuestion = await context.Questions.Where(q => q.StudiorumId == quiz.StudiorumId && q.Id > quiz.CurrentQuestionId)
+            quiz.State = newQuizState;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Question> GetNextQuestionAsync(int quizId)
+        {
+            QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
+            Question currentQuestion = await context.Questions.AsNoTracking().Where(q => q.StudiorumId == quiz.StudiorumId && q.Id > quiz.CurrentQuestionId)
                                                          .OrderBy<Question, int>(q => q.Id)
                                                          .Include(q => q.Answers).FirstOrDefaultAsync();
+
             if (currentQuestion != null)
+            {
                 quiz.CurrentQuestionId = currentQuestion.Id;
+            }
             else return null;
-            // after we send the question, state has to change: a forward thinking logic
-            quiz.State = QuizState.Showanswer;
-            await context.SaveChangesAsync();
             return currentQuestion;
         }
+
+        public async Task<Question> GetCurrentQuestionAsync(int quizId)
+        {
+            QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
+            return await context.Questions.Include(q => q.Answers).Where(q => q.Id == quiz.CurrentQuestionId).SingleAsync();
+        }
+
 
         public async Task<QuizState> GetStateAsync(int quizId)
         {
@@ -54,18 +71,27 @@ namespace Quiz.Repositories
             return quizInstance.State;
         }
 
-        public async Task<bool> SubmitAnswerAsync(int quizId, AnswerSubmit answerSubmit, string userId)
+        public async Task<int> getQuizId(string pin)
+        {
+            QuizInstance quiz = await context.QuizInstances.Where(q => q.Pin == pin).SingleAsync();
+            return quiz.Id;
+        }
+
+        public async Task<bool> SubmitAnswerAsync(int quizId, int answerId, string userId)
         {
             QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
-            Console.WriteLine(quiz.State);
+
             //making sure we dont submit answer after time is up, bc of the forward thinking logic during the question
             // the state is actually Showanswer and not ShowQuestion
             if (quiz.State != QuizState.Showanswer)
                 return false;
             Player p = await context.Players.Where(p => p.UserId == userId && p.QuizInstanceId == quizId).SingleOrDefaultAsync();
-            Answer answer = await context.Answers.FindAsync(answerSubmit.answerId);
+            Answer answer = await context.Answers.FindAsync(answerId);
 
-            int score = answer.IsCorrect ? CalculateScore(answerSubmit.timeLeft, answerSubmit.initTime) : 0;
+
+            int score = 0;
+            if (answer != null)
+                score = answer.IsCorrect ? CalculateScore(quiz.QuestionStartTime, quiz.CurrentQuestionTime) : 0 ;
 
             AnswerInstance newAnswer = new AnswerInstance
             {
@@ -73,7 +99,7 @@ namespace Quiz.Repositories
                 Player = p,
                 PlayerId = p.Id,
                 IsCorrect = answer.IsCorrect,
-                AnswerId = answerSubmit.answerId,
+                AnswerId = answer.Id,
                 QuestionId = quiz.CurrentQuestionId,
                 Quiz = quiz,
                 QuizInstanceId = quiz.Id,
@@ -98,8 +124,6 @@ namespace Quiz.Repositories
         public async Task<Answer> GetCorrectAnswerAsync(int quizId)
         {
             QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
-            quiz.State = QuizState.Showquestion;
-            await context.SaveChangesAsync();
             Answer correctAnswer = await context.Answers.Where(a => a.QuestionId == quiz.CurrentQuestionId && a.IsCorrect == true).SingleOrDefaultAsync();
             return correctAnswer;
         }
@@ -125,23 +149,37 @@ namespace Quiz.Repositories
                     if (ansstat.answer.Id == ansId)
                         ansstat.count++;
                 }
-            quiz.State = QuizState.Questionresult;
-            await context.SaveChangesAsync();
             return answerstats;
         }
 
         public async Task<Player> CreatePlayerAsync(string userId, string nickName, int quizId,string pin)
         {
+           Player newPlayer = await context.Players.Where(p => p.UserId == userId && p.QuizInstanceId == quizId).FirstOrDefaultAsync();
+            if (newPlayer == null)
+            {
+                newPlayer = new Player { Id = 0, NickName = nickName, UserId = userId, TotalScore = 0, QuizInstanceId = quizId, Pin = pin };
+                await context.Players.AddAsync(newPlayer);
+            }
+            else
+                newPlayer.NickName = nickName;
             
-           /* Player newPlayer = await context.Players.Where(p => p.UserId == userId && p.QuizInstanceId == quizId).FirstOrDefaultAsync();
-            if (newPlayer != null)
-                return newPlayer;*/
-            // quizID is 0 at this point, it will be refreshed
-            Player newPlayer = new Player { Id = 0, NickName = nickName, UserId = userId, TotalScore = 0, QuizInstanceId= quizId,Pin = pin};
-            await context.Players.AddAsync(newPlayer);
             await context.SaveChangesAsync();
-
             return newPlayer;
+        }
+
+        public async Task<int> DecreaseTimer(int quizId)
+        {
+            QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
+            quiz.CurrentQuestionTime -= 1;
+            await context.SaveChangesAsync();
+            return quiz.CurrentQuestionTime;
+        }
+
+        public async Task SetTimer(int quizId)
+        {
+            QuizInstance quiz = await context.QuizInstances.FindAsync(quizId);
+            quiz.CurrentQuestionTime = quiz.QuestionStartTime;
+            await context.SaveChangesAsync();
         }
 
         public async Task<List<TopPlayer>> GetTopPlayersAsync(int quizId)
@@ -172,8 +210,6 @@ namespace Quiz.Repositories
                 var player = await context.Players.FindAsync(answers[i].PlayerId);
                 topPlayers.Add(new TopPlayer(player.NickName, answers[i].Score));
             }
-            quiz.State = QuizState.Showquestion;
-            await context.SaveChangesAsync();
             return topPlayers;
         }
 

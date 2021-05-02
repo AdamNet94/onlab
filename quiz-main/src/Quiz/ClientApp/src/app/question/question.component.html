@@ -1,7 +1,7 @@
 <div class="container">
     <div class="container question-container">
         <h1 class="text-center">{{question.text}}</h1>
-        <span class="badge badge-warning" id="timer"> {{timeleft}} </span>
+        <span *ngIf="timeLeft" class="badge badge-warning" id="timer"> {{timeLeft}} </span>
     </div>
     <div *ngIf="questionPreview;then thenBlock else elseBlock" class="container answer-container" ></div>
     <ng-template #thenBlock>

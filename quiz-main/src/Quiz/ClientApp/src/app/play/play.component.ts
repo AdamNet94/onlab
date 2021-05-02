@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnDestroy, AfterViewChecked} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Answer } from '../models/answer';
 import { AnswerSubmit } from '../models/answer-submit';
 import { Player } from '../models/player';
@@ -13,7 +13,7 @@ import { SignalRService } from '../services/signal-r.service';
   templateUrl: './play.component.html',
   styleUrls: ['./play.component.css']
 })
-export class PlayComponent implements OnInit, OnDestroy,AfterViewChecked {
+export class PlayComponent implements OnInit, OnDestroy {
 
   private player:Player = new Player("",0);
   private pin: number = 0;
@@ -23,14 +23,10 @@ export class PlayComponent implements OnInit, OnDestroy,AfterViewChecked {
 
   constructor(private SignalRconnection:SignalRService) {this.quiz = new Quiz();}
 
-  ngAfterViewChecked(): void {
-        
-  }
-
   ngOnInit() {
    this.SignalRconnection.startConnection(this.pin.toString(),this.player.nickName);
    this.SignalRconnection.addQuestionListener(this.quiz);
-   this.SignalRconnection.addSkipQuestionListener(this,this.quiz,this.player);
+   this.SignalRconnection.GetAnswerResultListener(this.quiz,this.player);
    this.SignalRconnection.addPreviewQuestionListener(this.quiz);
   }
 
@@ -41,12 +37,12 @@ export class PlayComponent implements OnInit, OnDestroy,AfterViewChecked {
 
   sendAnswer($event) {
       this.questionChild.answersDisableFlag = true;
-      let answerSubmit:AnswerSubmit = $event as AnswerSubmit;
+      let answerSubmit:number = $event as number;
       this.SignalRconnection.SendAnswer(answerSubmit,this.quiz,this.pin.toString());
   }
 
   getAnswerResult() {
-    this.SignalRconnection.GetAnswerResult(this.quiz, this.player);
+    //this.SignalRconnection.GetAnswerResult(this.quiz, this.player);
   }
 
   ngOnDestroy(): void {

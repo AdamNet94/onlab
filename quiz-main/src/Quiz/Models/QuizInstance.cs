@@ -11,6 +11,9 @@ namespace Quiz.Models
         public QuizState State { get; set; }
         public int CurrentQuestionId { get; set; }
         public int StudiorumId { get; set; }
+        public string Pin { get; set; }
+        public int QuestionStartTime { get; set; }
+        public int CurrentQuestionTime { get; set; }
         public Studiorum Studiorum { get; set; }
     }
         public enum QuizState
