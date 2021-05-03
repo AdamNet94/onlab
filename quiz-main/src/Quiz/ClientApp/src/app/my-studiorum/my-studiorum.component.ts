@@ -59,7 +59,7 @@ export class MyStudiorumComponent implements OnInit {
     );
   }
 
-  getRandomInt(max=10000){
+  getRandomInt(max=60000){
     return Math.floor(Math.random() * Math.floor(max));
   }
 

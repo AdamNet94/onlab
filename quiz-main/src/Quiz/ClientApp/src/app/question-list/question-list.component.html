@@ -1,13 +1,14 @@
 
-  <h2 class="lead">{{studiorum.title}}</h2>
+  <h2 * ngIf="studiorum" class="lead">{{ studiorum.title }}</h2>
   <button type="button" class="btn btn-primary" (click)="createQuestion(); child.resetForm();">Add new Question</button>
   <div>
     <div class="row">
       <div class="col-8">
-        <app-question-editor #child *ngIf="selectedQuestion!=null"
+        <app-question-editor *ngIf="selectedQuestion!=null" #child
                              [formData] ="selectedQuestion"
                              (questionChangedEvent)="receiveChangedQuestion($event)"
-                             (questionDeletedEvent)="receiveDeletedQuestion($event)"></app-question-editor>
+                             (questionDeletedEvent)="receiveDeletedQuestion($event)">
+        </app-question-editor>
       </div>
       <div class="col-4">
         <div *ngFor="let question of studiorum.questions; index as i;">

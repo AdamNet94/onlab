@@ -34,7 +34,6 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.signalAdminConnection.addQuizIdListener(this.quiz,"admin"+this.quizPin,this.quizPin);
     this.signalAdminConnection.addRenderNewPlayerListener(this.players);
     this.signalAdminConnection.addReceiveCorrectAnswerListener(this.quiz,this.chartData);
     //this.signalAdminConnection.addQuestionListener(this.quiz);
@@ -48,7 +47,6 @@ export class LobbyComponent implements OnInit {
   skip() {
     this.quiz.timeRemained = 0;
     this.signalAdminConnection.skipQuestion(this.quizPin);
-    this.next();
   }
 
 
@@ -61,7 +59,7 @@ export class LobbyComponent implements OnInit {
 
   next() {
     this.signalAdminConnection.Next(this.quiz.quizId,this.quizPin);
-    this.quiz.answerArrived = 0;
+    
   }
 
   CountDown(lc:LobbyComponent) {
@@ -82,7 +80,6 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.signalAdminConnection.hubConnection.off("ReceiveQuizId");
     this.signalAdminConnection.hubConnection.off("ShowQuestion");
     this.signalAdminConnection.hubConnection.off("RenderNewPlayer");
     this.signalAdminConnection.hubConnection.off("ReceiveAnswerResults");

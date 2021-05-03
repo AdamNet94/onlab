@@ -61,8 +61,6 @@ namespace Quiz.Hub
              await Clients.Caller.ShowQuestion(currentQuestion);
         }
 
-
-
         public async Task Next(int quizId, string pin)
         {
             Question currentQuestion = null;

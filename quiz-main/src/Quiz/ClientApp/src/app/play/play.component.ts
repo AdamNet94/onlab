@@ -26,13 +26,13 @@ export class PlayComponent implements OnInit, OnDestroy {
   ngOnInit() {
    this.SignalRconnection.startConnection(this.pin.toString(),this.player.nickName);
    this.SignalRconnection.addQuestionListener(this.quiz);
-   this.SignalRconnection.GetAnswerResultListener(this.quiz,this.player);
+   this.SignalRconnection.addAnswerResultListener(this.quiz,this.player);
    this.SignalRconnection.addPreviewQuestionListener(this.quiz);
+   this.SignalRconnection.addSkipQuestionListener(this.questionChild,this.quiz,this.player);
   }
 
   onSubmit() {
     this.SignalRconnection.joinGroup(this.pin.toString(),this.player.nickName,this.quiz);
-    this.SignalRconnection.addQuizIdListener(this.quiz,this.player.nickName,this.pin.toString());
   }
 
   sendAnswer($event) {
@@ -41,12 +41,7 @@ export class PlayComponent implements OnInit, OnDestroy {
       this.SignalRconnection.SendAnswer(answerSubmit,this.quiz,this.pin.toString());
   }
 
-  getAnswerResult() {
-    //this.SignalRconnection.GetAnswerResult(this.quiz, this.player);
-  }
-
   ngOnDestroy(): void {
-    this.SignalRconnection.hubConnection.off("ReceiveQuizId");
     this.SignalRconnection.hubConnection.off("ShowQuestion");
     this.SignalRconnection.hubConnection.off("SkipQuestion");
     this.SignalRconnection.hubConnection.stop().then(() => console.log("on destroyed called and conenction stopped"));

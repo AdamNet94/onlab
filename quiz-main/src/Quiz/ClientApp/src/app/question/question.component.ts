@@ -61,8 +61,9 @@ export class QuestionComponent implements OnInit {
   }
   
   submitAnswer(index:number){
+    if(!this.answersDisableFlag)
+      this.answerSelected = index;
     this.answersDisableFlag = true;
-    this.answerSelected = index;
     this.answerSubmittedEvent.emit(this.question.answers[index].id);
   }
 

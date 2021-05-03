@@ -91,7 +91,7 @@ namespace Quiz.Repositories
 
             int score = 0;
             if (answer != null)
-                score = answer.IsCorrect ? CalculateScore(quiz.QuestionStartTime, quiz.CurrentQuestionTime) : 0 ;
+                score = answer.IsCorrect ? CalculateScore(quiz.CurrentQuestionTime, quiz.QuestionStartTime) : 0 ;
 
             AnswerInstance newAnswer = new AnswerInstance
             {
@@ -115,9 +115,18 @@ namespace Quiz.Repositories
         {
             QuizInstance quiz = await getQuiz(quizId);
             Player p = await context.Players.Where(p => p.UserId == userId && p.QuizInstanceId == quizId).FirstOrDefaultAsync();
-            int score = context.AnswerInstances
+            int score = 0;
+            try
+            {
+                score = context.AnswerInstances
                 .Where(a => a.PlayerId == p.Id && a.QuestionId == quiz.CurrentQuestionId)
                 .Select(a => a.Score).FirstOrDefault();
+            }
+            catch(InvalidOperationException e)
+            {
+                return 0;
+            }
+            
             return score;
         }
 

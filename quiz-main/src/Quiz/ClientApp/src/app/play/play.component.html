@@ -6,7 +6,7 @@
       <div class="input-group-prepend">
         <div class="input-group-text">PIN: </div>
       </div>
-      <input ngModel name="lobbyPin" #lobbyPin="ngModel" [(ngModel)]="pin" type="text" required minlength="3" maxlength="4" pattern='^[0-9]+$'
+      <input ngModel name="lobbyPin" #lobbyPin="ngModel" [(ngModel)]="pin" type="text" required minlength="3" maxlength="5" pattern='^[0-9]+$'
       class="form-control" id="Pin" placeholder="Enter PIN here">
     </div>
     <div *ngIf="lobbyPin.invalid && (lobbyPin.dirty || lobbyPin.touched)" class="alert alert-danger">

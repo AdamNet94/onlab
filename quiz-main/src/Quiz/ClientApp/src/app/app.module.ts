@@ -49,7 +49,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', component: PlayComponent,pathMatch: 'full' },
+      { path: '', component: PlayComponent,pathMatch: 'full'},
       { path: 'question', component: QuestionComponent},
       { path: 'chart', component: ChartComponent},
       { path: 'stage', component: StageComponent },
@@ -67,8 +67,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
     QuestionCrudService,
     StudiorumCrudService,
-    //SignalRService,
-    //SignalAdminService,
+    SignalRService,
+    SignalAdminService,
     ThemeService
   ],
   bootstrap: [AppComponent]

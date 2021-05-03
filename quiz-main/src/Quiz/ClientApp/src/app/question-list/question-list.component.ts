@@ -1,8 +1,6 @@
-import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { QuestionCrudService } from '../services/question-crud.service';
+import { Component, EventEmitter,OnInit, Output, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Question } from '../models/question';
-import { Answer } from '../models/answer';
 import { StudiorumCrudService } from '../services/studiorum-crud.service';
 import { Studiorum } from '../models/studiorum';
 import { QuestionEditorComponent } from '../question-editor/question-editor.component';
@@ -20,12 +18,12 @@ export class QuestionListComponent implements OnInit {
   studiorumId: number;
   studiorum: Studiorum = new Studiorum();
   selectedQuestion: Question;
-  @Output() currentQuestionChanged = new EventEmitter<Question>();
 
-
-  constructor(private httpservice: StudiorumCrudService, private router: Router, route: ActivatedRoute ) {
+  constructor(private httpservice: StudiorumCrudService,route: ActivatedRoute ) {
     this.studiorumId = Number(route.snapshot.paramMap.get('studiorumId'));
-    console.log(this.studiorumId);
+  }
+
+  ngOnInit() {
     this.httpservice.getStudiorum(this.studiorumId).subscribe(result => {
       this.studiorum = result;
       if(result.questions.length > 0)
@@ -41,16 +39,6 @@ export class QuestionListComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  isEmpty(){
-    if(this.selectedQuestion!=null)
-        return true;
-    return false;
-  }
-
-  ngOnInit() {
-
-  }
-
   receiveChangedQuestion($event){
     let q:Question = $event as Question;
     let index = this.studiorum.questions.findIndex(element => element.id == q.id);
@@ -62,6 +50,7 @@ export class QuestionListComponent implements OnInit {
        createQuestion() method
        */
     else this.studiorum.questions[this.studiorum.questions.length-1] = q;
+    this.selectedQuestion = q;
   }
 
   receiveDeletedQuestion($event) {
@@ -70,12 +59,12 @@ export class QuestionListComponent implements OnInit {
     if (index > 0)
       this.studiorum.questions.splice(index, 1);
     this.selectedQuestion = this.studiorum.questions[0];
-    console.log("meghivva");
   }
 
   changeCurrentQuestion(questionIndex: number) {
     this.selectedQuestion = this.studiorum.questions[questionIndex];
     console.log(this.selectedQuestion.id);
+    // 0 due to a new question will not have an Id, the default Id is 0
     if(this.selectedQuestion.id == 0)
       this.child.resetForm();
     else this.child.setForm();
@@ -90,9 +79,6 @@ export class QuestionListComponent implements OnInit {
     }
     else this.selectedQuestion = lastQuestion;
   }
-
-
-
 }
 
 

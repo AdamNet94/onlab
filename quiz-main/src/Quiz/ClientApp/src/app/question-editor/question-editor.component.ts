@@ -10,13 +10,12 @@ import { QuestionCrudService } from '../services/question-crud.service';
 })
 export class QuestionEditorComponent implements OnInit {
 
-  markupText: string[] = ['Answer 02 *', "Answer 02 *", "Answer 03 *", "Answer 04 *"]
   newQuestionflag: boolean;
   @Input() public formData: Question;
   @Output() questionChangedEvent = new EventEmitter<Question>();
   @Output() questionDeletedEvent = new EventEmitter<Question>();
 
-  constructor(private httpservice: QuestionCrudService, private router: Router) {
+  constructor(private httpservice: QuestionCrudService) {
   }
 
   hasArrived(){
@@ -27,7 +26,7 @@ export class QuestionEditorComponent implements OnInit {
 
   ngOnInit() {
     if(this.formData.id == 0)
-    this.resetForm();
+      this.resetForm();
     else this.newQuestionflag = false;
   }
 
@@ -36,7 +35,6 @@ export class QuestionEditorComponent implements OnInit {
       console.log(this.formData);
       this.httpservice.postQuestion(this.formData).subscribe(
         question => {
-          console.log("szerevertől: "+ question);
           this.questionChangedEvent.emit(question);
         },
         err => { console.log(err); },
